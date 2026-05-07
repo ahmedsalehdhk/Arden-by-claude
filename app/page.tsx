@@ -1,101 +1,575 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useInView,
+  AnimatePresence,
+} from "framer-motion";
+import { ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
+import Link from "next/link";
+import Nav from "./components/Nav";
+import Footer from "./components/Footer";
+
+// ─────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────
+
+
+const FEATURED_PROJECTS = [
+  {
+    category: "Featured Projects",
+    tag: "Commercial",
+    name: "ARDEN TOWER",
+    location: "203-204, Tejgaon, Dhaka",
+    image: "https://images.pexels.com/photos/1486785/pexels-photo-1486785.jpeg?auto=compress&cs=tinysrgb&w=1920",
+  },
+  {
+    category: "Featured Projects",
+    tag: "Residential",
+    name: "THE VELDT",
+    location: "12 Gulshan Avenue, Dhaka",
+    image: "https://images.pexels.com/photos/2462015/pexels-photo-2462015.jpeg?auto=compress&cs=tinysrgb&w=1920",
+  },
+];
+
+const LEFT_STATS = [
+  { value: 11, suffix: "M+", label: "Total Area Built\n(Million sft)" },
+  { value: 21, suffix: "", label: "Years Since Inception" },
+  { value: 63, suffix: "", label: "Number of Completed\nProjects" },
+];
+
+const RIGHT_STATS = [
+  { value: 100, suffix: "+", label: "Number of\nProjects" },
+  { value: 1500, suffix: "+", label: "Happy Clients" },
+  { value: 18, suffix: "M+", label: "Total Area in Pipeline\n(Million sft)" },
+];
+
+// ─────────────────────────────────────────────
+// HOOKS
+// ─────────────────────────────────────────────
+
+function useCountUp(target: number, duration = 2400, start = false) {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    if (!start) return;
+    let startTime: number | null = null;
+    const step = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(eased * target));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [start, target, duration]);
+  return count;
+}
+
+// ─────────────────────────────────────────────
+// PLACEHOLDER
+// ─────────────────────────────────────────────
+
+function Placeholder({
+  className = "",
+  color = "#c8bfb0",
+  style = {},
+}: {
+  className?: string;
+  color?: string;
+  style?: React.CSSProperties;
+}) {
+  return (
+    <div
+      className={`w-full h-full ${className}`}
+      style={{ backgroundColor: color, ...style }}
+    />
+  );
+}
+
+
+// ─────────────────────────────────────────────
+// SECTION 1 — HERO
+// ─────────────────────────────────────────────
+
+function Hero() {
+  const imageRef = useRef<HTMLDivElement>(null);
+  const { scrollY } = useScroll();
+  const clipPercent = useTransform(scrollY, [0, 600], [4, 0]);
+  const radius = useTransform(scrollY, [0, 600], [16, 0]);
+
+  useEffect(() => {
+    const unsub1 = clipPercent.on("change", (v) => {
+      if (imageRef.current) {
+        imageRef.current.style.clipPath = `inset(0 ${v}% round ${radius.get()}px)`;
+      }
+    });
+    const unsub2 = radius.on("change", (r) => {
+      if (imageRef.current) {
+        imageRef.current.style.clipPath = `inset(0 ${clipPercent.get()}% round ${r}px)`;
+      }
+    });
+    return () => { unsub1(); unsub2(); };
+  }, [clipPercent, radius]);
+
+  return (
+    <section className="bg-[#faf9f6] pt-[80px]" aria-label="Hero">
+      {/* Main headline */}
+      <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14 pt-6 sm:pt-10 pb-6 sm:pb-8">
+        <div className="overflow-hidden">
+          <motion.h1
+            initial={{ y: 110, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            className="font-serif text-[#1a1a1a] text-center lowercase select-none"
+            style={{
+              fontSize: "clamp(3.2rem, 9.5vw, 9.5rem)",
+              letterSpacing: "0.30em",
+              lineHeight: 1.0,
+              fontWeight: 300,
+            }}
+          >
+            setting standards
+          </motion.h1>
+        </div>
+      </div>
+
+      {/* Hero image placeholder */}
+      <div className="relative w-full" style={{ height: "78vh" }}>
+        <div
+          ref={imageRef}
+          className="absolute inset-0 will-change-[clip-path]"
+          style={{ clipPath: "inset(0 4% round 16px)" }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=1800"
+            alt="Luxury real estate development"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────
+// SECTION 2 — ABOUT / INTRO TEXT
+// ─────────────────────────────────────────────
+
+function AboutSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <section id="about" className="bg-[#faf9f6]">
+      <div
+        ref={ref}
+        className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14 py-14 sm:py-20 lg:py-28"
+      >
+        <div className="flex justify-end">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            className="max-w-3xl"
+          >
+            {/* <p
+              className="font-serif text-[#1a1a1a] leading-[1.25] mb-8"
+              style={{
+                fontSize: "clamp(1.55rem, 2.4vw, 2.1rem)",
+                fontWeight: 400,
+              }}
+            >
+              A mark of distinction in every development.
+            </p> */}
+            <p
+              className="font-sans font-medium text-[#1a1a1a] leading-[2] mb-10"
+              style={{ fontSize: "20px" }}
+            >
+              Our real estate portfolio is a mark of distinction. Featuring the
+              country&apos;s most selective developments, we promise investors
+              and buyers an unmatched level of service. Our success is built on
+              strong standards and a keen eye for detail, embodying luxury and
+              excellence.
+            </p>
+            <Link href="/about" className="self-start font-sans font-semibold text-[13px] tracking-[0.24em] uppercase text-[#1a1a1a] flex items-center gap-2 group hover:text-[#c9a54a] transition-colors duration-300">
+              More about us
+              <ArrowUpRight
+                size={12}
+                className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+              />
+            </Link>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────
+// SECTION 3 — FEATURED PROJECTS
+// ─────────────────────────────────────────────
+
+function FeaturedProjectsSection() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const project = FEATURED_PROJECTS[activeIndex];
+  const total = FEATURED_PROJECTS.length;
+
+  const goPrev = () => setActiveIndex((prev) => (prev - 1 + total) % total);
+  const goNext = () => setActiveIndex((prev) => (prev + 1) % total);
+
+  return (
+    <section id="projects" className="relative w-full overflow-hidden" style={{ height: "100vh" }}>
+      {/* Background images — crossfade */}
+      {FEATURED_PROJECTS.map((p, i) => (
+        <div
+          key={p.name}
+          className="absolute inset-0 transition-opacity duration-700 ease-in-out"
+          style={{ opacity: i === activeIndex ? 1 : 0 }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={p.image}
+            alt={p.name}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      ))}
+      {/* Gradient overlays */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#1a1a1a]/85 via-[#1a1a1a]/40 to-transparent z-[1]" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a]/50 via-transparent to-[#1a1a1a]/20 z-[1]" />
+
+      {/* Content */}
+      <div className="relative z-10 h-full flex items-center">
+        {/* Left column — text */}
+        <div className="flex flex-col justify-center px-5 sm:px-8 md:px-12 lg:px-20 max-w-2xl w-full lg:w-auto">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeIndex}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.45 }}
+            >
+              {/* Category label */}
+              <p className="font-sans text-[11px] tracking-[0.35em] uppercase text-white/45 mb-1">
+                {project.category}
+              </p>
+              {/* Tag */}
+              <p className="font-sans text-[11px] tracking-[0.30em] uppercase text-[#c9a54a] mb-7">
+                {project.tag}
+              </p>
+              {/* Project name */}
+              <h2
+                className="font-serif text-white uppercase leading-[1.05] mb-3"
+                style={{
+                  fontSize: "clamp(2.4rem, 4.5vw, 4.2rem)",
+                  fontWeight: 700,
+                  letterSpacing: "0.02em",
+                }}
+              >
+                {project.name}
+              </h2>
+              {/* Location */}
+              <p className="font-sans text-white/50 mb-12" style={{ fontSize: "14px", letterSpacing: "0.10em" }}>
+                {project.location}
+              </p>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* View Project CTA */}
+          <Link
+            href={`/projects/${project.name.toLowerCase().replace(/\s+/g, "-")}`}
+            className="flex items-center gap-3 mb-12"
+          >
+            <div className="w-[7px] h-[7px] rounded-full bg-[#c9a54a]" />
+            <span className="font-serif text-[15px] italic text-white/70 hover:text-white transition-colors tracking-wide">
+              View Project
+            </span>
+          </Link>
+
+          {/* Arrow navigation */}
+          <div className="flex items-center gap-4 mb-8">
+            <button
+              onClick={goPrev}
+              className="w-9 h-9 rounded-full border border-white/25 flex items-center justify-center text-white/50 hover:text-white hover:border-white/50 transition-all"
+              aria-label="Previous"
+            >
+              <ChevronLeft size={14} strokeWidth={1.5} />
+            </button>
+            <button
+              onClick={goNext}
+              className="w-9 h-9 rounded-full border border-white/25 flex items-center justify-center text-white/50 hover:text-white hover:border-white/50 transition-all"
+              aria-label="Next"
+            >
+              <ChevronRight size={14} strokeWidth={1.5} />
+            </button>
+          </div>
+
+          {/* Progress bars */}
+          <div className="flex items-center gap-1.5 w-[160px]">
+            {FEATURED_PROJECTS.map((_, i) => (
+              <div
+                key={i}
+                className={`h-[2px] flex-1 transition-all duration-500 cursor-pointer ${
+                  i === activeIndex ? "bg-white" : "bg-white/20"
+                }`}
+                onClick={() => setActiveIndex(i)}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────
+// SECTION 4 — STATISTICS
+// ─────────────────────────────────────────────
+
+function StatNumber({
+  stat,
+  started,
+  align,
+}: {
+  stat: { value: number; suffix: string; label: string };
+  started: boolean;
+  align: "left" | "right";
+}) {
+  const count = useCountUp(stat.value, 2400, started);
+  const lines = stat.label.split("\n");
+
+  return (
+    <div className={align === "right" ? "text-left" : "text-right"}>
+      <p
+        className="font-serif text-[#1a1a1a] leading-none"
+        style={{ fontSize: "clamp(2.6rem, 4.5vw, 4rem)", fontWeight: 700 }}
+      >
+        {count}
+        <span style={{ color: "#c9a54a" }}>{stat.suffix}</span>
+      </p>
+      {lines.map((line, i) => (
+        <p
+          key={i}
+          className="font-sans text-[#1a1a1a]/35 mt-1.5"
+          style={{
+            fontSize: "11px",
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            lineHeight: 1.5,
+          }}
+        >
+          {line}
+        </p>
+      ))}
+    </div>
+  );
+}
+
+function StatisticsSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  return (
+    <section id="businesses" className="bg-[#faf9f6] py-16 sm:py-24 lg:py-36">
+      <div ref={ref} className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14">
+        {/* Heading */}
+        <motion.div
+          initial={{ opacity: 0, y: 28 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.85 }}
+          className="text-center mb-14 sm:mb-20 lg:mb-32"
+        >
+          <h2
+            className="font-serif text-[#1a1a1a] leading-[1.25] mx-auto"
+            style={{
+              fontSize: "clamp(1.95rem, 3.4vw, 3.1rem)",
+              fontWeight: 400,
+              maxWidth: "640px",
+            }}
+          >
+            Witness, As We
+            <br />
+            <span style={{ fontWeight: 700 }}>Transform</span> Your Land
+            <br />
+            to <span style={{ fontWeight: 700 }}>Landmark</span>
+          </h2>
+        </motion.div>
+
+        {/* Desktop: 3-col */}
+        <div className="hidden lg:grid gap-x-12 items-center"
+          style={{ gridTemplateColumns: "1fr clamp(180px,18vw,280px) 1fr" }}>
+          {/* Left stats */}
+          <motion.div
+            initial={{ opacity: 0, x: -28 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.85, delay: 0.18 }}
+            className="space-y-14"
+          >
+            {LEFT_STATS.map((s) => (
+              <StatNumber key={s.label} stat={s} started={isInView} align="left" />
+            ))}
+          </motion.div>
+
+          {/* Center — building placeholder */}
+          <motion.div
+            initial={{ opacity: 0, y: 36 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.95, delay: 0.25 }}
+            className="relative overflow-hidden"
+            style={{ height: "clamp(380px,45vw,590px)" }}
+          >
+            <Placeholder color="#b0a898" />
+          </motion.div>
+
+          {/* Right stats */}
+          <motion.div
+            initial={{ opacity: 0, x: 28 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.85, delay: 0.18 }}
+            className="space-y-14"
+          >
+            {RIGHT_STATS.map((s) => (
+              <StatNumber key={s.label} stat={s} started={isInView} align="right" />
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Mobile: 2-col grid, no center image */}
+        <motion.div
+          initial={{ opacity: 0, y: 28 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.85, delay: 0.18 }}
+          className="lg:hidden grid grid-cols-2 gap-x-8 gap-y-12"
+        >
+          {[...LEFT_STATS, ...RIGHT_STATS].map((s) => (
+            <StatNumber key={s.label} stat={s} started={isInView} align="right" />
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+// ─────────────────────────────────────────────
+// SECTION 5 — CONTACT + FOOTER
+// ─────────────────────────────────────────────
+
+function ContactSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  return (
+    <section id="connect" className="bg-[#faf9f6] py-16 sm:py-24 lg:py-36">
+      <div ref={ref} className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14">
+        {/* Heading */}
+        <motion.h2
+          initial={{ opacity: 0, y: 24 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.05 }}
+          className="font-serif text-[#1a1a1a] uppercase mb-16"
+          style={{
+            fontSize: "clamp(2.1rem, 4vw, 3.8rem)",
+            fontWeight: 700,
+            letterSpacing: "0.01em",
+          }}
+        >
+          Let&apos;s Connect
+        </motion.h2>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+          {/* Left — contact blocks */}
+          <motion.div
+            initial={{ opacity: 0, x: -24 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.85, delay: 0.15 }}
+          >
+            {/* Clients */}
+            <div className="pb-10 border-b border-[#1a1a1a]/8">
+              <h3
+                className="font-sans text-[#c9a54a] mb-3 tracking-[0.06em]"
+                style={{ fontSize: "14px", fontWeight: 500 }}
+              >
+                Clients
+              </h3>
+              <p
+                className="font-sans text-[#1a1a1a]/45 leading-[1.95] mb-5"
+                style={{ fontSize: "15px", maxWidth: "360px" }}
+              >
+                Discover exquisite apartments, commercial spaces, and investment
+                opportunities with Arden Holdings Ltd. Let us turn your dreams
+                into a reality.
+              </p>
+              <Link href="/contact" className="font-sans text-[11px] tracking-[0.24em] uppercase text-[#1a1a1a] flex items-center gap-2 group hover:text-[#c9a54a] transition-colors">
+                Reach Out
+                <ArrowUpRight
+                  size={11}
+                  className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                />
+              </Link>
+            </div>
+
+            {/* Landowners */}
+            <div className="pt-10">
+              <h3
+                className="font-sans text-[#c9a54a] mb-3 tracking-[0.06em]"
+                style={{ fontSize: "14px", fontWeight: 500 }}
+              >
+                Landowners
+              </h3>
+              <p
+                className="font-sans text-[#1a1a1a]/45 leading-[1.95] mb-5"
+                style={{ fontSize: "15px", maxWidth: "360px" }}
+              >
+                Partner with Arden to further our portfolio as part of the
+                architectural landscape. Fill up the form to explore this
+                partnership.
+              </p>
+              <Link href="/contact?form=landowners" className="font-sans text-[11px] tracking-[0.24em] uppercase text-[#1a1a1a] flex items-center gap-2 group hover:text-[#c9a54a] transition-colors">
+                Partner With Us
+                <ArrowUpRight
+                  size={11}
+                  className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                />
+              </Link>
+            </div>
+          </motion.div>
+
+          {/* Right — image placeholder */}
+          <motion.div
+            initial={{ opacity: 0, x: 24 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.85, delay: 0.25 }}
+          >
+            <div className="relative overflow-hidden" style={{ aspectRatio: "4/3" }}>
+              <Placeholder color="#c2b9ab" />
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
+// ─────────────────────────────────────────────
+// PAGE
+// ─────────────────────────────────────────────
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+    <main>
+      <Nav />
+      <Hero />
+      <AboutSection />
+      <FeaturedProjectsSection />
+      <StatisticsSection />
+      <ContactSection />
+      <Footer />
+    </main>
   );
 }

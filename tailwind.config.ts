@@ -11,6 +11,17 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        cream: "#f5f0e8",
+        gold: "#c9a54a",
+        charcoal: "#1a1a1a",
+        "off-white": "#faf9f6",
+      },
+      fontFamily: {
+        serif: ["var(--font-opensans)", "sans-serif"],
+        sans: ["var(--font-opensans)", "sans-serif"],
+      },
+      letterSpacing: {
+        "widest-xl": "0.3em",
       },
     },
   },
