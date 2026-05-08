@@ -15,21 +15,20 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr] gap-10 sm:gap-12 border-b border-white/10 pb-10 sm:pb-12">
           {/* Brand */}
           <div>
-            <Link href="/" className="inline-block mb-5">
+            <Link href="/" className="inline-block mb-">
               <Image
                 src="/logo.png"
                 alt="Arden Holdings"
                 width={160}
                 height={40}
-                className="h-[34px] w-auto brightness-0 invert"
+                className="h-[96px] w-auto brightness-0 invert"
               />
             </Link>
             <p
-              className="font-sans text-white/50 leading-relaxed"
+              className="font-sans text-white leading-relaxed"
               style={{ fontSize: "14px", maxWidth: "280px" }}
             >
-              Setting standards in real estate development since 2003. Built on
-              strong values and a keen eye for detail.
+              {/* Legacy in every landmark */}
             </p>
           </div>
 
