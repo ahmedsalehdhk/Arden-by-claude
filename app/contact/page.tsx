@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, useInView } from "framer-motion";
 import { ArrowUpRight, Phone, Mail, MapPin } from "lucide-react";
 import Nav from "../components/Nav";
@@ -53,9 +54,16 @@ function InputField({ label, type = "text", textarea = false }: { label: string;
 
 type FormType = "clients" | "landowners";
 
-export default function ContactPage() {
+function ContactInner() {
   const [activeForm, setActiveForm] = useState<FormType>("clients");
   const [submitted, setSubmitted] = useState(false);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get("tab") === "landowners") {
+      setActiveForm("landowners");
+    }
+  }, [searchParams]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -274,5 +282,13 @@ export default function ContactPage() {
 
       <Footer />
     </main>
+  );
+}
+
+export default function ContactPage() {
+  return (
+    <Suspense>
+      <ContactInner />
+    </Suspense>
   );
 }

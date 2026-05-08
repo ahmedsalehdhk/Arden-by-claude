@@ -17,17 +17,29 @@ const NAV_LINKS = [
 export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [visible, setVisible] = useState(false);
   const pathname = usePathname();
 
   // Entrance animation — slide down after hero loads
   useEffect(() => {
-    const timer = setTimeout(() => setVisible(true), 1800);
+    const timer = setTimeout(() => setVisible(true), 200);
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 50);
+      // Hide on scroll down, show on scroll up (only after passing 90px nav height)
+      if (y > 90) {
+        setHidden(y > lastY);
+      } else {
+        setHidden(false);
+      }
+      lastY = y;
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -45,8 +57,8 @@ export default function Nav() {
     <>
       <motion.nav
         initial={{ y: -100, opacity: 0 }}
-        animate={visible ? { y: 0, opacity: 1 } : {}}
-        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        animate={visible ? { y: hidden && !menuOpen ? -100 : 0, opacity: 1 } : {}}
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         className={`fixed top-0 left-0 right-0 z-50 bg-[#faf9f6] transition-shadow duration-300 ${
           scrolled
             ? "shadow-[0_1px_0_rgba(26,26,26,0.08)]"

@@ -10,13 +10,6 @@ function Placeholder({ color = "#c2b9ab", className = "" }: { color?: string; cl
   return <div className={`w-full h-full ${className}`} style={{ backgroundColor: color }} />;
 }
 
-const STATS = [
-  { value: "11M+", label: "Total Area Built\n(Million sft)" },
-  { value: "21", label: "Years Since\nInception" },
-  { value: "63", label: "Completed\nProjects" },
-  { value: "1500+", label: "Happy\nClients" },
-];
-
 const VALUES = [
   {
     num: "01",
@@ -40,14 +33,6 @@ const VALUES = [
   },
 ];
 
-const TIMELINE = [
-  { year: "2003", event: "Arden Group founded in Dhaka with a vision to redefine urban living." },
-  { year: "2007", event: "Completed our first landmark residential tower in Gulshan, setting a new standard for premium living." },
-  { year: "2012", event: "Expanded into commercial real estate, delivering over 500,000 sft of Grade A office space." },
-  { year: "2017", event: "Reached the milestone of 10 million sft of total area built across all developments." },
-  { year: "2021", event: "Launched our sustainability initiative, committing to LEED certification across all new projects." },
-  { year: "2024", event: "Celebrating 21 years and 63 completed projects, with 18M+ sft in the pipeline." },
-];
 
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -136,40 +121,6 @@ export default function AboutPage() {
         <Placeholder color="#c8bfb0" />
       </section>
 
-      {/* ── STATS ── */}
-      <section className="bg-[#faf9f6] py-20 sm:py-28">
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14">
-          <FadeIn className="text-center mb-16 sm:mb-20">
-            <h2
-              className="font-serif text-[#1a1a1a]"
-              style={{ fontSize: "clamp(1.8rem, 3vw, 2.8rem)", fontWeight: 400 }}
-            >
-              Two decades of delivering excellence.
-            </h2>
-          </FadeIn>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12">
-            {STATS.map((s, i) => (
-              <FadeIn key={s.label} delay={i * 0.08}>
-                <div className="text-center">
-                  <p
-                    className="font-serif text-[#1a1a1a] leading-none mb-3"
-                    style={{ fontSize: "clamp(2.4rem, 4vw, 3.5rem)", fontWeight: 700 }}
-                  >
-                    {s.value.replace(/[0-9]+/, (n) => n)}
-                    <span style={{ color: "#c9a54a" }}></span>
-                  </p>
-                  {s.label.split("\n").map((line, j) => (
-                    <p key={j} className="font-sans text-[#1a1a1a]/35" style={{ fontSize: "11px", letterSpacing: "0.18em", textTransform: "uppercase", lineHeight: 1.6 }}>
-                      {line}
-                    </p>
-                  ))}
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── VALUES ── */}
       <section className="py-20 sm:py-28 lg:py-36" style={{ backgroundColor: "#f0ede6" }}>
         <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14">
@@ -203,48 +154,6 @@ export default function AboutPage() {
                 </div>
               </FadeIn>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── TIMELINE ── */}
-      <section className="bg-[#faf9f6] py-20 sm:py-28 lg:py-36">
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14">
-          <FadeIn className="mb-14 sm:mb-20">
-            <p className="font-sans text-[#c9a54a] mb-4" style={{ fontSize: "11px", letterSpacing: "0.32em", textTransform: "uppercase" }}>
-              Milestones
-            </p>
-            <h2
-              className="font-serif text-[#1a1a1a]"
-              style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
-            >
-              Our journey through time.
-            </h2>
-          </FadeIn>
-          <div className="relative">
-            {/* Vertical line on desktop */}
-            <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px bg-[#1a1a1a]/[0.08]" />
-            <div className="space-y-0">
-              {TIMELINE.map((item, i) => (
-                <FadeIn key={item.year} delay={i * 0.07}>
-                  <div className={`flex flex-col lg:flex-row gap-6 lg:gap-0 py-10 border-b border-[#1a1a1a]/[0.07] ${i % 2 === 0 ? "" : "lg:flex-row-reverse"}`}>
-                    <div className={`lg:w-1/2 ${i % 2 === 0 ? "lg:pr-16 lg:text-right" : "lg:pl-16"}`}>
-                      <p
-                        className="font-serif text-[#c9a54a]"
-                        style={{ fontSize: "clamp(1.8rem, 3vw, 2.6rem)", fontWeight: 700 }}
-                      >
-                        {item.year}
-                      </p>
-                    </div>
-                    <div className={`lg:w-1/2 ${i % 2 === 0 ? "lg:pl-16" : "lg:pr-16 lg:text-right"}`}>
-                      <p className="font-sans text-[#1a1a1a]/55 leading-[1.9]" style={{ fontSize: "16px" }}>
-                        {item.event}
-                      </p>
-                    </div>
-                  </div>
-                </FadeIn>
-              ))}
-            </div>
           </div>
         </div>
       </section>

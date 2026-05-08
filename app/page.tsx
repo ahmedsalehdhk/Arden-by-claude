@@ -21,17 +21,19 @@ import Footer from "./components/Footer";
 const FEATURED_PROJECTS = [
   {
     category: "Featured Projects",
-    tag: "Commercial",
-    name: "ARDEN TOWER",
-    location: "203-204, Tejgaon, Dhaka",
-    image: "https://images.pexels.com/photos/1486785/pexels-photo-1486785.jpeg?auto=compress&cs=tinysrgb&w=1920",
+    tag: "Residential",
+    name: "Amanat",
+    location: "Banani, Dhaka",
+    image: "/projectimages/amanat/Front Side View_01.jpg",
+    buildingImage: "/projectimages/amanat/Eye Level View_01.jpg",
   },
   {
     category: "Featured Projects",
     tag: "Residential",
-    name: "THE VELDT",
-    location: "12 Gulshan Avenue, Dhaka",
-    image: "https://images.pexels.com/photos/2462015/pexels-photo-2462015.jpeg?auto=compress&cs=tinysrgb&w=1920",
+    name: "Rahma",
+    location: "Sector 11, Jolshiri",
+    image: "/projectimages/rahma/view 02.jpg",
+    buildingImage: "/projectimages/rahma/View 01.jpg",
   },
 ];
 
@@ -98,40 +100,35 @@ function Hero() {
   const imageRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
   const clipPercent = useTransform(scrollY, [0, 600], [4, 0]);
-  const radius = useTransform(scrollY, [0, 600], [16, 0]);
 
   useEffect(() => {
-    const unsub1 = clipPercent.on("change", (v) => {
+    const unsub = clipPercent.on("change", (v) => {
       if (imageRef.current) {
-        imageRef.current.style.clipPath = `inset(0 ${v}% round ${radius.get()}px)`;
+        imageRef.current.style.clipPath = `inset(0 ${v}%)`;
       }
     });
-    const unsub2 = radius.on("change", (r) => {
-      if (imageRef.current) {
-        imageRef.current.style.clipPath = `inset(0 ${clipPercent.get()}% round ${r}px)`;
-      }
-    });
-    return () => { unsub1(); unsub2(); };
-  }, [clipPercent, radius]);
+    return () => { unsub(); };
+  }, [clipPercent]);
 
   return (
-    <section className="bg-[#faf9f6] pt-[80px]" aria-label="Hero">
+    <section className="bg-[#faf9f6] pt-[140px]" aria-label="Hero">
       {/* Main headline */}
-      <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14 pt-6 sm:pt-10 pb-6 sm:pb-8">
-        <div className="overflow-hidden">
+      <div className="px-[4%] pt-6 sm:pt-10 pb-6 sm:pb-8">
+        <div className="overflow-hidden pb-3">
           <motion.h1
             initial={{ y: 110, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            className="font-serif text-[#1a1a1a] text-center lowercase select-none"
+            className="font-serif text-[#1a1a1a] text-center select-none w-full sm:whitespace-nowrap"
             style={{
-              fontSize: "clamp(3.2rem, 9.5vw, 9.5rem)",
-              letterSpacing: "0.30em",
-              lineHeight: 1.0,
+              fontSize: "clamp(2.2rem, 4.5vw, 4.5vw)",
+              letterSpacing: "0.28em",
+              lineHeight: 1.25,
               fontWeight: 300,
             }}
           >
-            setting standards
+            <span className="hidden sm:inline">Legacy In Every Landmark</span>
+            <span className="sm:hidden">Legacy In<br />Every Landmark</span>
           </motion.h1>
         </div>
       </div>
@@ -141,7 +138,7 @@ function Hero() {
         <div
           ref={imageRef}
           className="absolute inset-0 will-change-[clip-path]"
-          style={{ clipPath: "inset(0 4% round 16px)" }}
+          style={{ clipPath: "inset(0 4%)" }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -222,7 +219,7 @@ function FeaturedProjectsSection() {
   const goNext = () => setActiveIndex((prev) => (prev + 1) % total);
 
   return (
-    <section id="projects" className="relative w-full overflow-hidden" style={{ height: "100vh" }}>
+    <section id="projects" className="relative w-full overflow-hidden" style={{ height: "80vh" }}>
       {/* Background images — crossfade */}
       {FEATURED_PROJECTS.map((p, i) => (
         <div
@@ -243,9 +240,30 @@ function FeaturedProjectsSection() {
       <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a]/50 via-transparent to-[#1a1a1a]/20 z-[1]" />
 
       {/* Content */}
-      <div className="relative z-10 h-full flex items-center">
+      <div className="relative z-10 h-full flex flex-col lg:flex-row lg:items-center lg:justify-between">
+        {/* Building image — top on mobile, right column on desktop */}
+        <div className="lg:hidden flex justify-center pt-6 px-5 sm:px-8">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeIndex}
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.97 }}
+              transition={{ duration: 0.6 }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={project.buildingImage}
+                alt={`${project.name} building`}
+                className="object-cover"
+                style={{ width: "55vw", maxWidth: "280px", height: "35vh", maxHeight: "300px" }}
+              />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
         {/* Left column — text */}
-        <div className="flex flex-col justify-center px-5 sm:px-8 md:px-12 lg:px-20 max-w-2xl w-full lg:w-auto">
+        <div className="flex flex-col justify-center px-5 sm:px-8 md:px-12 lg:px-20 max-w-2xl w-full lg:w-auto flex-1 pt-4 lg:pt-0">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeIndex}
@@ -255,18 +273,18 @@ function FeaturedProjectsSection() {
               transition={{ duration: 0.45 }}
             >
               {/* Category label */}
-              <p className="font-sans text-[11px] tracking-[0.35em] uppercase text-white/45 mb-1">
+              <p className="font-sans text-[13px] sm:text-[15px] tracking-[0.35em] uppercase text-white/45 mb-1">
                 {project.category}
               </p>
               {/* Tag */}
-              <p className="font-sans text-[11px] tracking-[0.30em] uppercase text-[#c9a54a] mb-7">
+              <p className="font-sans text-[12px] sm:text-[15px] tracking-[0.30em] uppercase text-[#c9a54a] mb-5 sm:mb-7">
                 {project.tag}
               </p>
               {/* Project name */}
               <h2
-                className="font-serif text-white uppercase leading-[1.05] mb-3"
+                className="font-serif text-white uppercase leading-[1.05] mb-2 sm:mb-3"
                 style={{
-                  fontSize: "clamp(2.4rem, 4.5vw, 4.2rem)",
+                  fontSize: "clamp(2rem, 4.5vw, 4.2rem)",
                   fontWeight: 700,
                   letterSpacing: "0.02em",
                 }}
@@ -274,7 +292,7 @@ function FeaturedProjectsSection() {
                 {project.name}
               </h2>
               {/* Location */}
-              <p className="font-sans text-white/50 mb-12" style={{ fontSize: "14px", letterSpacing: "0.10em" }}>
+              <p className="font-sans text-white/50 mb-8 sm:mb-12" style={{ fontSize: "14px", letterSpacing: "0.10em" }}>
                 {project.location}
               </p>
             </motion.div>
@@ -283,26 +301,26 @@ function FeaturedProjectsSection() {
           {/* View Project CTA */}
           <Link
             href={`/projects/${project.name.toLowerCase().replace(/\s+/g, "-")}`}
-            className="flex items-center gap-3 mb-12"
+            className="flex items-center gap-3 mb-8 sm:mb-12"
           >
             <div className="w-[7px] h-[7px] rounded-full bg-[#c9a54a]" />
-            <span className="font-serif text-[15px] italic text-white/70 hover:text-white transition-colors tracking-wide">
+            <span className="font-serif text-[14px] sm:text-[15px] text-white/70 hover:text-white transition-colors tracking-wide">
               View Project
             </span>
           </Link>
 
           {/* Arrow navigation */}
-          <div className="flex items-center gap-4 mb-8">
+          <div className="flex items-center gap-4 mb-6 sm:mb-8">
             <button
               onClick={goPrev}
-              className="w-9 h-9 rounded-full border border-white/25 flex items-center justify-center text-white/50 hover:text-white hover:border-white/50 transition-all"
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-white/25 flex items-center justify-center text-white/50 hover:text-white hover:border-white/50 transition-all"
               aria-label="Previous"
             >
               <ChevronLeft size={14} strokeWidth={1.5} />
             </button>
             <button
               onClick={goNext}
-              className="w-9 h-9 rounded-full border border-white/25 flex items-center justify-center text-white/50 hover:text-white hover:border-white/50 transition-all"
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-white/25 flex items-center justify-center text-white/50 hover:text-white hover:border-white/50 transition-all"
               aria-label="Next"
             >
               <ChevronRight size={14} strokeWidth={1.5} />
@@ -310,7 +328,7 @@ function FeaturedProjectsSection() {
           </div>
 
           {/* Progress bars */}
-          <div className="flex items-center gap-1.5 w-[160px]">
+          <div className="flex items-center gap-1.5 w-[140px] sm:w-[160px]">
             {FEATURED_PROJECTS.map((_, i) => (
               <div
                 key={i}
@@ -321,6 +339,27 @@ function FeaturedProjectsSection() {
               />
             ))}
           </div>
+        </div>
+
+        {/* Right column — building image (desktop only) */}
+        <div className="hidden lg:block pr-14 flex-shrink-0">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeIndex}
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.97 }}
+              transition={{ duration: 0.6 }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={project.buildingImage}
+                alt={`${project.name} building`}
+                className="object-cover"
+                style={{ width: "320px", height: "65vh", maxHeight: "520px" }}
+              />
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
     </section>
@@ -529,7 +568,7 @@ function ContactSection() {
                 architectural landscape. Fill up the form to explore this
                 partnership.
               </p>
-              <Link href="/contact?form=landowners" className="font-sans text-[11px] tracking-[0.24em] uppercase text-[#1a1a1a] flex items-center gap-2 group hover:text-[#c9a54a] transition-colors">
+              <Link href="/contact?tab=landowners" className="font-sans text-[11px] tracking-[0.24em] uppercase text-[#1a1a1a] flex items-center gap-2 group hover:text-[#c9a54a] transition-colors">
                 Partner With Us
                 <ArrowUpRight
                   size={11}
