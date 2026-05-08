@@ -56,7 +56,7 @@ export default function AboutPage() {
       <Nav />
 
       {/* ── HERO ── */}
-      <section className="relative pt-[60px] overflow-hidden bg-white" style={{ minHeight: "90vh" }}>
+      <section className="relative pt-[60px] overflow-hidden bg-[#faf9f6]" style={{ minHeight: "90vh" }}>
         <div className="relative z-10 px-[7.5%] pt-24 sm:pt-36 pb-24 sm:pb-40">
           <motion.p
             initial={{ opacity: 0, y: 16 }}
@@ -71,7 +71,7 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="font-serif text-[#1a1a1a] lowercase"
+            className="font-serif text-[#1a1a1a]"
             style={{
               fontSize: "clamp(3rem, 8vw, 8rem)",
               letterSpacing: "0.06em",
@@ -101,10 +101,10 @@ export default function AboutPage() {
               </h2>
             </FadeIn>
             <FadeIn delay={0.15}>
-              <p className="font-sans text-[#1a1a1a]/50 leading-[2] mb-6" style={{ fontSize: "16px" }}>
+              <p className="font-sans font-medium text-justify text-[#1a1a1a] leading-[2] mb-6" style={{ fontSize: "20px" }}>
                 Arden Group was founded in 2003 with a singular vision: to set a new standard for real estate in Bangladesh. Over two decades, we have grown from a single project in Gulshan into one of the country&apos;s most respected property developers, with a portfolio spanning premium residential towers, Grade A commercial buildings, and mixed-use landmark developments.
               </p>
-              <p className="font-sans text-[#1a1a1a]/50 leading-[2]" style={{ fontSize: "16px" }}>
+              <p className="font-sans font-medium text-justify text-[#1a1a1a] leading-[2]" style={{ fontSize: "20px" }}>
                 Our success is built not merely on the quality of bricks and mortar, but on the trust of the thousands of clients, investors, and landowners who have partnered with us. Every project we undertake carries the weight of that trust — and it is a responsibility we take seriously.
               </p>
             </FadeIn>
@@ -114,7 +114,12 @@ export default function AboutPage() {
 
       {/* ── FULL-WIDTH IMAGE ── */}
       <section className="w-full" style={{ height: "clamp(300px, 55vw, 700px)" }}>
-        <Placeholder color="#c8bfb0" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/projectimages/amanat/Rooftop _02.jpg"
+          alt="Arden rooftop development"
+          className="w-full h-full object-cover"
+        />
       </section>
 
       {/* ── VALUES ── */}
