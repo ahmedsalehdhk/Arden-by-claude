@@ -118,7 +118,7 @@ function Hero() {
           <motion.h1
             initial={{ y: 110, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 1.2, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="font-serif text-[#1a1a1a] text-center select-none uppercase w-full sm:whitespace-nowrap"
             style={{
               fontSize: "clamp(2.2rem, 4.5vw, 4.5vw)",
@@ -138,7 +138,7 @@ function Hero() {
         <motion.div
           initial={{ y: -60, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 1.2, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 1.2, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
           className="absolute inset-0"
         >
           <div
@@ -538,19 +538,19 @@ function ContactSection() {
             <div className="pb-10 border-b border-[#1a1a1a]/8">
               <h3
                 className="font-sans text-[#c9a54a] mb-3 tracking-[0.06em]"
-                style={{ fontSize: "14px", fontWeight: 500 }}
+                style={{ fontSize: "20px", fontWeight: 500 }}
               >
                 Clients
               </h3>
               <p
-                className="font-sans text-[#1a1a1a]/45 leading-[1.95] mb-5"
-                style={{ fontSize: "15px", maxWidth: "360px" }}
+                className="font-sans text-[#1a1a1a] leading-[1.95] mb-5"
+                style={{ fontSize: "20px", maxWidth: "500px" }}
               >
                 Discover exquisite apartments, commercial spaces, and investment
                 opportunities with Arden Holdings Ltd. Let us turn your dreams
                 into a reality.
               </p>
-              <Link href="/contact" className="font-sans text-[11px] tracking-[0.24em] uppercase text-[#1a1a1a] flex items-center gap-2 group hover:text-[#c9a54a] transition-colors">
+              <Link href="/contact" className="font-sans font-semibold text-[13px] tracking-[0.24em] uppercase text-[#1a1a1a] flex items-center gap-2 group hover:text-[#c9a54a] transition-colors">
                 Reach Out
                 <ArrowUpRight
                   size={11}
@@ -558,24 +558,25 @@ function ContactSection() {
                 />
               </Link>
             </div>
+            {/* <Link href="/about" className="self-start font-sans font-semibold text-[13px] tracking-[0.24em] uppercase text-[#1a1a1a] flex items-center gap-2 group hover:text-[#c9a54a] transition-colors duration-300"> */}
 
             {/* Landowners */}
             <div className="pt-10">
               <h3
                 className="font-sans text-[#c9a54a] mb-3 tracking-[0.06em]"
-                style={{ fontSize: "14px", fontWeight: 500 }}
+                style={{ fontSize: "20px", fontWeight: 500 }}
               >
                 Landowners
               </h3>
               <p
-                className="font-sans text-[#1a1a1a]/45 leading-[1.95] mb-5"
-                style={{ fontSize: "15px", maxWidth: "360px" }}
+                className="font-sans text-[#1a1a1a] leading-[1.95] mb-5"
+                style={{ fontSize: "20px", maxWidth: "500px" }}
               >
                 Partner with Arden to further our portfolio as part of the
                 architectural landscape. Fill up the form to explore this
                 partnership.
               </p>
-              <Link href="/contact?tab=landowners" className="font-sans text-[11px] tracking-[0.24em] uppercase text-[#1a1a1a] flex items-center gap-2 group hover:text-[#c9a54a] transition-colors">
+              <Link href="/contact?tab=landowners" className="font-sans font-semibold text-[13px] tracking-[0.24em] uppercase text-[#1a1a1a] flex items-center gap-2 group hover:text-[#c9a54a] transition-colors">
                 Partner With Us
                 <ArrowUpRight
                   size={11}
