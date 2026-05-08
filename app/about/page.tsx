@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
@@ -61,7 +61,7 @@ export default function AboutPage() {
           <Placeholder color="#1c1b1a" />
           <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a]/60 via-[#1a1a1a]/20 to-[#faf9f6]" />
         </div>
-        <div className="relative z-10 max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14 pt-24 sm:pt-36 pb-24 sm:pb-40">
+        <div className="relative z-10 px-[7.5%] pt-24 sm:pt-36 pb-24 sm:pb-40">
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -91,7 +91,7 @@ export default function AboutPage() {
 
       {/* ── INTRO ── */}
       <section className="bg-[#faf9f6] py-20 sm:py-28 lg:py-36">
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14">
+        <div className="px-[7.5%]">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-start">
             <FadeIn>
               <p className="font-sans text-[#c9a54a] mb-5" style={{ fontSize: "11px", letterSpacing: "0.32em", textTransform: "uppercase" }}>
@@ -123,7 +123,7 @@ export default function AboutPage() {
 
       {/* ── VALUES ── */}
       <section className="py-20 sm:py-28 lg:py-36" style={{ backgroundColor: "#f0ede6" }}>
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14">
+        <div className="px-[7.5%]">
           <FadeIn className="mb-14 sm:mb-20">
             <p className="font-sans text-[#c9a54a] mb-4" style={{ fontSize: "11px", letterSpacing: "0.32em", textTransform: "uppercase" }}>
               What We Stand For
@@ -160,7 +160,7 @@ export default function AboutPage() {
 
       {/* ── IMAGE GRID ── */}
       <section className="bg-[#faf9f6] pb-20 sm:pb-28">
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14">
+        <div className="px-[7.5%]">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div style={{ aspectRatio: "3/4" }}><Placeholder color="#c2b9ab" /></div>
             <div className="sm:mt-12" style={{ aspectRatio: "3/4" }}><Placeholder color="#b8ae9f" /></div>
@@ -171,7 +171,7 @@ export default function AboutPage() {
 
       {/* ── CTA ── */}
       <section className="bg-[#1a1a1a] py-20 sm:py-28">
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14 text-center">
+        <div className="px-[7.5%] text-center">
           <FadeIn>
             <p className="font-sans text-white/40 mb-5" style={{ fontSize: "11px", letterSpacing: "0.32em", textTransform: "uppercase" }}>
               Work With Us

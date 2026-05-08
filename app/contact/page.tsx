@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRef, useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
@@ -81,7 +81,7 @@ function ContactInner() {
           <Placeholder color="#1c1b1a" />
           <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a]/30 via-transparent to-[#faf9f6]" />
         </div>
-        <div className="relative z-10 max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14 pt-20 sm:pt-28 pb-16 sm:pb-24">
+        <div className="relative z-10 px-[7.5%] pt-20 sm:pt-28 pb-16 sm:pb-24">
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -110,7 +110,7 @@ function ContactInner() {
 
       {/* ── FORM SECTION ── */}
       <section className="bg-[#faf9f6] py-16 sm:py-24 lg:py-32">
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14">
+        <div className="px-[7.5%]">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
 
             {/* Left — description + tabs */}
@@ -197,7 +197,7 @@ function ContactInner() {
 
       {/* ── CONTACT INFO ── */}
       <section style={{ backgroundColor: "#f0ede6" }} className="py-16 sm:py-24">
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14">
+        <div className="px-[7.5%]">
           <FadeIn className="mb-12 sm:mb-16">
             <p className="font-sans text-[#c9a54a] mb-2" style={{ fontSize: "11px", letterSpacing: "0.32em", textTransform: "uppercase" }}>
               Get In Touch

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
@@ -53,7 +53,7 @@ export default function ProjectsPage() {
           <Placeholder color="#1c1b1a" />
           <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a]/40 via-transparent to-[#faf9f6]" />
         </div>
-        <div className="relative z-10 max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14 pt-20 sm:pt-32 pb-20 sm:pb-28">
+        <div className="relative z-10 px-[7.5%] pt-20 sm:pt-32 pb-20 sm:pb-28">
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -83,7 +83,7 @@ export default function ProjectsPage() {
 
       {/* ── SEARCH ── */}
       <section className="bg-[#faf9f6] sticky top-[60px] z-30 border-b border-[#1a1a1a]/[0.07]">
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14 py-4">
+        <div className="px-[7.5%] py-4">
           <div className="relative max-w-md">
             <input
               type="text"
@@ -107,7 +107,7 @@ export default function ProjectsPage() {
 
       {/* ── PROJECTS GRID ── */}
       <section className="bg-[#faf9f6] py-12 sm:py-16 lg:py-20">
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14">
+        <div className="px-[7.5%]">
           <AnimatePresence mode="wait">
             {filtered.length === 0 ? (
               <motion.div
@@ -141,7 +141,7 @@ export default function ProjectsPage() {
 
       {/* ── CTA ── */}
       <section className="bg-[#1a1a1a] py-20 sm:py-28">
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14 text-center">
+        <div className="px-[7.5%] text-center">
           <FadeIn>
             <p className="font-sans text-white/40 mb-5" style={{ fontSize: "11px", letterSpacing: "0.32em", textTransform: "uppercase" }}>
               Landowners

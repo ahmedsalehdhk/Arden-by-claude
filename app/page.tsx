@@ -113,7 +113,7 @@ function Hero() {
   return (
     <section className="bg-[#faf9f6] pt-[140px]" aria-label="Hero">
       {/* Main headline */}
-      <div className="px-[4%] pt-6 sm:pt-10 pb-6 sm:pb-8">
+      <div className="px-[7.5%] pt-6 sm:pt-10 pb-6 sm:pb-8">
         <div className="overflow-hidden pb-3">
           <motion.h1
             initial={{ y: 110, opacity: 0 }}
@@ -164,7 +164,7 @@ function AboutSection() {
     <section id="about" className="bg-[#faf9f6]">
       <div
         ref={ref}
-        className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14 py-14 sm:py-20 lg:py-28"
+        className="px-[7.5%] py-14 sm:py-20 lg:py-28"
       >
         <div className="flex justify-end">
           <motion.div
@@ -242,7 +242,7 @@ function FeaturedProjectsSection() {
       {/* Content */}
       <div className="relative z-10 h-full flex flex-col lg:flex-row lg:items-center lg:justify-between">
         {/* Building image — top on mobile, right column on desktop */}
-        <div className="lg:hidden flex justify-center pt-8 sm:pt-10 px-5 sm:px-8">
+        <div className="lg:hidden flex justify-center pt-8 sm:pt-10 px-[7.5%]">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeIndex}
@@ -263,7 +263,7 @@ function FeaturedProjectsSection() {
         </div>
 
         {/* Left column — text */}
-        <div className="flex flex-col justify-center px-5 sm:px-8 md:px-12 lg:px-20 max-w-2xl w-full lg:w-auto flex-1 pt-6 sm:pt-8 lg:pt-0">
+        <div className="flex flex-col justify-center px-[7.5%] lg:px-20 max-w-2xl w-full lg:w-auto flex-1 pt-6 sm:pt-8 lg:pt-0">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeIndex}
@@ -415,7 +415,7 @@ function StatisticsSection() {
 
   return (
     <section id="businesses" className="bg-[#faf9f6] py-16 sm:py-24 lg:py-36">
-      <div ref={ref} className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14">
+      <div ref={ref} className="px-[7.5%]">
         {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 28 }}
@@ -504,7 +504,7 @@ function ContactSection() {
 
   return (
     <section id="connect" className="bg-[#faf9f6] py-16 sm:py-24 lg:py-36">
-      <div ref={ref} className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14">
+      <div ref={ref} className="px-[7.5%]">
         {/* Heading */}
         <motion.h2
           initial={{ opacity: 0, y: 24 }}

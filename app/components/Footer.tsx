@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import Image from "next/image";
 
 const NAV_LINKS = [
@@ -10,8 +10,8 @@ const NAV_LINKS = [
 
 export default function Footer() {
   return (
-    <footer className="bg-[#1a1a1a] py-12 sm:py-16 px-5 sm:px-8 lg:px-14">
-      <div className="max-w-[1440px] mx-auto">
+    <footer className="bg-[#1a1a1a] py-12 sm:py-16 px-[7.5%]">
+      <div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr] gap-10 sm:gap-12 border-b border-white/10 pb-10 sm:pb-12">
           {/* Brand */}
           <div>

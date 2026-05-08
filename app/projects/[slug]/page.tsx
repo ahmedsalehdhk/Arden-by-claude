@@ -78,7 +78,7 @@ function ProjectNotFound() {
     <main className="bg-[#faf9f6]">
       <Nav />
       <section className="pt-[120px] pb-32 text-center">
-        <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14">
+        <div className="px-[7.5%]">
           <h1
             className="font-serif text-[#1a1a1a] mb-6"
             style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", fontWeight: 500 }}
@@ -122,7 +122,7 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14 flex flex-col items-center justify-center text-center"
+      <div className="relative z-10 px-[7.5%] flex flex-col items-center justify-center text-center"
         style={{ minHeight: "calc(70vh - 90px)" }}
       >
         <motion.div
@@ -175,7 +175,7 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
 function AtAGlance({ project }: { project: ProjectDetail }) {
   return (
     <section className="bg-[#faf9f6] py-20 sm:py-28 lg:py-36">
-      <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14">
+      <div className="px-[7.5%]">
         {/* Section heading */}
         <FadeIn>
           <div className="text-center mb-16 sm:mb-20">
@@ -310,7 +310,7 @@ function FeaturesSection({ project }: { project: ProjectDetail }) {
 
   return (
     <section className="bg-[#f4f2ee] py-20 sm:py-28 lg:py-36">
-      <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14">
+      <div className="px-[7.5%]">
         {/* Section heading */}
         <FadeIn>
           <div className="text-center mb-16 sm:mb-20">
@@ -417,7 +417,7 @@ function FeaturesSection({ project }: { project: ProjectDetail }) {
 function ProjectCTA({ project }: { project: ProjectDetail }) {
   return (
     <section className="bg-[#1a1a1a] py-20 sm:py-28">
-      <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-14 text-center">
+      <div className="px-[7.5%] text-center">
         <FadeIn>
           <p
             className="font-sans text-white/40 mb-5"
