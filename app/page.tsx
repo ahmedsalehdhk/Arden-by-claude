@@ -279,7 +279,7 @@ function FeaturedProjectsSection() {
               transition={{ duration: 0.45 }}
             >
               {/* Category label */}
-              <p className="font-sans text-[13px] sm:text-[15px] tracking-[0.35em] uppercase text-white/45 mb-1">
+              <p className="font-sans text-[13px] sm:text-[15px] tracking-[0.35em] uppercase text-white mb-1">
                 {project.category}
               </p>
               {/* Tag */}
@@ -298,7 +298,7 @@ function FeaturedProjectsSection() {
                 {project.name}
               </h2>
               {/* Location */}
-              <p className="font-sans text-white/50 mb-8 sm:mb-12" style={{ fontSize: "14px", letterSpacing: "0.10em" }}>
+              <p className="font-sans text-white mb-8 sm:mb-12" style={{ fontSize: "14px", letterSpacing: "0.10em" }}>
                 {project.location}
               </p>
             </motion.div>
@@ -310,7 +310,7 @@ function FeaturedProjectsSection() {
             className="flex items-center gap-3 mb-8 sm:mb-12"
           >
             <div className="w-[7px] h-[7px] rounded-full bg-[#c9a54a]" />
-            <span className="font-serif text-[14px] sm:text-[15px] text-white/70 hover:text-white transition-colors tracking-wide">
+            <span className="font-serif text-[14px] sm:text-[15px] text-white hover:text-white/70 transition-colors tracking-wide">
               View Project
             </span>
           </Link>
@@ -319,14 +319,14 @@ function FeaturedProjectsSection() {
           <div className="flex items-center gap-4 mb-6 sm:mb-8">
             <button
               onClick={goPrev}
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-white/25 flex items-center justify-center text-white/50 hover:text-white hover:border-white/50 transition-all"
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-white flex items-center justify-center text-white hover:text-white/70 hover:border-white/70 transition-all"
               aria-label="Previous"
             >
               <ChevronLeft size={14} strokeWidth={1.5} />
             </button>
             <button
               onClick={goNext}
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-white/25 flex items-center justify-center text-white/50 hover:text-white hover:border-white/50 transition-all"
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-white flex items-center justify-center text-white hover:text-white/70 hover:border-white/70 transition-all"
               aria-label="Next"
             >
               <ChevronRight size={14} strokeWidth={1.5} />
@@ -339,7 +339,7 @@ function FeaturedProjectsSection() {
               <div
                 key={i}
                 className={`h-[2px] flex-1 transition-all duration-500 cursor-pointer ${
-                  i === activeIndex ? "bg-white" : "bg-white/20"
+                  i === activeIndex ? "bg-white" : "bg-white/40"
                 }`}
                 onClick={() => setActiveIndex(i)}
               />
