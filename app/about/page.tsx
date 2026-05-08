@@ -159,17 +159,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── IMAGE GRID ── */}
-      <section className="bg-[#faf9f6] pb-20 sm:pb-28">
-        <div className="px-[7.5%]">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div style={{ aspectRatio: "3/4" }}><Placeholder color="#c2b9ab" /></div>
-            <div className="sm:mt-12" style={{ aspectRatio: "3/4" }}><Placeholder color="#b8ae9f" /></div>
-            <div className="lg:mt-6" style={{ aspectRatio: "3/4" }}><Placeholder color="#cdc4b5" /></div>
-          </div>
-        </div>
-      </section>
-
       {/* ── CTA ── */}
       <section className="bg-[#1a1a1a] py-20 sm:py-28">
         <div className="px-[7.5%] text-center">
