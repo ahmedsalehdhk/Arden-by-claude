@@ -376,23 +376,23 @@ function FeaturedProjectsSection() {
 // SECTION 4 — STATISTICS
 // ─────────────────────────────────────────────
 
+const ALL_STATS = [...LEFT_STATS, ...RIGHT_STATS];
+
 function StatNumber({
   stat,
   started,
-  align,
 }: {
   stat: { value: number; suffix: string; label: string };
   started: boolean;
-  align: "left" | "right";
 }) {
   const count = useCountUp(stat.value, 2400, started);
   const lines = stat.label.split("\n");
 
   return (
-    <div className={align === "right" ? "text-left" : "text-right"}>
+    <div className="text-center">
       <p
         className="font-serif text-[#1a1a1a] leading-none"
-        style={{ fontSize: "clamp(2.6rem, 4.5vw, 4rem)", fontWeight: 700 }}
+        style={{ fontSize: "clamp(2.2rem, 3.5vw, 3.6rem)", fontWeight: 700 }}
       >
         {count}
         <span style={{ color: "#c9a54a" }}>{stat.suffix}</span>
@@ -434,67 +434,25 @@ function StatisticsSection() {
             style={{
               fontSize: "clamp(1.95rem, 3.4vw, 3.1rem)",
               fontWeight: 400,
-              maxWidth: "640px",
             }}
           >
-            Witness, As We
-            <br />
-            <span style={{ fontWeight: 700 }}>Transform</span> Your Land
-            <br />
-            to <span style={{ fontWeight: 700 }}>Landmark</span>
+            Shaping Your Property into a  <span className="font-bold">Lasting Legacy</span>
           </h2>
         </motion.div>
 
-        {/* Desktop: 3-col */}
-        <div className="hidden lg:grid gap-x-12 items-center"
-          style={{ gridTemplateColumns: "1fr clamp(180px,18vw,280px) 1fr" }}>
-          {/* Left stats */}
-          <motion.div
-            initial={{ opacity: 0, x: -28 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.85, delay: 0.18 }}
-            className="space-y-14"
-          >
-            {LEFT_STATS.map((s) => (
-              <StatNumber key={s.label} stat={s} started={isInView} align="left" />
-            ))}
-          </motion.div>
-
-          {/* Center — building placeholder */}
-          <motion.div
-            initial={{ opacity: 0, y: 36 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.95, delay: 0.25 }}
-            className="relative overflow-hidden"
-            style={{ height: "clamp(380px,45vw,590px)" }}
-          >
-            <Placeholder color="#b0a898" />
-          </motion.div>
-
-          {/* Right stats */}
-          <motion.div
-            initial={{ opacity: 0, x: 28 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.85, delay: 0.18 }}
-            className="space-y-14"
-          >
-            {RIGHT_STATS.map((s) => (
-              <StatNumber key={s.label} stat={s} started={isInView} align="right" />
-            ))}
-          </motion.div>
-        </div>
-
-        {/* Mobile: 2-col grid, no center image */}
-        <motion.div
-          initial={{ opacity: 0, y: 28 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.85, delay: 0.18 }}
-          className="lg:hidden grid grid-cols-2 gap-x-8 gap-y-12"
-        >
-          {[...LEFT_STATS, ...RIGHT_STATS].map((s) => (
-            <StatNumber key={s.label} stat={s} started={isInView} align="right" />
+        {/* All 6 stats in a single responsive grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-12">
+          {ALL_STATS.map((s, i) => (
+            <motion.div
+              key={s.label}
+              initial={{ opacity: 0, y: 24 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.7, delay: 0.2 + i * 0.08 }}
+            >
+              <StatNumber stat={s} started={isInView} />
+            </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
