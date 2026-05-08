@@ -99,7 +99,7 @@ function Placeholder({
 function Hero() {
   const imageRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
-  const clipPercent = useTransform(scrollY, [0, 600], [4, 0]);
+  const clipPercent = useTransform(scrollY, [0, 600], [7.5, 0]);
 
   useEffect(() => {
     const unsub = clipPercent.on("change", (v) => {
@@ -138,7 +138,7 @@ function Hero() {
         <div
           ref={imageRef}
           className="absolute inset-0 will-change-[clip-path]"
-          style={{ clipPath: "inset(0 4%)" }}
+          style={{ clipPath: "inset(0 7.5%)" }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -263,7 +263,7 @@ function FeaturedProjectsSection() {
         </div>
 
         {/* Left column — text */}
-        <div className="flex flex-col justify-center px-[7.5%] lg:px-20 max-w-2xl w-full lg:w-auto flex-1 pt-6 sm:pt-8 lg:pt-0">
+        <div className="flex flex-col justify-center px-[7.5%] max-w-2xl w-full lg:w-auto flex-1 pt-6 sm:pt-8 lg:pt-0">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeIndex}
@@ -342,7 +342,7 @@ function FeaturedProjectsSection() {
         </div>
 
         {/* Right column — building image (desktop only) */}
-        <div className="hidden lg:block pr-14 flex-shrink-0">
+        <div className="hidden lg:block pr-[7.5%] flex-shrink-0">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeIndex}
