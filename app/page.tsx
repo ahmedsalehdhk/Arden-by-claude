@@ -242,9 +242,8 @@ function FeaturedProjectsSection() {
           />
         </div>
       ))}
-      {/* Gradient overlays */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#1a1a1a]/85 via-[#1a1a1a]/40 to-transparent z-[1]" />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a]/50 via-transparent to-[#1a1a1a]/20 z-[1]" />
+      {/* Uniform dark overlay */}
+      <div className="absolute inset-0 bg-[#1a1a1a]/60 z-[1]" />
 
       {/* Content */}
       <div className="relative z-10 h-full flex flex-col lg:flex-row lg:items-center lg:justify-between">
