@@ -68,27 +68,6 @@ function useCountUp(target: number, duration = 2400, start = false) {
   return count;
 }
 
-// ─────────────────────────────────────────────
-// PLACEHOLDER
-// ─────────────────────────────────────────────
-
-function Placeholder({
-  className = "",
-  color = "#c8bfb0",
-  style = {},
-}: {
-  className?: string;
-  color?: string;
-  style?: React.CSSProperties;
-}) {
-  return (
-    <div
-      className={`w-full h-full ${className}`}
-      style={{ backgroundColor: color, ...style }}
-    />
-  );
-}
-
 
 // ─────────────────────────────────────────────
 // SECTION 1 — HERO
@@ -191,7 +170,7 @@ function AboutSection() {
               className="font-sans font-medium text-[#1a1a1a] leading-[2] mb-10"
               style={{ fontSize: "20px" }}
             >
-              Building the country's most selective projects requires more than just a vision—it requires a standard of excellence that never wavers. Discover a portfolio where luxury meets structural perfection.
+              Building the country&apos;s most selective projects requires more than just a vision—it requires a standard of excellence that never wavers. Discover a portfolio where luxury meets structural perfection.
             </p>
             <Link href="/about" className="self-start font-sans font-semibold text-[13px] tracking-[0.24em] uppercase text-[#1a1a1a] flex items-center gap-2 group hover:text-[#c9a54a] transition-colors duration-300">
               More about us
@@ -512,9 +491,7 @@ function ContactSection() {
               className="font-sans text-[#1a1a1a] leading-[1.95] mb-5"
               style={{ fontSize: "20px", maxWidth: "500px" }}
             >
-              Discover exquisite apartments, commercial spaces, and investment
-              opportunities with Arden Holdings Ltd. Let us turn your dreams
-              into a reality.
+              Discover exclusive real estate opportunities designed for the modern investor. We don’t just develop land, we create landmarks that stand the test of time.
             </p>
             <Link href="/contact" className="font-sans font-semibold text-[13px] tracking-[0.24em] uppercase text-[#1a1a1a] flex items-center gap-2 group hover:text-[#c9a54a] transition-colors">
               Reach Out
@@ -537,9 +514,7 @@ function ContactSection() {
               className="font-sans text-[#1a1a1a] leading-[1.95] mb-5"
               style={{ fontSize: "20px", maxWidth: "500px" }}
             >
-              Partner with Arden to further our portfolio as part of the
-              architectural landscape. Fill up the form to explore this
-              partnership.
+              Partner with Arden to leave a lasting mark on the city&apos;s skyline. Let&apos;s start the conversation—share your information to explore partnership opportunities.
             </p>
             <Link href="/contact?tab=landowners" className="font-sans font-semibold text-[13px] tracking-[0.24em] uppercase text-[#1a1a1a] flex items-center gap-2 group hover:text-[#c9a54a] transition-colors">
               Partner With Us

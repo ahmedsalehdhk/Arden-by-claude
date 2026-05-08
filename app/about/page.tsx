@@ -6,10 +6,6 @@ import { ArrowUpRight } from "lucide-react";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 
-function Placeholder({ color = "#c2b9ab", className = "" }: { color?: string; className?: string }) {
-  return <div className={`w-full h-full ${className}`} style={{ backgroundColor: color }} />;
-}
-
 const VALUES = [
   {
     num: "01",
@@ -101,10 +97,10 @@ export default function AboutPage() {
               </h2>
             </FadeIn>
             <FadeIn delay={0.15}>
-              <p className="font-sans font-medium text-justify text-[#1a1a1a] leading-[2] mb-6" style={{ fontSize: "20px" }}>
+              <p className="font-sans font-medium text-justify text-[#1a1a1a]/60 leading-[2] mb-6" style={{ fontSize: "20px" }}>
                 Arden Group was founded in 2003 with a singular vision: to set a new standard for real estate in Bangladesh. Over two decades, we have grown from a single project in Gulshan into one of the country&apos;s most respected property developers, with a portfolio spanning premium residential towers, Grade A commercial buildings, and mixed-use landmark developments.
               </p>
-              <p className="font-sans font-medium text-justify text-[#1a1a1a] leading-[2]" style={{ fontSize: "20px" }}>
+              <p className="font-sans font-medium text-justify text-[#1a1a1a]/60 leading-[2]" style={{ fontSize: "20px" }}>
                 Our success is built not merely on the quality of bricks and mortar, but on the trust of the thousands of clients, investors, and landowners who have partnered with us. Every project we undertake carries the weight of that trust — and it is a responsibility we take seriously.
               </p>
             </FadeIn>
@@ -149,7 +145,7 @@ export default function AboutPage() {
                   >
                     {v.title}
                   </h3>
-                  <p className="font-sans text-[#1a1a1a]/45 leading-[1.9]" style={{ fontSize: "15px" }}>
+                  <p className="font-sans text-[#1a1a1a] leading-[1.9]" style={{ fontSize: "20px" }}>
                     {v.body}
                   </p>
                 </div>

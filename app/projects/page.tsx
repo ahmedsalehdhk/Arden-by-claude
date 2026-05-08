@@ -7,10 +7,6 @@ import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import ProjectCard from "../components/ProjectCard";
 
-function Placeholder({ color = "#c2b9ab", className = "" }: { color?: string; className?: string }) {
-  return <div className={`w-full h-full ${className}`} style={{ backgroundColor: color }} />;
-}
-
 // Project data extracted from Shanta — adapted for Arden
 const PROJECTS = [
   { name: "Amanat", address: "Road 1, Block I, Banani, Dhaka", location: "Banani", status: "Ongoing", type: "Residential", image: "/projectimages/amanat/Front Side View_01.jpg" },
