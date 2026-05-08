@@ -39,8 +39,6 @@ const FEATURED_PROJECTS = [
 
 const LEFT_STATS = [
   { value: 11, suffix: "M+", label: "Total Area Built\n(Million sft)" },
-  { value: 21, suffix: "", label: "Years Since Inception" },
-  { value: 63, suffix: "", label: "Number of Completed\nProjects" },
 ];
 
 const RIGHT_STATS = [
@@ -392,7 +390,7 @@ function StatNumber({
     <div className="text-center">
       <p
         className="font-serif text-[#1a1a1a] leading-none"
-        style={{ fontSize: "clamp(2.2rem, 3.5vw, 3.6rem)", fontWeight: 700 }}
+        style={{ fontSize: "clamp(2.4rem, 4vw, 4rem)", fontWeight: 700 }}
       >
         {count}
         <span style={{ color: "#c9a54a" }}>{stat.suffix}</span>
@@ -440,8 +438,8 @@ function StatisticsSection() {
           </h2>
         </motion.div>
 
-        {/* All 6 stats in a single responsive grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-8 gap-y-12">
+        {/* All stats in a single responsive grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-10 gap-y-12 max-w-5xl mx-auto">
           {ALL_STATS.map((s, i) => (
             <motion.div
               key={s.label}
