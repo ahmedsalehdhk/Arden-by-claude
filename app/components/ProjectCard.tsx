@@ -7,7 +7,8 @@ export interface ProjectCardData {
   location: string;
   status: "Ongoing" | "Upcoming" | "Completed" | string;
   type: "Residential" | "Commercial" | string;
-  color: string;
+  image?: string;
+  color?: string;
 }
 
 export default function ProjectCard({ project }: { project: ProjectCardData }) {
@@ -16,15 +17,24 @@ export default function ProjectCard({ project }: { project: ProjectCardData }) {
   return (
     <Link href={`/projects/${slug}`} className="block">
       <article className="group cursor-pointer">
-        {/* Image placeholder */}
+        {/* Image / placeholder */}
         <div
           className="relative overflow-hidden mb-5"
           style={{ aspectRatio: "4/3" }}
         >
-          <div
-            className="w-full h-full transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
-            style={{ backgroundColor: project.color }}
-          />
+          {project.image ? (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={project.image}
+              alt={project.name}
+              className="w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
+            />
+          ) : (
+            <div
+              className="w-full h-full transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
+              style={{ backgroundColor: project.color || "#c2b9ab" }}
+            />
+          )}
           {/* Status badge */}
           <div className="absolute top-4 left-4">
             <span
