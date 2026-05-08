@@ -119,7 +119,7 @@ function Hero() {
             initial={{ y: 110, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-            className="font-serif text-[#1a1a1a] text-center select-none w-full sm:whitespace-nowrap"
+            className="font-serif text-[#1a1a1a] text-center select-none uppercase w-full sm:whitespace-nowrap"
             style={{
               fontSize: "clamp(2.2rem, 4.5vw, 4.5vw)",
               letterSpacing: "0.22em",
@@ -134,19 +134,26 @@ function Hero() {
       </div>
 
       {/* Hero image placeholder */}
-      <div className="relative w-full" style={{ height: "78vh" }}>
-        <div
-          ref={imageRef}
-          className="absolute inset-0 will-change-[clip-path]"
-          style={{ clipPath: "inset(0 7.5%)" }}
+      <div className="relative w-full overflow-hidden" style={{ height: "78vh" }}>
+        <motion.div
+          initial={{ y: -60, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 1.2, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          className="absolute inset-0"
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://images.pexels.com/photos/323780/pexels-photo-323780.jpeg?auto=compress&cs=tinysrgb&w=1800"
-            alt="Luxury real estate development"
-            className="w-full h-full object-cover"
-          />
-        </div>
+          <div
+            ref={imageRef}
+            className="absolute inset-0 will-change-[clip-path]"
+            style={{ clipPath: "inset(0 7.5%)" }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/projectimages/rahma/View 09.png"
+              alt="Luxury real estate development"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </motion.div>
       </div>
     </section>
   );
