@@ -548,7 +548,12 @@ function ContactSection() {
             transition={{ duration: 0.85, delay: 0.25 }}
           >
             <div className="relative overflow-hidden" style={{ aspectRatio: "4/3" }}>
-              <Placeholder color="#c2b9ab" />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/projectimages/amanat/High Eye level View_04.jpg"
+                alt="Arden Holdings development"
+                className="w-full h-full object-cover"
+              />
             </div>
           </motion.div>
         </div>
