@@ -56,8 +56,8 @@ export default function AboutPage() {
       <Nav />
 
       {/* ── HERO ── */}
-      <section className="relative pt-[60px] overflow-hidden bg-[#faf9f6]" style={{ minHeight: "90vh" }}>
-        <div className="relative z-10 px-[7.5%] pt-24 sm:pt-36 pb-24 sm:pb-40">
+      <section className="relative pt-[60px] overflow-hidden bg-[#faf9f6]" style={{ minHeight: "55vh" }}>
+        <div className="relative z-10 px-[7.5%] pt-20 sm:pt-32 pb-20 sm:pb-28">
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={isLoaded ? { opacity: 1, y: 0 } : {}}
@@ -71,16 +71,16 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 32 }}
             animate={isLoaded ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="font-serif text-[#1a1a1a]"
+            className="font-serif text-[#1a1a1a] uppercase"
             style={{
-              fontSize: "clamp(3rem, 8vw, 8rem)",
-              letterSpacing: "0.06em",
-              fontWeight: 300,
-              lineHeight: 1.0,
-              maxWidth: "700px",
+              fontSize: "clamp(2rem, 5.5vw, 5.5rem)",
+              letterSpacing: "0.04em",
+              fontWeight: 700,
+              lineHeight: 1.05,
+              maxWidth: "800px",
             }}
           >
-            A mark of distinction.
+            A Mark of Distinction.
           </motion.h1>
         </div>
       </section>

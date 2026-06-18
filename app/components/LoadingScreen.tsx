@@ -70,7 +70,7 @@ export default function LoadingScreen({
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed inset-0 z-[100] bg-[#faf9f6] flex flex-col items-center justify-center"
+          className="fixed inset-0 z-[100] bg-[#1a1a1a] flex flex-col items-center justify-center"
         >
           {/* Logo */}
           <motion.div
@@ -83,7 +83,7 @@ export default function LoadingScreen({
               alt="Arden Holdings"
               width={160}
               height={40}
-              className="h-[32px] w-auto mb-10"
+              className="h-[32px] w-auto mb-10 brightness-0 invert"
               priority
             />
           </motion.div>
@@ -97,7 +97,7 @@ export default function LoadingScreen({
           >
             <div className="w-10 h-10 relative">
               <div
-                className="absolute inset-0 rounded-full border border-[#1a1a1a]/[0.07]"
+                className="absolute inset-0 rounded-full border border-white/[0.1]"
               />
               <div
                 className="absolute inset-0 rounded-full border border-transparent border-t-[#c9a54a] animate-spin"
@@ -111,7 +111,7 @@ export default function LoadingScreen({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.5 }}
-            className="font-sans text-[#1a1a1a]/25 mt-8"
+            className="font-sans text-white/25 mt-8"
             style={{
               fontSize: "11px",
               letterSpacing: "0.3em",

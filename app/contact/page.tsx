@@ -78,14 +78,14 @@ function ContactInner() {
       <Nav />
 
       {/* ── HERO ── */}
-      <section className="relative pt-[60px] overflow-hidden bg-[#faf9f6]" style={{ minHeight: "50vh" }}>
-        <div className="relative z-10 px-[7.5%] pt-20 sm:pt-28 pb-16 sm:pb-24">
+      <section className="relative pt-[60px] overflow-hidden bg-[#faf9f6]" style={{ minHeight: "55vh" }}>
+        <div className="relative z-10 px-[7.5%] pt-20 sm:pt-32 pb-20 sm:pb-28">
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={isLoaded ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
             className="font-sans text-[#1a1a1a]/40 mb-6"
-            style={{ fontSize: "14px", letterSpacing: "0.32em", textTransform: "uppercase" }}
+            style={{ fontSize: "12px", letterSpacing: "0.32em", textTransform: "uppercase" }}
           >
             Reach Out
           </motion.p>
@@ -95,10 +95,11 @@ function ContactInner() {
             transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             className="font-serif text-[#1a1a1a] uppercase"
             style={{
-              fontSize: "clamp(2.5rem, 7vw, 7rem)",
+              fontSize: "clamp(2rem, 5.5vw, 5.5rem)",
               letterSpacing: "0.04em",
               fontWeight: 700,
-              lineHeight: 1.0,
+              lineHeight: 1.05,
+              maxWidth: "800px",
             }}
           >
             Contact Us
