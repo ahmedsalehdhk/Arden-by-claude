@@ -117,6 +117,7 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
           fill
           className="object-cover"
           priority
+          sizes="100vw"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a]/60 via-[#1a1a1a]/50 to-[#1a1a1a]/80" />
       </div>
@@ -237,6 +238,8 @@ function AtAGlance({ project }: { project: ProjectDetail }) {
                   alt={`${project.name} Building`}
                   fill
                   className="object-cover"
+                  sizes="(max-width: 1024px) 80vw, 320px"
+                  loading="lazy"
                 />
               </div>
               {/* Status badge */}
@@ -401,6 +404,8 @@ function FeaturesSection({ project }: { project: ProjectDetail }) {
                 alt={`${project.name} Features`}
                 fill
                 className="object-cover"
+                sizes="(max-width: 1280px) 33vw, 480px"
+                loading="lazy"
               />
             </div>
           </FadeIn>
