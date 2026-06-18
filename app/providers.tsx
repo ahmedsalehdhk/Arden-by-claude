@@ -7,13 +7,6 @@ import "lenis/dist/lenis.css";
 import { LoadContext } from "./context/LoadContext";
 import LoadingScreen from "./components/LoadingScreen";
 
-const HOME_PRELOAD_IMAGES = [
-  "/projectimages/rahma/view-09.png",
-  "/projectimages/amanat/front-side-view-01.jpg",
-  "/projectimages/rahma/view-02.jpg",
-  "/projectimages/amanat/eye-level-view-01.jpg",
-  "/projectimages/rahma/view-01.jpg",
-];
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -46,11 +39,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <LoadContext.Provider value={{ isLoaded }}>
       {isHomePage && !isLoaded && (
-        <LoadingScreen
-          imagesToPreload={HOME_PRELOAD_IMAGES}
-          onComplete={() => setIsLoaded(true)}
-          minimumDuration={1800}
-        />
+        <LoadingScreen onComplete={() => setIsLoaded(true)} />
       )}
       {children}
     </LoadContext.Provider>
