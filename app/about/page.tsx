@@ -102,10 +102,10 @@ export default function AboutPage() {
             </FadeIn>
             <FadeIn delay={0.15}>
               <p className="font-sans font-medium text-left text-[#1a1a1a]/60 leading-[2] mb-6" style={{ fontSize: "clamp(15px, 2vw, 20px)" }}>
-                Arden Group was founded in 2003 with a singular vision: to set a new standard for real estate in Bangladesh. Over two decades, we have grown from a single project in Gulshan into one of the country&apos;s most respected property developers, with a portfolio spanning premium residential towers, Grade A commercial buildings, and mixed-use landmark developments.
+                Arden Holdings Ltd. was founded with a singular vision: to redefine the standards of real estate development. Through an unwavering commitment to quality, innovation, and integrity, we have grown into one of the region&apos;s most respected property developers — with a portfolio spanning premium residential towers, Grade A commercial spaces, and landmark mixed-use developments.
               </p>
               <p className="font-sans font-medium text-left text-[#1a1a1a]/60 leading-[2]" style={{ fontSize: "clamp(15px, 2vw, 20px)" }}>
-                Our success is built not merely on the quality of bricks and mortar, but on the trust of the thousands of clients, investors, and landowners who have partnered with us. Every project we undertake carries the weight of that trust — and it is a responsibility we take seriously.
+                Our reputation is built not merely on the quality of our construction, but on the trust of the clients, investors, and landowners who have chosen to partner with us. Every project we undertake carries the weight of that trust — and it is a responsibility we take seriously.
               </p>
             </FadeIn>
           </div>

@@ -272,7 +272,7 @@ function ContactInner() {
             <div className="text-center">
               <div className="w-3 h-3 rounded-full bg-[#c9a54a] mx-auto mb-3" />
               <p className="font-sans text-[12px] tracking-[0.22em] uppercase text-[#1a1a1a]/40">
-                Arden Group — Gulshan, Dhaka
+                Arden Holdings Ltd. — Gulshan, Dhaka
               </p>
             </div>
           </div>

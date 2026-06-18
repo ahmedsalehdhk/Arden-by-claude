@@ -104,7 +104,7 @@ export default function Footer() {
 
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="font-sans text-white/40" style={{ fontSize: "12px" }}>
-            &copy; {new Date().getFullYear()} Arden Group. All rights reserved.
+            &copy; {new Date().getFullYear()} Arden Holdings Ltd. All rights reserved.
           </p>
           <div className="flex gap-6">
             {["Privacy Policy", "Terms of Use", "Sitemap"].map((label) => (
