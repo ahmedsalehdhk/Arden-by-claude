@@ -27,13 +27,16 @@ body {
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #faf9f6;
+  background: #e8e4df;
 }
 ::-webkit-scrollbar-thumb {
-  background: #c9a54a;
+  background: #c4bfb8;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a39c;
 }
 
 /* Utility classes */
