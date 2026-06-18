@@ -161,7 +161,6 @@ function AboutSection() {
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             className="max-w-3xl"
           >
-            <h1>Heyyyyyyy</h1>
             <p
               className="font-sans font-medium text-[#1a1a1a] leading-[2] mb-10"
               style={{ fontSize: "20px" }}
