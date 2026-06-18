@@ -6,7 +6,6 @@ import {
   useScroll,
   useTransform,
   useInView,
-  AnimatePresence,
 } from "framer-motion";
 import { ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
@@ -187,20 +186,33 @@ function AboutSection() {
 
 function FeaturedProjectsSection() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const project = FEATURED_PROJECTS[activeIndex];
+  const [fading, setFading] = useState(false);
   const total = FEATURED_PROJECTS.length;
 
-  const goPrev = () => setActiveIndex((prev) => (prev - 1 + total) % total);
-  const goNext = () => setActiveIndex((prev) => (prev + 1) % total);
+  const switchTo = (next: number) => {
+    if (next === activeIndex || fading) return;
+    setFading(true);
+    setActiveIndex(next);
+    setTimeout(() => setFading(false), 420);
+  };
+
+  const goPrev = () => switchTo((activeIndex - 1 + total) % total);
+  const goNext = () => switchTo((activeIndex + 1) % total);
+
+  const project = FEATURED_PROJECTS[activeIndex];
 
   return (
     <section id="projects" className="relative w-full overflow-hidden h-[100svh] lg:h-[80vh]">
-      {/* Background images — crossfade */}
+      {/* Background images — GPU-composited crossfade, all in DOM */}
       {FEATURED_PROJECTS.map((p, i) => (
         <div
           key={p.name}
-          className="absolute inset-0 transition-opacity duration-700 ease-in-out"
-          style={{ opacity: i === activeIndex ? 1 : 0 }}
+          className="absolute inset-0"
+          style={{
+            opacity: i === activeIndex ? 1 : 0,
+            transition: "opacity 420ms cubic-bezier(0.4,0,0.2,1)",
+            willChange: "opacity",
+          }}
         >
           <Image
             src={p.image}
@@ -208,7 +220,8 @@ function FeaturedProjectsSection() {
             fill
             className="object-cover"
             sizes="100vw"
-            loading="lazy"
+            priority={i === 0}
+            loading={i === 0 ? undefined : "lazy"}
           />
         </div>
       ))}
@@ -219,66 +232,66 @@ function FeaturedProjectsSection() {
       <div className="relative z-10 h-full flex flex-col lg:flex-row lg:items-center lg:justify-between">
         {/* Building image — top on mobile, right column on desktop */}
         <div className="lg:hidden flex justify-center pt-8 sm:pt-10 px-[7.5%]">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeIndex}
-              initial={{ opacity: 0, scale: 0.97 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.97 }}
-              transition={{ duration: 0.6 }}
-            >
+          <div
+            className="relative shadow-lg"
+            style={{ width: "60vw", maxWidth: "320px", height: "38vh", maxHeight: "340px" }}
+          >
+            {FEATURED_PROJECTS.map((p, i) => (
               <div
-                className="relative shadow-lg"
-                style={{ width: "60vw", maxWidth: "320px", height: "38vh", maxHeight: "340px" }}
+                key={p.name}
+                className="absolute inset-0"
+                style={{
+                  opacity: i === activeIndex ? 1 : 0,
+                  transition: "opacity 380ms cubic-bezier(0.4,0,0.2,1)",
+                  willChange: "opacity",
+                }}
               >
                 <Image
-                  src={project.buildingImage}
-                  alt={`${project.name} building`}
+                  src={p.buildingImage}
+                  alt={`${p.name} building`}
                   fill
                   className="object-cover"
                   sizes="(max-width: 640px) 60vw, 320px"
                   loading="lazy"
                 />
               </div>
-            </motion.div>
-          </AnimatePresence>
+            ))}
+          </div>
         </div>
 
         {/* Left column — text */}
         <div className="flex flex-col justify-center px-[7.5%] max-w-2xl w-full lg:w-auto flex-1 pt-6 sm:pt-8 lg:pt-0">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeIndex}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.45 }}
-            >
-              {/* Category label */}
-              <p className="font-sans text-[13px] sm:text-[15px] tracking-[0.35em] uppercase text-white mb-1">
-                {project.category}
-              </p>
-              {/* Tag */}
-              <p className="font-sans text-[12px] sm:text-[15px] tracking-[0.30em] uppercase text-[#c9a54a] mb-5 sm:mb-7">
-                {project.tag}
-              </p>
-              {/* Project name */}
-              <h2
-                className="font-serif text-white uppercase leading-[1.05] mb-2 sm:mb-3"
+          {/* Text layers — all rendered, active one visible */}
+          <div className="relative" style={{ minHeight: "180px" }}>
+            {FEATURED_PROJECTS.map((p, i) => (
+              <div
+                key={p.name}
+                className="absolute inset-x-0 top-0"
                 style={{
-                  fontSize: "clamp(2rem, 4.5vw, 4.2rem)",
-                  fontWeight: 700,
-                  letterSpacing: "0.02em",
+                  opacity: i === activeIndex ? 1 : 0,
+                  transition: "opacity 320ms cubic-bezier(0.4,0,0.2,1)",
+                  willChange: "opacity",
+                  pointerEvents: i === activeIndex ? "auto" : "none",
                 }}
               >
-                {project.name}
-              </h2>
-              {/* Location */}
-              <p className="font-sans text-white mb-8 sm:mb-12" style={{ fontSize: "14px", letterSpacing: "0.10em" }}>
-                {project.location}
-              </p>
-            </motion.div>
-          </AnimatePresence>
+                <p className="font-sans text-[13px] sm:text-[15px] tracking-[0.35em] uppercase text-white mb-1">
+                  {p.category}
+                </p>
+                <p className="font-sans text-[12px] sm:text-[15px] tracking-[0.30em] uppercase text-[#c9a54a] mb-5 sm:mb-7">
+                  {p.tag}
+                </p>
+                <h2
+                  className="font-serif text-white uppercase leading-[1.05] mb-2 sm:mb-3"
+                  style={{ fontSize: "clamp(2rem, 4.5vw, 4.2rem)", fontWeight: 700, letterSpacing: "0.02em" }}
+                >
+                  {p.name}
+                </h2>
+                <p className="font-sans text-white mb-8 sm:mb-12" style={{ fontSize: "14px", letterSpacing: "0.10em" }}>
+                  {p.location}
+                </p>
+              </div>
+            ))}
+          </div>
 
           {/* View Project CTA */}
           <Link
@@ -314,10 +327,9 @@ function FeaturedProjectsSection() {
             {FEATURED_PROJECTS.map((_, i) => (
               <div
                 key={i}
-                className={`h-[2px] flex-1 transition-all duration-500 cursor-pointer ${
-                  i === activeIndex ? "bg-white" : "bg-white/40"
-                }`}
-                onClick={() => setActiveIndex(i)}
+                className={`h-[2px] flex-1 cursor-pointer ${i === activeIndex ? "bg-white" : "bg-white/40"}`}
+                style={{ transition: "background-color 300ms" }}
+                onClick={() => switchTo(i)}
               />
             ))}
           </div>
@@ -325,26 +337,28 @@ function FeaturedProjectsSection() {
 
         {/* Right column — building image (desktop only) */}
         <div className="hidden lg:block pr-[7.5%] flex-shrink-0">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeIndex}
-              initial={{ opacity: 0, scale: 0.97 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.97 }}
-              transition={{ duration: 0.6 }}
-            >
-              <div className="relative" style={{ width: "320px", height: "65vh", maxHeight: "520px" }}>
+          <div className="relative" style={{ width: "320px", height: "65vh", maxHeight: "520px" }}>
+            {FEATURED_PROJECTS.map((p, i) => (
+              <div
+                key={p.name}
+                className="absolute inset-0"
+                style={{
+                  opacity: i === activeIndex ? 1 : 0,
+                  transition: "opacity 380ms cubic-bezier(0.4,0,0.2,1)",
+                  willChange: "opacity",
+                }}
+              >
                 <Image
-                  src={project.buildingImage}
-                  alt={`${project.name} building`}
+                  src={p.buildingImage}
+                  alt={`${p.name} building`}
                   fill
                   className="object-cover"
                   sizes="320px"
                   loading="lazy"
                 />
               </div>
-            </motion.div>
-          </AnimatePresence>
+            ))}
+          </div>
         </div>
       </div>
     </section>
