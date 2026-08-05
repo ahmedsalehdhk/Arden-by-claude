@@ -260,15 +260,19 @@ function ContactInner() {
       </section>
 
       {/* ── MAP ── */}
-      <section className="w-full" style={{ height: "clamp(280px, 40vw, 520px)" }}>
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8661.74351166099!2d90.39012999489778!3d23.78111813250275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c76a25b04c17%3A0xc32fd7eaacd36446!2sMohakhali%20DOHS%2C%20Dhaka!5e1!3m2!1sen!2sbd!4v1785912046644!5m2!1sen!2sbd"
-          className="w-full h-full border-0"
-          allowFullScreen
-          loading="lazy"
-          referrerPolicy="strict-origin-when-cross-origin"
-          title="Arden Holdings Ltd. — Mohakhali DOHS, Dhaka"
-        />
+      <section className="w-full pb-16 sm:pb-24">
+        <div className="px-[7.5%]">
+          <div className="w-full" style={{ height: "clamp(280px, 40vw, 520px)" }}>
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8661.74351166099!2d90.39012999489778!3d23.78111813250275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c76a25b04c17%3A0xc32fd7eaacd36446!2sMohakhali%20DOHS%2C%20Dhaka!5e1!3m2!1sen!2sbd!4v1785912046644!5m2!1sen!2sbd"
+              className="w-full h-full border-0"
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+              title="Arden Holdings Ltd. — Mohakhali DOHS, Dhaka"
+            />
+          </div>
+        </div>
       </section>
 
       <Footer />
