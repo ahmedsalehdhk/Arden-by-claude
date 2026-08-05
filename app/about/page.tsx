@@ -140,8 +140,8 @@ export default function AboutPage() {
           </FadeIn>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-[#1a1a1a]/[0.07]">
             {VALUES.map((v, i) => (
-              <FadeIn key={v.title} delay={i * 0.08}>
-                <div className="bg-[#f0ede6] p-8 sm:p-10 lg:p-12">
+              <FadeIn key={v.title} delay={i * 0.08} className="h-full">
+                <div className="bg-[#f0ede6] p-8 sm:p-10 lg:p-12 h-full">
                   <p className="font-sans text-[#c9a54a] mb-5" style={{ fontSize: "12px", letterSpacing: "0.22em" }}>
                     {v.num}
                   </p>
