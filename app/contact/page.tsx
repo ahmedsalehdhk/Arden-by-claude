@@ -8,10 +8,6 @@ import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import { useIsLoaded } from "../context/LoadContext";
 
-function Placeholder({ color = "#c2b9ab", className = "" }: { color?: string; className?: string }) {
-  return <div className={`w-full h-full ${className}`} style={{ backgroundColor: color }} />;
-}
-
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
@@ -253,8 +249,7 @@ function ContactInner() {
                 <div>
                   <p className="font-sans text-[11px] tracking-[0.26em] uppercase text-[#1a1a1a]/40 mb-2">Address</p>
                   <p className="font-serif text-[#1a1a1a]" style={{ fontSize: "1.1rem", lineHeight: 1.5 }}>
-                    Arden Forum, East Tower,<br />
-                    Level 20–22, 74 Gulshan Ave,<br />
+                    Mohakhali DOHS,<br />
                     Dhaka 1212
                   </p>
                 </div>
@@ -264,19 +259,16 @@ function ContactInner() {
         </div>
       </section>
 
-      {/* ── MAP PLACEHOLDER ── */}
+      {/* ── MAP ── */}
       <section className="w-full" style={{ height: "clamp(280px, 40vw, 520px)" }}>
-        <div className="relative w-full h-full">
-          <Placeholder color="#d6d0c6" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center">
-              <div className="w-3 h-3 rounded-full bg-[#c9a54a] mx-auto mb-3" />
-              <p className="font-sans text-[12px] tracking-[0.22em] uppercase text-[#1a1a1a]/40">
-                Arden Holdings Ltd. — Gulshan, Dhaka
-              </p>
-            </div>
-          </div>
-        </div>
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8661.74351166099!2d90.39012999489778!3d23.78111813250275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c76a25b04c17%3A0xc32fd7eaacd36446!2sMohakhali%20DOHS%2C%20Dhaka!5e1!3m2!1sen!2sbd!4v1785912046644!5m2!1sen!2sbd"
+          className="w-full h-full border-0"
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="strict-origin-when-cross-origin"
+          title="Arden Holdings Ltd. — Mohakhali DOHS, Dhaka"
+        />
       </section>
 
       <Footer />
