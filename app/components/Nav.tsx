@@ -86,13 +86,13 @@ export default function Nav() {
             className="ml-auto flex items-center gap-2.5"
             aria-label="Toggle menu"
           >
-            <span className="font-sans text-[14px] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a]/50">
+            <span className="font-sans text-[14px] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a]">
               Menu
             </span>
             {menuOpen ? (
-              <X size={15} strokeWidth={1.5} className="text-[#1a1a1a]" />
+              <X size={20} strokeWidth={2} className="text-[#1a1a1a]" />
             ) : (
-              <Menu size={15} strokeWidth={1.5} className="text-[#1a1a1a]" />
+              <Menu size={20} strokeWidth={2} className="text-[#1a1a1a]" />
             )}
           </button>
         </div>

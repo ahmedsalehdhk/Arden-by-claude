@@ -20,6 +20,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
+import AnimatedHeading from "../../components/AnimatedHeading";
 import { getProjectBySlug } from "../../data/projects";
 import type { ProjectDetail } from "../../data/projects";
 
@@ -140,10 +141,12 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
           </span>
         </motion.div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+        <AnimatedHeading
+          as="h1"
+          text={project.name}
+          trigger="load"
+          active
+          delay={0.3}
           className="font-serif text-white uppercase"
           style={{
             fontSize: "clamp(2.5rem, 7vw, 7rem)",
@@ -151,9 +154,7 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
             fontWeight: 700,
             lineHeight: 1.05,
           }}
-        >
-          {project.name}
-        </motion.h1>
+        />
 
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -186,16 +187,17 @@ function AtAGlance({ project }: { project: ProjectDetail }) {
             >
               Project Overview
             </p>
-            <h2
+            <AnimatedHeading
+              as="h2"
+              text="At a Glance"
+              trigger="view"
               className="font-serif text-[#1a1a1a] uppercase"
               style={{
                 fontSize: "clamp(1.8rem, 4vw, 3.2rem)",
                 letterSpacing: "0.14em",
                 fontWeight: 600,
               }}
-            >
-              At a Glance
-            </h2>
+            />
             {/* Decorative line */}
             <div className="mt-6 flex items-center justify-center gap-3">
               <div className="w-12 h-px bg-[#c9a54a]/40" />
@@ -323,16 +325,17 @@ function FeaturesSection({ project }: { project: ProjectDetail }) {
             >
               What We Offer
             </p>
-            <h2
+            <AnimatedHeading
+              as="h2"
+              text="Features & Amenities"
+              trigger="view"
               className="font-serif text-[#1a1a1a] uppercase"
               style={{
                 fontSize: "clamp(1.8rem, 4vw, 3.2rem)",
                 letterSpacing: "0.14em",
                 fontWeight: 600,
               }}
-            >
-              Features &amp; Amenities
-            </h2>
+            />
             {/* Decorative line */}
             <div className="mt-6 flex items-center justify-center gap-3">
               <div className="w-12 h-px bg-[#c9a54a]/40" />
@@ -430,12 +433,13 @@ function ProjectCTA({ project }: { project: ProjectDetail }) {
           >
             Interested in {project.name}?
           </p>
-          <h2
+          <AnimatedHeading
+            as="h2"
+            text="Schedule a private viewing or inquire today."
+            trigger="view"
             className="font-serif text-white mb-10"
             style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", fontWeight: 400 }}
-          >
-            Schedule a private viewing or inquire today.
-          </h2>
+          />
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/contact"

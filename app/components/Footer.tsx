@@ -76,7 +76,7 @@ export default function Footer() {
                 className="font-sans text-white/60"
                 style={{ fontSize: "15px" }}
               >
-                74 Gulshan Avenue
+                Mohakhali DOHS
                 <br />
                 Dhaka 1212
               </li>

@@ -5,6 +5,7 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import AnimatedHeading from "../components/AnimatedHeading";
 import ProjectCard from "../components/ProjectCard";
 import { useIsLoaded } from "../context/LoadContext";
 
@@ -57,10 +58,12 @@ export default function ProjectsPage() {
           >
             Our Portfolio
           </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 32 }}
-            animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          <AnimatedHeading
+            as="h1"
+            text="Exclusive Properties in Prime Locations"
+            trigger="load"
+            active={isLoaded}
+            delay={0.1}
             className="font-serif text-[#1a1a1a] uppercase"
             style={{
               fontSize: "clamp(2rem, 5.5vw, 5.5rem)",
@@ -69,9 +72,7 @@ export default function ProjectsPage() {
               lineHeight: 1.05,
               maxWidth: "800px",
             }}
-          >
-            Exclusive Properties<br />in Prime Locations
-          </motion.h1>
+          />
         </div>
       </section>
 

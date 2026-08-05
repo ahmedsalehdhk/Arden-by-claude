@@ -12,11 +12,22 @@ import Link from "next/link";
 import Image from "next/image";
 import Nav from "./components/Nav";
 import Footer from "./components/Footer";
+import AnimatedHeading from "./components/AnimatedHeading";
 import { useIsLoaded } from "./context/LoadContext";
 
 // ─────────────────────────────────────────────
 // DATA
 // ─────────────────────────────────────────────
+
+// Add more images here to auto-rotate through them in the hero.
+// Each image plays a Ken Burns loop; when its cycle ends, the next crossfades in.
+const HERO_IMAGES = [
+  { src: "/projectimages/rahma/view-09.png", alt: "Luxury real estate development" },
+  { src: "/projectimages/amanat/lobby-view-01.jpg", alt: "Luxury real estate development"},
+  { src: "/projectimages/rahma/view-08.png", alt: "Luxury real estate development"}
+];
+
+const KEN_BURNS_DURATION_S = 6;
 
 const FEATURED_PROJECTS = [
   {
@@ -78,6 +89,7 @@ function Hero() {
   const { scrollY } = useScroll();
   const clipPercent = useTransform(scrollY, [0, 600], [7.5, 0]);
   const isLoaded = useIsLoaded();
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   useEffect(() => {
     const unsub = clipPercent.on("change", (v) => {
@@ -88,27 +100,33 @@ function Hero() {
     return () => { unsub(); };
   }, [clipPercent]);
 
+  // Rotate hero images once per Ken Burns cycle (only kicks in when >1 image)
+  useEffect(() => {
+    if (HERO_IMAGES.length <= 1) return;
+    const id = setInterval(() => {
+      setActiveImageIndex((prev) => (prev + 1) % HERO_IMAGES.length);
+    }, KEN_BURNS_DURATION_S * 1000);
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <section className="bg-[#faf9f6] pt-[140px]" aria-label="Hero">
       {/* Main headline */}
       <div className="px-[7.5%] pt-6 sm:pt-10 pb-6 sm:pb-8">
-        <div className="overflow-hidden pb-3">
-          <motion.h1
-            initial={{ y: 110, opacity: 0 }}
-            animate={isLoaded ? { y: 0, opacity: 1 } : {}}
-            transition={{ duration: 1.2, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="font-serif text-[#1a1a1a] text-center select-none uppercase w-full sm:whitespace-nowrap"
-            style={{
-              fontSize: "clamp(2.2rem, 4.5vw, 4.5vw)",
-              letterSpacing: "0.22em",
-              lineHeight: 1.25,
-              fontWeight: 400,
-            }}
-          >
-            <span className="hidden sm:inline">Legacy In Every Landmark</span>
-            <span className="sm:hidden">Legacy In<br />Every Landmark</span>
-          </motion.h1>
-        </div>
+        <AnimatedHeading
+          as="h1"
+          text="Legacy In Every Landmark"
+          trigger="load"
+          active={isLoaded}
+          delay={0.4}
+          className="font-serif text-[#1a1a1a] text-center select-none uppercase w-full sm:whitespace-nowrap"
+          style={{
+            fontSize: "clamp(2.2rem, 4.5vw, 4.5vw)",
+            letterSpacing: "0.22em",
+            lineHeight: 1.25,
+            fontWeight: 400,
+          }}
+        />
       </div>
 
       {/* Hero image */}
@@ -124,14 +142,27 @@ function Hero() {
             className="absolute inset-0 will-change-[clip-path]"
             style={{ clipPath: "inset(0 7.5%)" }}
           >
-            <Image
-              src="/projectimages/rahma/view-09.png"
-              alt="Luxury real estate development"
-              fill
-              className="object-cover"
-              priority
-              sizes="100vw"
-            />
+            {HERO_IMAGES.map((img, i) => (
+              <div
+                key={img.src}
+                className="absolute inset-0 hero-ken-burns"
+                style={{
+                  opacity: i === activeImageIndex ? 1 : 0,
+                  transition: "opacity 1500ms cubic-bezier(0.4,0,0.2,1)",
+                  animationPlayState: i === activeImageIndex ? "running" : "paused",
+                }}
+              >
+                <Image
+                  src={img.src}
+                  alt={img.alt}
+                  fill
+                  className="object-cover"
+                  priority={i === 0}
+                  loading={i === 0 ? undefined : "lazy"}
+                  sizes="100vw"
+                />
+              </div>
+            ))}
           </div>
         </motion.div>
       </div>
@@ -416,22 +447,19 @@ function StatisticsSection() {
     <section id="businesses" className="bg-[#faf9f6] py-16 sm:py-24 lg:py-36">
       <div ref={ref} className="px-[7.5%]">
         {/* Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 28 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.85 }}
-          className="text-center mb-14 sm:mb-20 lg:mb-32"
-        >
-          <h2
+        <div className="text-center mb-14 sm:mb-20 lg:mb-32">
+          <AnimatedHeading
+            as="h2"
+            text="Shaping Your Property into a Lasting Legacy"
+            trigger="view"
+            boldFromWord={5}
             className="font-serif text-[#1a1a1a] leading-[1.25] mx-auto"
             style={{
               fontSize: "clamp(1.95rem, 3.4vw, 3.1rem)",
               fontWeight: 400,
             }}
-          >
-            Shaping Your Property into a  <span className="font-bold">Lasting Legacy</span>
-          </h2>
-        </motion.div>
+          />
+        </div>
 
         {/* All stats in a single responsive grid */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-10 gap-y-12 max-w-5xl mx-auto">
@@ -481,19 +509,17 @@ function ContactSection() {
 
       <div ref={ref} className="relative z-10 px-[7.5%]">
         {/* Heading */}
-        <motion.h2
-          initial={{ opacity: 0, y: 24 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.05 }}
+        <AnimatedHeading
+          as="h2"
+          text="Get in touch"
+          trigger="view"
           className="font-serif text-[#1a1a1a] uppercase mb-16"
           style={{
             fontSize: "clamp(2.1rem, 4vw, 3.8rem)",
             fontWeight: 700,
             letterSpacing: "0.01em",
           }}
-        >
-          Get in touch
-        </motion.h2>
+        />
 
         <motion.div
           initial={{ opacity: 0, x: -24 }}

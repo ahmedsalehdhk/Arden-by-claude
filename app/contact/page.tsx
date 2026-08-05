@@ -6,6 +6,7 @@ import { motion, useInView } from "framer-motion";
 import { ArrowUpRight, Phone, Mail, MapPin } from "lucide-react";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import AnimatedHeading from "../components/AnimatedHeading";
 import { useIsLoaded } from "../context/LoadContext";
 
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -85,10 +86,12 @@ function ContactInner() {
           >
             Reach Out
           </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 32 }}
-            animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          <AnimatedHeading
+            as="h1"
+            text="Contact Us"
+            trigger="load"
+            active={isLoaded}
+            delay={0.1}
             className="font-serif text-[#1a1a1a] uppercase"
             style={{
               fontSize: "clamp(2rem, 5.5vw, 5.5rem)",
@@ -97,9 +100,7 @@ function ContactInner() {
               lineHeight: 1.05,
               maxWidth: "800px",
             }}
-          >
-            Contact Us
-          </motion.h1>
+          />
         </div>
       </section>
 
@@ -260,7 +261,7 @@ function ContactInner() {
       </section>
 
       {/* ── MAP ── */}
-      <section className="w-full pb-16 sm:pb-24">
+      <section className="w-full pt-16 sm:pt-24 pb-16 sm:pb-24">
         <div className="px-[7.5%]">
           <div className="w-full" style={{ height: "clamp(280px, 40vw, 520px)" }}>
             <iframe

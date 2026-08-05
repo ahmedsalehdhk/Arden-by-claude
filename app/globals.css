@@ -48,6 +48,17 @@ body {
   font-family: var(--font-opensans), sans-serif;
 }
 
+/* Hero pan — slow sideways drift, no zoom */
+@keyframes ken-burns {
+  0%   { transform: scale(1.06) translateX(-1.5%); }
+  100% { transform: scale(1.06) translateX(1.5%); }
+}
+.hero-ken-burns {
+  animation: ken-burns 6s ease-in-out infinite alternate;
+  transform-origin: center center;
+  will-change: transform;
+}
+
 /* Marquee animation */
 @keyframes marquee {
   0% {

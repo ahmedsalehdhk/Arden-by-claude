@@ -6,6 +6,7 @@ import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
+import AnimatedHeading from "../components/AnimatedHeading";
 import { useIsLoaded } from "../context/LoadContext";
 
 const VALUES = [
@@ -67,10 +68,12 @@ export default function AboutPage() {
           >
             About Arden
           </motion.p>
-          <motion.h1
-            initial={{ opacity: 0, y: 32 }}
-            animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          <AnimatedHeading
+            as="h1"
+            text="A Mark of Distinction."
+            trigger="load"
+            active={isLoaded}
+            delay={0.1}
             className="font-serif text-[#1a1a1a] uppercase"
             style={{
               fontSize: "clamp(2rem, 5.5vw, 5.5rem)",
@@ -79,9 +82,7 @@ export default function AboutPage() {
               lineHeight: 1.05,
               maxWidth: "800px",
             }}
-          >
-            A Mark of Distinction.
-          </motion.h1>
+          />
         </div>
       </section>
 
@@ -93,12 +94,13 @@ export default function AboutPage() {
               <p className="font-sans text-[#c9a54a] mb-5" style={{ fontSize: "11px", letterSpacing: "0.32em", textTransform: "uppercase" }}>
                 Our Story
               </p>
-              <h2
+              <AnimatedHeading
+                as="h2"
+                text="Built on ambition, delivered with precision."
+                trigger="view"
                 className="font-serif text-[#1a1a1a] leading-[1.2]"
                 style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
-              >
-                Built on ambition, delivered with precision.
-              </h2>
+              />
             </FadeIn>
             <FadeIn delay={0.15}>
               <p className="font-sans font-medium text-left text-[#1a1a1a]/60 leading-[2] mb-6" style={{ fontSize: "clamp(15px, 2vw, 20px)" }}>
@@ -131,12 +133,13 @@ export default function AboutPage() {
             <p className="font-sans text-[#c9a54a] mb-4" style={{ fontSize: "11px", letterSpacing: "0.32em", textTransform: "uppercase" }}>
               What We Stand For
             </p>
-            <h2
+            <AnimatedHeading
+              as="h2"
+              text="Our principles guide every decision we make."
+              trigger="view"
               className="font-serif text-[#1a1a1a]"
               style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400, maxWidth: "500px" }}
-            >
-              Our principles guide every decision we make.
-            </h2>
+            />
           </FadeIn>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-[#1a1a1a]/[0.07]">
             {VALUES.map((v, i) => (
@@ -168,12 +171,13 @@ export default function AboutPage() {
             <p className="font-sans text-white/40 mb-5" style={{ fontSize: "11px", letterSpacing: "0.32em", textTransform: "uppercase" }}>
               Work With Us
             </p>
-            <h2
+            <AnimatedHeading
+              as="h2"
+              text="Ready to find your next landmark?"
+              trigger="view"
               className="font-serif text-white mb-10"
               style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", fontWeight: 400, letterSpacing: "0.03em" }}
-            >
-              Ready to find your next landmark?
-            </h2>
+            />
             <a
               href="/contact"
               className="inline-flex items-center gap-2.5 font-sans text-[12px] tracking-[0.26em] uppercase text-[#c9a54a] border border-[#c9a54a]/40 px-8 py-4 hover:bg-[#c9a54a] hover:text-white transition-all duration-300"
