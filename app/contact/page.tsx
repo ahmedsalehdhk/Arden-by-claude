@@ -2,8 +2,9 @@
 
 import { useRef, useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight, Phone, Mail, MapPin } from "lucide-react";
+import Image from "next/image";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import AnimatedHeading from "../components/AnimatedHeading";
@@ -57,12 +58,24 @@ function ContactInner() {
   const [submitted, setSubmitted] = useState(false);
   const searchParams = useSearchParams();
   const isLoaded = useIsLoaded();
+  const imageRef = useRef<HTMLDivElement>(null);
+  const { scrollY } = useScroll();
+  const clipPercent = useTransform(scrollY, [0, 600], [7.5, 0]);
 
   useEffect(() => {
     if (searchParams.get("tab") === "landowners") {
       setActiveForm("landowners");
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    const unsub = clipPercent.on("change", (v) => {
+      if (imageRef.current) {
+        imageRef.current.style.clipPath = `inset(0 ${v}%)`;
+      }
+    });
+    return () => { unsub(); };
+  }, [clipPercent]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,32 +88,48 @@ function ContactInner() {
       <Nav />
 
       {/* ── HERO ── */}
-      <section className="relative pt-[60px] overflow-hidden bg-[#faf9f6]" style={{ minHeight: "55vh" }}>
-        <div className="relative z-10 px-[7.5%] pt-20 sm:pt-32 pb-20 sm:pb-28">
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="font-sans text-[#1a1a1a]/40 mb-6"
-            style={{ fontSize: "12px", letterSpacing: "0.32em", textTransform: "uppercase" }}
-          >
-            Reach Out
-          </motion.p>
+      <section className="bg-[#faf9f6] pt-[140px]" aria-label="Contact hero">
+        {/* Headline */}
+        <div className="px-[7.5%] pt-6 sm:pt-10 pb-6 sm:pb-8">
           <AnimatedHeading
             as="h1"
-            text="Contact Us"
+            text="Contact"
             trigger="load"
             active={isLoaded}
-            delay={0.1}
-            className="font-serif text-[#1a1a1a] uppercase"
+            delay={0.4}
+            className="font-serif text-[#1a1a1a] text-center select-none uppercase w-full sm:whitespace-nowrap"
             style={{
-              fontSize: "clamp(2rem, 5.5vw, 5.5rem)",
-              letterSpacing: "0.04em",
-              fontWeight: 700,
-              lineHeight: 1.05,
-              maxWidth: "800px",
+              fontSize: "clamp(2.2rem, 4.5vw, 4.5vw)",
+              letterSpacing: "0.22em",
+              lineHeight: 1.25,
+              fontWeight: 400,
             }}
           />
+        </div>
+
+        {/* Hero image */}
+        <div className="relative w-full overflow-hidden" style={{ height: "78vh" }}>
+          <motion.div
+            initial={{ y: -60, opacity: 0 }}
+            animate={isLoaded ? { y: 0, opacity: 1 } : {}}
+            transition={{ duration: 1.2, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute inset-0"
+          >
+            <div
+              ref={imageRef}
+              className="absolute inset-0 will-change-[clip-path]"
+              style={{ clipPath: "inset(0 7.5%)" }}
+            >
+              <Image
+                src="/projectimages/amanat/rooftop-01.jpg"
+                alt="Amanat rooftop by Arden Holdings"
+                fill
+                className="object-cover"
+                priority
+                sizes="100vw"
+              />
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -263,6 +292,18 @@ function ContactInner() {
       {/* ── MAP ── */}
       <section className="w-full pt-16 sm:pt-24 pb-16 sm:pb-24">
         <div className="px-[7.5%]">
+          <FadeIn className="mb-8 sm:mb-12">
+            <p className="font-sans text-[#c9a54a] mb-3" style={{ fontSize: "11px", letterSpacing: "0.32em", textTransform: "uppercase" }}>
+              Our Office
+            </p>
+            <AnimatedHeading
+              as="h2"
+              text="Come visit us"
+              trigger="view"
+              className="font-serif text-[#1a1a1a]"
+              style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
+            />
+          </FadeIn>
           <div className="w-full" style={{ height: "clamp(280px, 40vw, 520px)" }}>
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8661.74351166099!2d90.39012999489778!3d23.78111813250275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c76a25b04c17%3A0xc32fd7eaacd36446!2sMohakhali%20DOHS%2C%20Dhaka!5e1!3m2!1sen!2sbd!4v1785912046644!5m2!1sen!2sbd"

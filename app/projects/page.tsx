@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Search } from "lucide-react";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import AnimatedHeading from "../components/AnimatedHeading";
@@ -47,50 +47,58 @@ export default function ProjectsPage() {
       <Nav />
 
       {/* ── HERO ── */}
-      <section className="relative pt-[60px] overflow-hidden bg-[#faf9f6]" style={{ minHeight: "55vh" }}>
-        <div className="relative z-10 px-[7.5%] pt-20 sm:pt-32 pb-20 sm:pb-28">
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="font-sans text-[#1a1a1a]/40 mb-6"
-            style={{ fontSize: "12px", letterSpacing: "0.32em", textTransform: "uppercase" }}
-          >
-            Our Portfolio
-          </motion.p>
+      <section className="bg-[#faf9f6] pt-[140px]" aria-label="Projects hero">
+        <div className="px-[7.5%] pt-6 sm:pt-10 pb-10 sm:pb-16">
           <AnimatedHeading
             as="h1"
-            text="Exclusive Properties in Prime Locations"
+            text="Prime Residences in Elite Destinations"
             trigger="load"
             active={isLoaded}
-            delay={0.1}
-            className="font-serif text-[#1a1a1a] uppercase"
+            delay={0.4}
+            className="font-serif text-[#1a1a1a] text-center select-none uppercase mx-auto text-balance"
             style={{
-              fontSize: "clamp(2rem, 5.5vw, 5.5rem)",
-              letterSpacing: "0.04em",
-              fontWeight: 700,
-              lineHeight: 1.05,
-              maxWidth: "800px",
+              fontSize: "clamp(1.4rem, 4.5vw, 4.5vw)",
+              letterSpacing: "0.22em",
+              lineHeight: 1.25,
+              fontWeight: 400,
+              maxWidth: "min(1000px, 92vw)",
+              textWrap: "balance",
             }}
           />
         </div>
       </section>
 
+      {/* Full-width divider between hero and search */}
+      <hr className="border-t border-[#1a1a1a]/10 w-full m-0" />
+
       {/* ── SEARCH ── */}
-      <section className="bg-[#faf9f6] sticky top-[60px] z-30 border-b border-[#1a1a1a]/[0.07]">
-        <div className="px-[7.5%] py-4">
-          <div className="relative max-w-md">
+      <section className="bg-[#faf9f6] sticky top-[60px] z-30">
+        <div className="px-[7.5%] pt-12 sm:pt-16 pb-2 sm:pb-3">
+          <label
+            htmlFor="project-search"
+            className="block font-sans text-[#c9a54a] mb-3"
+            style={{ fontSize: "11px", letterSpacing: "0.32em", textTransform: "uppercase" }}
+          >
+            Find a Project
+          </label>
+          <div className="relative max-w-xl">
+            <Search
+              size={17}
+              strokeWidth={1.75}
+              className="absolute left-0 top-1/2 -translate-y-1/2 text-[#1a1a1a]/55 pointer-events-none"
+            />
             <input
+              id="project-search"
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search by name or location…"
-              className="w-full bg-transparent border-b border-[#1a1a1a]/15 py-2.5 pr-8 font-sans text-[13px] text-[#1a1a1a] placeholder-[#1a1a1a]/30 focus:outline-none focus:border-[#1a1a1a]/50 transition-colors"
+              className="w-full bg-transparent border-b border-[#1a1a1a]/25 pl-7 pr-8 py-3 font-sans text-[15px] text-[#1a1a1a] placeholder-[#1a1a1a]/45 focus:outline-none focus:border-[#c9a54a] transition-colors"
             />
             {query && (
               <button
                 onClick={() => setQuery("")}
-                className="absolute right-0 top-1/2 -translate-y-1/2 text-[#1a1a1a]/30 hover:text-[#1a1a1a] transition-colors text-lg leading-none"
+                className="absolute right-0 top-1/2 -translate-y-1/2 text-[#1a1a1a]/40 hover:text-[#1a1a1a] transition-colors text-xl leading-none"
                 aria-label="Clear search"
               >
                 ×
@@ -101,7 +109,7 @@ export default function ProjectsPage() {
       </section>
 
       {/* ── PROJECTS GRID ── */}
-      <section className="bg-[#faf9f6] py-12 sm:py-16 lg:py-20">
+      <section className="bg-[#faf9f6] pt-4 sm:pt-6 pb-12 sm:pb-16 lg:pb-20">
         <div className="px-[7.5%]">
           <AnimatePresence mode="wait">
             {filtered.length === 0 ? (
@@ -139,14 +147,15 @@ export default function ProjectsPage() {
         <div className="px-[7.5%] text-center">
           <FadeIn>
             <p className="font-sans text-white/40 mb-5" style={{ fontSize: "11px", letterSpacing: "0.32em", textTransform: "uppercase" }}>
-              Landowners
+              Work With Us
             </p>
-            <h2
+            <AnimatedHeading
+              as="h2"
+              text="Partner with us to build something extraordinary."
+              trigger="view"
               className="font-serif text-white mb-10"
-              style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", fontWeight: 400 }}
-            >
-              Partner with Arden to build something landmark.
-            </h2>
+              style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", fontWeight: 400, letterSpacing: "0.03em" }}
+            />
             <a
               href="/contact"
               className="inline-flex items-center gap-2.5 font-sans text-[12px] tracking-[0.26em] uppercase text-[#c9a54a] border border-[#c9a54a]/40 px-8 py-4 hover:bg-[#c9a54a] hover:text-white transition-all duration-300"

@@ -1,7 +1,7 @@
 ﻿"use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Nav from "../components/Nav";
@@ -51,38 +51,66 @@ function FadeIn({ children, delay = 0, className = "" }: { children: React.React
 
 export default function AboutPage() {
   const isLoaded = useIsLoaded();
+  const imageRef = useRef<HTMLDivElement>(null);
+  const { scrollY } = useScroll();
+  const clipPercent = useTransform(scrollY, [0, 600], [7.5, 0]);
+
+  useEffect(() => {
+    const unsub = clipPercent.on("change", (v) => {
+      if (imageRef.current) {
+        imageRef.current.style.clipPath = `inset(0 ${v}%)`;
+      }
+    });
+    return () => { unsub(); };
+  }, [clipPercent]);
 
   return (
     <main className="bg-[#faf9f6]">
       <Nav />
 
       {/* ── HERO ── */}
-      <section className="relative pt-[60px] overflow-hidden bg-[#faf9f6]" style={{ minHeight: "55vh" }}>
-        <div className="relative z-10 px-[7.5%] pt-20 sm:pt-32 pb-20 sm:pb-28">
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="font-sans text-[#1a1a1a]/40 mb-6"
-            style={{ fontSize: "12px", letterSpacing: "0.32em", textTransform: "uppercase" }}
-          >
-            About Arden
-          </motion.p>
+      <section className="bg-[#faf9f6] pt-[140px]" aria-label="About Arden hero">
+        {/* Headline */}
+        <div className="px-[7.5%] pt-6 sm:pt-10 pb-6 sm:pb-8">
           <AnimatedHeading
             as="h1"
-            text="A Mark of Distinction."
+            text="About Arden"
             trigger="load"
             active={isLoaded}
-            delay={0.1}
-            className="font-serif text-[#1a1a1a] uppercase"
+            delay={0.4}
+            className="font-serif text-[#1a1a1a] text-center select-none uppercase w-full sm:whitespace-nowrap"
             style={{
-              fontSize: "clamp(2rem, 5.5vw, 5.5rem)",
-              letterSpacing: "0.04em",
-              fontWeight: 700,
-              lineHeight: 1.05,
-              maxWidth: "800px",
+              fontSize: "clamp(2.2rem, 4.5vw, 4.5vw)",
+              letterSpacing: "0.22em",
+              lineHeight: 1.25,
+              fontWeight: 400,
             }}
           />
+        </div>
+
+        {/* Hero image */}
+        <div className="relative w-full overflow-hidden" style={{ height: "78vh" }}>
+          <motion.div
+            initial={{ y: -60, opacity: 0 }}
+            animate={isLoaded ? { y: 0, opacity: 1 } : {}}
+            transition={{ duration: 1.2, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute inset-0"
+          >
+            <div
+              ref={imageRef}
+              className="absolute inset-0 will-change-[clip-path]"
+              style={{ clipPath: "inset(0 7.5%)" }}
+            >
+              <Image
+                src="/projectimages/amanat/front-side-view-01.jpg"
+                alt="Amanat by Arden Holdings"
+                fill
+                className="object-cover"
+                priority
+                sizes="100vw"
+              />
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -104,7 +132,7 @@ export default function AboutPage() {
             </FadeIn>
             <FadeIn delay={0.15}>
               <p className="font-sans font-medium text-left text-[#1a1a1a]/60 leading-[2] mb-6" style={{ fontSize: "clamp(15px, 2vw, 20px)" }}>
-                Arden Holdings Ltd. was founded with a singular vision: to redefine the standards of real estate development. Through an unwavering commitment to quality, innovation, and integrity, we have grown into one of the region&apos;s most respected property developers — with a portfolio spanning premium residential towers, Grade A commercial spaces, and landmark mixed-use developments.
+                Arden Holdings Ltd. was founded with a singular vision: to redefine the standards of real estate development. Through an unwavering commitment to quality, innovation, and integrity, we have grown into one of the region&apos;s most respected property developers.
               </p>
               <p className="font-sans font-medium text-left text-[#1a1a1a]/60 leading-[2]" style={{ fontSize: "clamp(15px, 2vw, 20px)" }}>
                 Our reputation is built not merely on the quality of our construction, but on the trust of the clients, investors, and landowners who have chosen to partner with us. Every project we undertake carries the weight of that trust — and it is a responsibility we take seriously.
@@ -112,18 +140,6 @@ export default function AboutPage() {
             </FadeIn>
           </div>
         </div>
-      </section>
-
-      {/* ── FULL-WIDTH IMAGE ── */}
-      <section className="w-full relative" style={{ height: "clamp(300px, 55vw, 700px)" }}>
-        <Image
-          src="/projectimages/amanat/rooftop-02.jpg"
-          alt="Arden rooftop development"
-          fill
-          className="object-cover"
-          loading="lazy"
-          sizes="100vw"
-        />
       </section>
 
       {/* ── VALUES ── */}
@@ -173,7 +189,7 @@ export default function AboutPage() {
             </p>
             <AnimatedHeading
               as="h2"
-              text="Ready to find your next landmark?"
+              text="How about we catch up over coffee?"
               trigger="view"
               className="font-serif text-white mb-10"
               style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", fontWeight: 400, letterSpacing: "0.03em" }}

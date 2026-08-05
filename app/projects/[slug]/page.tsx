@@ -109,8 +109,8 @@ function ProjectNotFound() {
 
 function ProjectHero({ project }: { project: ProjectDetail }) {
   return (
-    <section className="relative pt-[90px] overflow-hidden" style={{ minHeight: "70vh" }}>
-      {/* Background image */}
+    <section className="relative w-full overflow-hidden" style={{ height: "100svh", minHeight: "600px" }}>
+      {/* Full-bleed background image */}
       <div className="absolute inset-0">
         <Image
           src={project.heroImage}
@@ -120,27 +120,20 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
           priority
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a]/60 via-[#1a1a1a]/50 to-[#1a1a1a]/80" />
+        {/* Top-down dark fade — keeps the transparent nav legible on any image */}
+        <div
+          className="absolute inset-x-0 top-0"
+          style={{
+            height: "45%",
+            background: "linear-gradient(to bottom, rgba(10,10,10,0.72) 0%, rgba(10,10,10,0.35) 45%, rgba(10,10,10,0) 100%)",
+          }}
+        />
+        {/* Subtle overall darkening so centered text reads on any shot */}
+        <div className="absolute inset-0 bg-[#0a0a0a]/25" />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 px-[7.5%] flex flex-col items-center justify-center text-center"
-        style={{ minHeight: "calc(70vh - 90px)" }}
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-5"
-        >
-          <span
-            className="inline-block font-sans text-white/50 tracking-[0.32em] uppercase"
-            style={{ fontSize: "12px" }}
-          >
-            {project.type} &middot; {project.location}
-          </span>
-        </motion.div>
-
+      {/* Content — sits high, roughly 1/4 from top */}
+      <div className="relative z-10 h-full flex flex-col items-center justify-start pt-[28vh] px-[7.5%] text-center">
         <AnimatedHeading
           as="h1"
           text={project.name}
@@ -149,19 +142,19 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
           delay={0.3}
           className="font-serif text-white uppercase"
           style={{
-            fontSize: "clamp(2.5rem, 7vw, 7rem)",
-            letterSpacing: "0.12em",
+            fontSize: "clamp(3rem, 7.5vw, 8rem)",
+            letterSpacing: "0.14em",
             fontWeight: 700,
-            lineHeight: 1.05,
+            lineHeight: 1,
           }}
         />
 
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="font-sans text-white/60 mt-5"
-          style={{ fontSize: "17px", maxWidth: "500px", letterSpacing: "0.03em" }}
+          transition={{ duration: 0.8, delay: 0.9 }}
+          className="font-sans text-white/70 mt-6 sm:mt-8"
+          style={{ fontSize: "12px", letterSpacing: "0.36em", textTransform: "uppercase" }}
         >
           {project.tagline}
         </motion.p>
@@ -175,131 +168,65 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
 // ─────────────────────────────────────────────
 
 function AtAGlance({ project }: { project: ProjectDetail }) {
+  const allSpecs = [...project.specsLeft, ...project.specsRight];
+
   return (
-    <section className="bg-[#faf9f6] py-20 sm:py-28 lg:py-36">
+    <section className="py-20 sm:py-28 lg:py-36" style={{ backgroundColor: "#f5f0e8" }}>
       <div className="px-[7.5%]">
-        {/* Section heading */}
-        <FadeIn>
-          <div className="text-center mb-16 sm:mb-20">
-            <p
-              className="font-sans text-[#1a1a1a]/30 mb-4"
-              style={{ fontSize: "12px", letterSpacing: "0.32em", textTransform: "uppercase" }}
-            >
-              Project Overview
-            </p>
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.55fr)] gap-14 lg:gap-24 items-start">
+
+          {/* Left — title + status + address */}
+          <FadeIn>
             <AnimatedHeading
               as="h2"
               text="At a Glance"
               trigger="view"
-              className="font-serif text-[#1a1a1a] uppercase"
+              className="font-serif text-[#1a1a1a] uppercase mb-10 sm:mb-14"
               style={{
-                fontSize: "clamp(1.8rem, 4vw, 3.2rem)",
-                letterSpacing: "0.14em",
-                fontWeight: 600,
+                fontSize: "clamp(1.9rem, 4vw, 3.4rem)",
+                letterSpacing: "0.04em",
+                fontWeight: 400,
+                lineHeight: 1.15,
               }}
             />
-            {/* Decorative line */}
-            <div className="mt-6 flex items-center justify-center gap-3">
-              <div className="w-12 h-px bg-[#c9a54a]/40" />
-              <div className="w-2 h-2 rotate-45 border border-[#c9a54a]/40" />
-              <div className="w-12 h-px bg-[#c9a54a]/40" />
-            </div>
-          </div>
-        </FadeIn>
-
-        {/* Main grid: specs left — building center — specs right */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px_1fr] gap-10 lg:gap-8 items-center">
-          {/* Left specs */}
-          <FadeIn delay={0.1}>
-            <div className="space-y-8 lg:space-y-10">
-              {project.specsLeft.map((spec) => (
-                <div key={spec.label} className="text-center lg:text-right">
-                  <p
-                    className="font-serif text-[#1a1a1a]"
-                    style={{ fontSize: "clamp(1.4rem, 2.5vw, 2rem)", fontWeight: 500 }}
-                  >
-                    {spec.value}
-                  </p>
-                  <p
-                    className="font-sans text-[#1a1a1a]/40 mt-1"
-                    style={{ fontSize: "13px", letterSpacing: "0.12em", textTransform: "uppercase" }}
-                  >
-                    {spec.label}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </FadeIn>
-
-          {/* Center building image */}
-          <FadeIn delay={0.2} className="order-first lg:order-none">
-            <div className="relative mx-auto" style={{ maxWidth: "320px" }}>
-              <div className="relative overflow-hidden" style={{ aspectRatio: "3/5" }}>
-                <Image
-                  src={project.buildingImage}
-                  alt={`${project.name} Building`}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 80vw, 320px"
-                  loading="lazy"
-                />
-              </div>
-              {/* Status badge */}
-              <div className="absolute -bottom-4 left-1/2 -translate-x-1/2">
-                <span
-                  className="inline-block font-sans text-white px-5 py-2.5"
-                  style={{
-                    fontSize: "11px",
-                    letterSpacing: "0.24em",
-                    textTransform: "uppercase",
-                    backgroundColor:
-                      project.status === "Ongoing"
-                        ? "#c9a54a"
-                        : project.status === "Upcoming"
-                        ? "#1a1a1a"
-                        : "rgba(26,26,26,0.65)",
-                  }}
-                >
-                  {project.status}
-                </span>
-              </div>
-            </div>
-          </FadeIn>
-
-          {/* Right specs */}
-          <FadeIn delay={0.3}>
-            <div className="space-y-8 lg:space-y-10">
-              {project.specsRight.map((spec) => (
-                <div key={spec.label} className="text-center lg:text-left">
-                  <p
-                    className="font-serif text-[#1a1a1a]"
-                    style={{ fontSize: "clamp(1.4rem, 2.5vw, 2rem)", fontWeight: 500 }}
-                  >
-                    {spec.value}
-                  </p>
-                  <p
-                    className="font-sans text-[#1a1a1a]/40 mt-1"
-                    style={{ fontSize: "13px", letterSpacing: "0.12em", textTransform: "uppercase" }}
-                  >
-                    {spec.label}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </FadeIn>
-        </div>
-
-        {/* Address below */}
-        <FadeIn delay={0.4}>
-          <div className="text-center mt-16 sm:mt-20">
             <p
-              className="font-sans text-[#1a1a1a]/35"
-              style={{ fontSize: "14px", letterSpacing: "0.06em" }}
+              className="font-sans text-[#c9a54a] mb-8"
+              style={{ fontSize: "13px", letterSpacing: "0.24em", textTransform: "uppercase", fontWeight: 600 }}
             >
-              {project.address}
+              Status: {project.status}
             </p>
+            <div>
+              <p
+                className="font-sans text-[#1a1a1a] mb-2"
+                style={{ fontSize: "13px", letterSpacing: "0.14em", textTransform: "uppercase", fontWeight: 700 }}
+              >
+                Address:
+              </p>
+              <p className="font-sans text-[#1a1a1a]/75" style={{ fontSize: "16px", lineHeight: 1.6 }}>
+                {project.address}
+              </p>
+            </div>
+          </FadeIn>
+
+          {/* Right — specs grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-9">
+            {allSpecs.map((spec, i) => (
+              <FadeIn key={spec.label} delay={0.05 + i * 0.04}>
+                <div className="pb-6 border-b border-[#1a1a1a]/15">
+                  <p
+                    className="font-sans text-[#1a1a1a] mb-3"
+                    style={{ fontSize: "13px", letterSpacing: "0.14em", textTransform: "uppercase", fontWeight: 700 }}
+                  >
+                    {spec.label} :
+                  </p>
+                  <p className="font-serif text-[#1a1a1a]" style={{ fontSize: "1.1rem", fontWeight: 400 }}>
+                    {spec.value}
+                  </p>
+                </div>
+              </FadeIn>
+            ))}
           </div>
-        </FadeIn>
+        </div>
       </div>
     </section>
   );
@@ -477,7 +404,7 @@ export default function ProjectDetailPage() {
 
   return (
     <main className="bg-[#faf9f6]">
-      <Nav />
+      <Nav transparent />
       <ProjectHero project={project} />
       <AtAGlance project={project} />
       <FeaturesSection project={project} />

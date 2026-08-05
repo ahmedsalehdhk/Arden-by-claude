@@ -15,7 +15,7 @@ const NAV_LINKS = [
   { label: "Contact", href: "/contact" },
 ];
 
-export default function Nav() {
+export default function Nav({ transparent = false }: { transparent?: boolean } = {}) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -55,16 +55,21 @@ export default function Nav() {
     return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
 
+  // Transparent-over-hero mode: only while the requested page opts in AND user hasn't scrolled past the hero
+  const isTransparent = transparent && !scrolled && !menuOpen;
+
   return (
     <>
       <motion.nav
         initial={{ y: -100, opacity: 0 }}
         animate={visible ? { y: hidden && !menuOpen ? -100 : 0, opacity: 1 } : {}}
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 bg-[#faf9f6] transition-shadow duration-300 ${
-          scrolled
-            ? "shadow-[0_1px_0_rgba(26,26,26,0.08)]"
-            : "border-b border-[#1a1a1a]/[0.07]"
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isTransparent
+            ? "bg-transparent"
+            : scrolled
+              ? "bg-[#faf9f6] shadow-[0_1px_0_rgba(26,26,26,0.08)]"
+              : "bg-[#faf9f6] border-b border-[#1a1a1a]/[0.07]"
         }`}
       >
         <div className="mx-auto flex items-center" style={{ paddingTop: "27px", paddingBottom: "27px", paddingLeft: "7.5%", paddingRight: "7.5%" }}>
@@ -75,7 +80,9 @@ export default function Nav() {
               alt="Arden Holdings"
               width={180}
               height={45}
-              className="h-[38px] w-auto"
+              className={`h-[38px] w-auto transition-[filter] duration-300 ${
+                isTransparent ? "brightness-0 invert" : ""
+              }`}
               priority
             />
           </Link>
@@ -86,13 +93,15 @@ export default function Nav() {
             className="ml-auto flex items-center gap-2.5"
             aria-label="Toggle menu"
           >
-            <span className="font-sans text-[14px] font-semibold tracking-[0.2em] uppercase text-[#1a1a1a]">
+            <span className={`font-sans text-[14px] font-semibold tracking-[0.2em] uppercase transition-colors duration-300 ${
+              isTransparent ? "text-white/85" : "text-[#1a1a1a]"
+            }`}>
               Menu
             </span>
             {menuOpen ? (
-              <X size={20} strokeWidth={2} className="text-[#1a1a1a]" />
+              <X size={20} strokeWidth={2} className={isTransparent ? "text-white" : "text-[#1a1a1a]"} />
             ) : (
-              <Menu size={20} strokeWidth={2} className="text-[#1a1a1a]" />
+              <Menu size={20} strokeWidth={2} className={isTransparent ? "text-white" : "text-[#1a1a1a]"} />
             )}
           </button>
         </div>
