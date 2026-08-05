@@ -3,11 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import {
   motion,
+  AnimatePresence,
   useScroll,
   useTransform,
   useInView,
 } from "framer-motion";
-import { ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowUpRight, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import Nav from "./components/Nav";
@@ -34,6 +35,7 @@ const FEATURED_PROJECTS = [
     category: "Featured Projects",
     tag: "Residential",
     name: "Amanat",
+    slug: "amanat",
     location: "Banani, Dhaka",
     image: "/projectimages/amanat/front-side-view-01.jpg",
     buildingImage: "/projectimages/amanat/eye-level-view-01.jpg",
@@ -42,20 +44,17 @@ const FEATURED_PROJECTS = [
     category: "Featured Projects",
     tag: "Residential",
     name: "Rahma",
+    slug: "rahma",
     location: "Sector 11, Jolshiri",
     image: "/projectimages/rahma/view-02.jpg",
     buildingImage: "/projectimages/rahma/view-01.jpg",
   },
 ];
 
-const LEFT_STATS = [
-  { value: 2, suffix: "M+", label: "Total Area Built\n(Million sft)" },
-];
-
-const RIGHT_STATS = [
-  { value: 32, suffix: "+", label: "Number of\nProjects" },
-  { value: 500, suffix: "+", label: "Happy Clients" },
-  { value: 4, suffix: "M+", label: "Total Area in Pipeline\n(Million sft)" },
+const STATS = [
+  { value: 100, suffix: "%", label: "On-Time Handover" },
+  { value: 0, suffix: "", label: "Compromised Standards" },
+  { value: 100, suffix: "%", label: "Success Rate" },
 ];
 
 // ─────────────────────────────────────────────
@@ -215,57 +214,104 @@ function AboutSection() {
 // SECTION 3 — FEATURED PROJECTS
 // ─────────────────────────────────────────────
 
+const FEATURED_AUTO_ADVANCE_MS = 7000;
+const FEATURED_SWIPE_DURATION_MS = 900;
+
 function FeaturedProjectsSection() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [prevIndex, setPrevIndex] = useState<number | null>(null);
   const [fading, setFading] = useState(false);
   const total = FEATURED_PROJECTS.length;
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  // Background moves DOWN as we scroll DOWN → feels distant (slower than scroll)
+  const bgY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
+  // Building card moves UP as we scroll DOWN → feels close (faster than scroll)
+  const cardY = useTransform(scrollYProgress, [0, 1], ["12%", "-12%"]);
 
   const switchTo = (next: number) => {
     if (next === activeIndex || fading) return;
     setFading(true);
+    setPrevIndex(activeIndex);
     setActiveIndex(next);
-    setTimeout(() => setFading(false), 420);
+    setTimeout(() => {
+      setFading(false);
+      setPrevIndex(null);
+    }, FEATURED_SWIPE_DURATION_MS);
   };
 
   const goPrev = () => switchTo((activeIndex - 1 + total) % total);
   const goNext = () => switchTo((activeIndex + 1) % total);
 
+  // Auto-advance every N ms; timer resets whenever activeIndex changes (manual or auto)
+  useEffect(() => {
+    if (total <= 1) return;
+    const id = setTimeout(() => {
+      const next = (activeIndex + 1) % total;
+      setFading(true);
+      setPrevIndex(activeIndex);
+      setActiveIndex(next);
+      setTimeout(() => {
+        setFading(false);
+        setPrevIndex(null);
+      }, FEATURED_SWIPE_DURATION_MS);
+    }, FEATURED_AUTO_ADVANCE_MS);
+    return () => clearTimeout(id);
+  }, [activeIndex, total]);
+
   const project = FEATURED_PROJECTS[activeIndex];
 
   return (
-    <section id="projects" className="relative w-full overflow-hidden h-[100svh] lg:h-[80vh]">
-      {/* Background images — GPU-composited crossfade, all in DOM */}
-      {FEATURED_PROJECTS.map((p, i) => (
-        <div
-          key={p.name}
-          className="absolute inset-0"
-          style={{
-            opacity: i === activeIndex ? 1 : 0,
-            transition: "opacity 420ms cubic-bezier(0.4,0,0.2,1)",
-            willChange: "opacity",
-          }}
-        >
-          <Image
-            src={p.image}
-            alt={p.name}
-            fill
-            className="object-cover"
-            sizes="100vw"
-            priority={i === 0}
-            loading={i === 0 ? undefined : "lazy"}
-          />
-        </div>
-      ))}
+    <section ref={sectionRef} id="projects" className="relative w-full overflow-hidden min-h-[100svh] lg:min-h-0 lg:h-[80vh]">
+      {/* Background parallax layer (scaled 1.2x so ±8% translate stays covered) */}
+      <motion.div className="absolute inset-0" style={{ y: bgY, scale: 1.2 }}>
+        {FEATURED_PROJECTS.map((p, i) => {
+          const isActive = i === activeIndex;
+          const isExiting = i === prevIndex;
+          const isRelevant = isActive || isExiting;
+          return (
+            <motion.div
+              key={p.name}
+              className="absolute inset-0"
+              style={{
+                zIndex: isExiting ? 3 : isActive ? 2 : 1,
+                visibility: isRelevant ? "visible" : "hidden",
+                willChange: "transform",
+              }}
+              initial={{ y: 0 }}
+              animate={{ y: isExiting ? "-100%" : "0%" }}
+              transition={isExiting
+                ? { duration: FEATURED_SWIPE_DURATION_MS / 1000, ease: [0.65, 0, 0.35, 1] }
+                : { duration: 0 }}
+            >
+              <Image
+                src={p.image}
+                alt={p.name}
+                fill
+                className="object-cover"
+                sizes="100vw"
+                priority={i === 0}
+                loading={i === 0 ? undefined : "lazy"}
+              />
+            </motion.div>
+          );
+        })}
+      </motion.div>
       {/* Uniform dark overlay */}
       <div className="absolute inset-0 bg-[#1a1a1a]/60 z-[1]" />
 
       {/* Content */}
       <div className="relative z-10 h-full flex flex-col lg:flex-row lg:items-center lg:justify-between">
         {/* Building image — top on mobile, right column on desktop */}
-        <div className="lg:hidden flex justify-center pt-8 sm:pt-10 px-[7.5%]">
+        <motion.div className="lg:hidden flex justify-center pt-4 sm:pt-6 px-[7.5%]" style={{ y: cardY }}>
           <div
             className="relative shadow-lg"
-            style={{ width: "60vw", maxWidth: "320px", height: "38vh", maxHeight: "340px" }}
+            style={{ width: "88vw", maxWidth: "480px", height: "56vh", maxHeight: "540px" }}
           >
             {FEATURED_PROJECTS.map((p, i) => (
               <div
@@ -282,93 +328,109 @@ function FeaturedProjectsSection() {
                   alt={`${p.name} building`}
                   fill
                   className="object-cover"
-                  sizes="(max-width: 640px) 60vw, 320px"
+                  sizes="(max-width: 640px) 88vw, 480px"
                   loading="lazy"
                 />
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* Left column — text */}
-        <div className="flex flex-col justify-center px-[7.5%] max-w-2xl w-full lg:w-auto flex-1 pt-6 sm:pt-8 lg:pt-0">
-          {/* Text layers — all rendered, active one visible */}
-          <div className="relative" style={{ minHeight: "180px" }}>
-            {FEATURED_PROJECTS.map((p, i) => (
-              <div
-                key={p.name}
+        <div className="flex flex-col justify-center px-[7.5%] max-w-2xl w-full lg:w-auto flex-1 pt-4 sm:pt-6 lg:pt-0 pb-6 lg:pb-0">
+          {/* Static category label — doesn't re-animate on slide change */}
+          <p className="font-sans text-[13px] sm:text-[15px] tracking-[0.35em] uppercase text-white mb-5 sm:mb-7">
+            {project.category}
+          </p>
+
+          {/* Text — staggered entrance on slide change */}
+          <div className="relative" style={{ minHeight: "140px" }}>
+            <AnimatePresence mode="sync">
+              <motion.div
+                key={activeIndex}
                 className="absolute inset-x-0 top-0"
-                style={{
-                  opacity: i === activeIndex ? 1 : 0,
-                  transition: "opacity 320ms cubic-bezier(0.4,0,0.2,1)",
-                  willChange: "opacity",
-                  pointerEvents: i === activeIndex ? "auto" : "none",
-                }}
+                exit={{ opacity: 0, transition: { duration: 0.2, ease: "easeOut" } }}
               >
-                <p className="font-sans text-[13px] sm:text-[15px] tracking-[0.35em] uppercase text-white mb-1">
-                  {p.category}
-                </p>
-                <p className="font-sans text-[12px] sm:text-[15px] tracking-[0.30em] uppercase text-[#c9a54a] mb-5 sm:mb-7">
-                  {p.tag}
-                </p>
-                <h2
-                  className="font-serif text-white uppercase leading-[1.05] mb-2 sm:mb-3"
+                <motion.h2
+                  initial={{ y: 28, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.75, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                  className="font-serif text-white uppercase leading-[1.05] mb-3 sm:mb-4"
                   style={{ fontSize: "clamp(2rem, 4.5vw, 4.2rem)", fontWeight: 700, letterSpacing: "0.02em" }}
                 >
-                  {p.name}
-                </h2>
-                <p className="font-sans text-white mb-8 sm:mb-12" style={{ fontSize: "14px", letterSpacing: "0.10em" }}>
-                  {p.location}
-                </p>
-              </div>
-            ))}
+                  {project.name}
+                </motion.h2>
+                <motion.p
+                  initial={{ y: 18, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.6, delay: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                  className="font-sans text-white/85 mb-8 sm:mb-12"
+                  style={{ fontSize: "clamp(17px, 1.6vw, 22px)", letterSpacing: "0.06em" }}
+                >
+                  {project.location}
+                </motion.p>
+              </motion.div>
+            </AnimatePresence>
           </div>
 
-          {/* View Project CTA */}
-          <Link
-            href={`/projects/${project.name.toLowerCase().replace(/\s+/g, "-")}`}
-            className="flex items-center gap-3 mb-8 sm:mb-12"
-          >
-            <div className="w-[7px] h-[7px] rounded-full bg-[#c9a54a]" />
-            <span className="font-serif text-[14px] sm:text-[15px] text-white hover:text-white/70 transition-colors tracking-wide">
-              View Project
-            </span>
-          </Link>
-
-          {/* Arrow navigation */}
-          <div className="flex items-center gap-4 mb-6 sm:mb-8">
-            <button
-              onClick={goPrev}
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-white flex items-center justify-center text-white hover:text-white/70 hover:border-white/70 transition-all"
-              aria-label="Previous"
+          {/* Controls group — visually separated from the text above */}
+          <div className="mt-2 sm:mt-20">
+            {/* View Project CTA */}
+            <Link
+              href={`/projects/${project.slug}`}
+              className="group inline-flex items-center gap-3 mb-10 sm:mb-14 w-fit"
             >
-              <ChevronLeft size={14} strokeWidth={1.5} />
-            </button>
-            <button
-              onClick={goNext}
-              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full border border-white flex items-center justify-center text-white hover:text-white/70 hover:border-white/70 transition-all"
-              aria-label="Next"
-            >
-              <ChevronRight size={14} strokeWidth={1.5} />
-            </button>
-          </div>
-
-          {/* Progress bars */}
-          <div className="flex items-center gap-1.5 w-[140px] sm:w-[160px]">
-            {FEATURED_PROJECTS.map((_, i) => (
-              <div
-                key={i}
-                className={`h-[2px] flex-1 cursor-pointer ${i === activeIndex ? "bg-white" : "bg-white/40"}`}
-                style={{ transition: "background-color 300ms" }}
-                onClick={() => switchTo(i)}
+              <span className="font-serif text-[19px] sm:text-[22px] text-white group-hover:text-[#c9a54a] transition-colors duration-300 tracking-wide">
+                View Project
+              </span>
+              <ArrowRight
+                size={20}
+                strokeWidth={1.5}
+                className="text-white group-hover:text-[#c9a54a] group-hover:translate-x-1 transition-all duration-300"
               />
-            ))}
+            </Link>
+
+            {/* Arrow navigation — larger, pressable */}
+            <div className="flex items-center gap-4 mb-6 sm:mb-8">
+              <button
+                onClick={() => {
+                  if (typeof navigator !== "undefined" && "vibrate" in navigator) navigator.vibrate(12);
+                  goPrev();
+                }}
+                className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-white/80 flex items-center justify-center text-white hover:bg-white hover:text-[#1a1a1a] active:scale-90 transition-all duration-150 ease-out"
+                aria-label="Previous"
+              >
+                <ChevronLeft size={22} strokeWidth={1.75} />
+              </button>
+              <button
+                onClick={() => {
+                  if (typeof navigator !== "undefined" && "vibrate" in navigator) navigator.vibrate(12);
+                  goNext();
+                }}
+                className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-white/80 flex items-center justify-center text-white hover:bg-white hover:text-[#1a1a1a] active:scale-90 transition-all duration-150 ease-out"
+                aria-label="Next"
+              >
+                <ChevronRight size={22} strokeWidth={1.75} />
+              </button>
+            </div>
+
+            {/* Progress bars */}
+            <div className="flex items-center gap-1.5 w-[140px] sm:w-[160px]">
+              {FEATURED_PROJECTS.map((_, i) => (
+                <div
+                  key={i}
+                  className={`h-[2px] flex-1 cursor-pointer ${i === activeIndex ? "bg-white" : "bg-white/40"}`}
+                  style={{ transition: "background-color 300ms" }}
+                  onClick={() => switchTo(i)}
+                />
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Right column — building image (desktop only) */}
-        <div className="hidden lg:block pr-[7.5%] flex-shrink-0">
-          <div className="relative" style={{ width: "320px", height: "65vh", maxHeight: "520px" }}>
+        <motion.div className="hidden lg:block pr-[7.5%] flex-shrink-0" style={{ y: cardY }}>
+          <div className="relative" style={{ width: "min(520px, 38vw)", height: "75vh", maxHeight: "640px" }}>
             {FEATURED_PROJECTS.map((p, i) => (
               <div
                 key={p.name}
@@ -384,13 +446,13 @@ function FeaturedProjectsSection() {
                   alt={`${p.name} building`}
                   fill
                   className="object-cover"
-                  sizes="320px"
+                  sizes="(max-width: 1024px) 0px, 520px"
                   loading="lazy"
                 />
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -399,8 +461,6 @@ function FeaturedProjectsSection() {
 // ─────────────────────────────────────────────
 // SECTION 4 — STATISTICS
 // ─────────────────────────────────────────────
-
-const ALL_STATS = [...LEFT_STATS, ...RIGHT_STATS];
 
 function StatNumber({
   stat,
@@ -462,8 +522,8 @@ function StatisticsSection() {
         </div>
 
         {/* All stats in a single responsive grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-10 gap-y-12 max-w-5xl mx-auto">
-          {ALL_STATS.map((s, i) => (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-10 gap-y-12 max-w-4xl mx-auto">
+          {STATS.map((s, i) => (
             <motion.div
               key={s.label}
               initial={{ opacity: 0, y: 24 }}
