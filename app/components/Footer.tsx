@@ -50,11 +50,11 @@ export default function Footer() {
           <ul className="space-y-3.5">
             <li>
               <a
-                href="tel:+8802-9882345"
+                href="tel:+8801615759822"
                 className="font-sans text-white/60 hover:text-white transition-colors"
                 style={{ fontSize: "15px" }}
               >
-                +880 2-9882345
+                +88 016 1575 9822
               </a>
             </li>
             <li>
@@ -67,22 +67,7 @@ export default function Footer() {
               </a>
             </li>
             <li className="font-sans text-white/60" style={{ fontSize: "15px" }}>
-              Mohakhali DOHS<br />Dhaka 1212
-            </li>
-            <li className="pt-2">
-              <span
-                className="font-sans text-white/40 mr-2"
-                style={{ fontSize: "13px", letterSpacing: "0.14em", textTransform: "uppercase" }}
-              >
-                Hotline:
-              </span>
-              <a
-                href="tel:16634"
-                className="font-serif text-[#c9a54a] hover:text-[#dcb768] transition-colors"
-                style={{ fontSize: "17px", fontWeight: 500 }}
-              >
-                16634
-              </a>
+              House 40 (2nd Floor), Road 20,<br />Mohakhali DOHS, Dhaka-1206
             </li>
           </ul>
         </div>

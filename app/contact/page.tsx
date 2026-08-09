@@ -242,13 +242,10 @@ function ContactInner() {
                   <Phone size={14} className="text-[#c9a54a]" strokeWidth={1.5} />
                 </div>
                 <div>
-                  <p className="font-sans text-[11px] tracking-[0.26em] uppercase text-[#1a1a1a]/40 mb-2">Hotline</p>
-                  <a href="tel:16634" className="font-serif text-[#1a1a1a] hover:text-[#c9a54a] transition-colors" style={{ fontSize: "1.3rem" }}>
-                    16634
+                  <p className="font-sans text-[11px] tracking-[0.26em] uppercase text-[#1a1a1a]/40 mb-2">Phone</p>
+                  <a href="tel:+8801615759822" className="font-serif text-[#1a1a1a] hover:text-[#c9a54a] transition-colors" style={{ fontSize: "1.3rem" }}>
+                    +88 016 1575 9822
                   </a>
-                  <p className="font-sans text-[#1a1a1a]/40 mt-1" style={{ fontSize: "14px" }}>
-                    Sales: +880 1678-666444
-                  </p>
                 </div>
               </div>
             </FadeIn>
@@ -279,8 +276,8 @@ function ContactInner() {
                 <div>
                   <p className="font-sans text-[11px] tracking-[0.26em] uppercase text-[#1a1a1a]/40 mb-2">Address</p>
                   <p className="font-serif text-[#1a1a1a]" style={{ fontSize: "1.1rem", lineHeight: 1.5 }}>
-                    Mohakhali DOHS,<br />
-                    Dhaka 1212
+                    House 40 (2nd Floor), Road 20,<br />
+                    Mohakhali DOHS, Dhaka-1206
                   </p>
                 </div>
               </div>
@@ -306,12 +303,12 @@ function ContactInner() {
           </FadeIn>
           <div className="w-full" style={{ height: "clamp(280px, 40vw, 520px)" }}>
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8661.74351166099!2d90.39012999489778!3d23.78111813250275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c76a25b04c17%3A0xc32fd7eaacd36446!2sMohakhali%20DOHS%2C%20Dhaka!5e1!3m2!1sen!2sbd!4v1785912046644!5m2!1sen!2sbd"
+              src="https://www.google.com/maps?q=House%2040%20Road%2020%20Mohakhali%20DOHS%20Dhaka%201206&output=embed"
               className="w-full h-full border-0"
               allowFullScreen
               loading="lazy"
               referrerPolicy="strict-origin-when-cross-origin"
-              title="Arden Holdings Ltd. — Mohakhali DOHS, Dhaka"
+              title="Arden Holdings Ltd. — House 40, Road 20, Mohakhali DOHS, Dhaka-1206"
             />
           </div>
         </div>

@@ -147,11 +147,11 @@ export default function Nav({ transparent = false }: { transparent?: boolean } =
             </ul>
             <div className="absolute bottom-10 flex items-center gap-6">
               <span className="font-sans text-[11px] tracking-[0.22em] uppercase text-[#1a1a1a]/25">
-                Mohakhali DOHS, Dhaka
+                Mohakhali DOHS, Dhaka-1206
               </span>
               <span className="w-px h-3 bg-[#1a1a1a]/15" />
               <span className="font-sans text-[11px] tracking-[0.22em] uppercase text-[#1a1a1a]/25">
-                +880 2-9882345
+                +88 016 1575 9822
               </span>
             </div>
           </motion.div>
