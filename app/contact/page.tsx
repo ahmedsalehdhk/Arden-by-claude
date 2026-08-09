@@ -30,7 +30,7 @@ function InputField({ label, type = "text", textarea = false }: { label: string;
   return (
     <div className="group">
       <label
-        className="block font-sans text-[11px] tracking-[0.26em] uppercase text-[#1a1a1a]/40 mb-2"
+        className="block font-sans text-[11px] tracking-[0.26em] uppercase text-[#1a1a1a]/75 mb-2"
       >
         {label}
       </label>
