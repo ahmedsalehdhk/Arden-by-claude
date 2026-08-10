@@ -1,32 +1,17 @@
 "use client";
 
-import { useState, useRef, useMemo } from "react";
+import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import AnimatedHeading from "../components/AnimatedHeading";
+import { FadeIn, Section, Tag, FilterChip } from "../components/ui";
 import { useIsLoaded } from "../context/LoadContext";
 import { NEWS, NewsCategory, NewsItem } from "../data/news";
 
 const FILTERS: ("All" | NewsCategory)[] = ["All", "News", "Event"];
-
-function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-40px" });
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
 
 function formatDate(iso: string) {
   const d = new Date(iso);
@@ -46,51 +31,30 @@ function NewsCard({ item }: { item: NewsItem }) {
             src={item.image}
             alt={item.title}
             fill
-            className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
+            className="object-cover transition-transform duration-700 ease-arden group-hover:scale-105"
             loading="lazy"
             sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a]/55 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-ink/55 via-transparent to-transparent" />
 
-          {/* Date overlay */}
           <div className="absolute bottom-4 left-4 flex items-end gap-2 text-white">
-            <span
-              className="font-serif leading-none"
-              style={{ fontSize: "clamp(2.25rem, 4.5vw, 3.25rem)", fontWeight: 400, letterSpacing: "0.01em" }}
-            >
+            <span className="font-serif leading-none" style={{ fontSize: "clamp(2.25rem, 4.5vw, 3.25rem)", fontWeight: 400 }}>
               {day}
             </span>
-            <span
-              className="font-sans mb-1.5"
-              style={{ fontSize: "11px", letterSpacing: "0.22em", textTransform: "uppercase", opacity: 0.85 }}
-            >
+            <span className="font-sans text-eyebrow-sm mb-1.5 opacity-85 uppercase">
               {month} {year}
             </span>
           </div>
 
-          {/* Category chip */}
           <div className="absolute bottom-4 right-4">
-            <span
-              className="font-sans bg-white/90 text-[#1a1a1a] px-3 py-1.5"
-              style={{ fontSize: "10px", letterSpacing: "0.22em", textTransform: "uppercase" }}
-            >
-              {item.category}
-            </span>
+            <Tag variant="category">{item.category}</Tag>
           </div>
         </div>
 
-        <h3
-          className="font-serif text-[#1a1a1a] group-hover:text-[#c9a54a] transition-colors duration-300 mb-2"
-          style={{ fontSize: "clamp(1.15rem, 1.5vw, 1.35rem)", fontWeight: 500, lineHeight: 1.35 }}
-        >
+        <h3 className="font-serif text-h3 text-ink group-hover:text-gold transition-colors duration-300 mb-2">
           {item.title}
         </h3>
-        <p
-          className="font-sans text-[#1a1a1a]/55"
-          style={{ fontSize: "14px", lineHeight: 1.6 }}
-        >
-          {item.excerpt}
-        </p>
+        <p className="font-sans text-body-sm text-ink/55">{item.excerpt}</p>
       </article>
     </Link>
   );
@@ -106,99 +70,81 @@ export default function NewsPage() {
   );
 
   return (
-    <main className="bg-[#faf9f6]">
+    <main className="bg-bone">
       <Nav />
 
-      {/* ── HERO ── */}
-      <section className="bg-[#faf9f6] pt-[140px]" aria-label="News hero">
-        <div className="px-[7.5%] pt-6 sm:pt-12 pb-10 sm:pb-16">
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-            <AnimatedHeading
-              as="h1"
-              text="News & Events"
-              trigger="load"
-              active={isLoaded}
-              delay={0.4}
-              className="font-serif text-[#1a1a1a] select-none uppercase text-balance"
-              style={{
-                fontSize: "clamp(2.5rem, 8vw, 7rem)",
-                letterSpacing: "0.02em",
-                lineHeight: 1.02,
-                fontWeight: 400,
-                maxWidth: "12ch",
-              }}
-            />
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
-              className="font-sans text-[#1a1a1a]/60 lg:text-right"
-              style={{ fontSize: "15px", letterSpacing: "0.03em" }}
+      {/* HERO */}
+      <Section tone="bone" rhythm="flush" className="pt-nav-offset" innerClassName="pt-6 sm:pt-12 pb-10 sm:pb-16">
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+          <AnimatedHeading
+            as="h1"
+            text="News & Events"
+            trigger="load"
+            active={isLoaded}
+            delay={0.4}
+            className="font-serif text-ink select-none uppercase text-balance"
+            style={{
+              fontSize: "clamp(2.5rem, 8vw, 7rem)",
+              letterSpacing: "0.02em",
+              lineHeight: 1.02,
+              fontWeight: 400,
+              maxWidth: "12ch",
+            }}
+          />
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={isLoaded ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
+            className="font-sans text-ink/60 lg:text-right"
+            style={{ fontSize: "15px", letterSpacing: "0.03em" }}
+          >
+            Stay updated with us
+          </motion.p>
+        </div>
+      </Section>
+
+      {/* FILTERS */}
+      <Section tone="bone" rhythm="flush" innerClassName="pb-8 sm:pb-10">
+        <div className="flex items-center gap-2 sm:gap-3">
+          {FILTERS.map((f) => (
+            <FilterChip key={f} active={filter === f} onClick={() => setFilter(f)}>
+              {f}
+            </FilterChip>
+          ))}
+        </div>
+      </Section>
+
+      {/* GRID */}
+      <Section tone="bone" rhythm="flush" innerClassName="pb-20 sm:pb-28">
+        <AnimatePresence mode="wait">
+          {filtered.length === 0 ? (
+            <motion.div
+              key="empty"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="text-center py-24"
             >
-              Stay updated with us
-            </motion.p>
-          </div>
-        </div>
-      </section>
-
-      {/* ── FILTERS ── */}
-      <section className="bg-[#faf9f6]">
-        <div className="px-[7.5%] pb-8 sm:pb-10">
-          <div className="flex items-center gap-2 sm:gap-3">
-            {FILTERS.map((f) => {
-              const active = filter === f;
-              return (
-                <button
-                  key={f}
-                  onClick={() => setFilter(f)}
-                  className={`font-sans px-5 sm:px-6 py-2 rounded-full transition-all duration-300 ${
-                    active
-                      ? "bg-[#1a1a1a] text-white"
-                      : "text-[#1a1a1a]/60 hover:text-[#1a1a1a]"
-                  }`}
-                  style={{ fontSize: "13px", letterSpacing: "0.04em" }}
-                >
-                  {f}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ── GRID ── */}
-      <section className="bg-[#faf9f6] pb-20 sm:pb-28">
-        <div className="px-[7.5%]">
-          <AnimatePresence mode="wait">
-            {filtered.length === 0 ? (
-              <motion.div
-                key="empty"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="text-center py-24"
-              >
-                <p className="font-sans text-[#1a1a1a]/30 text-sm tracking-wide">Nothing to show yet.</p>
-              </motion.div>
-            ) : (
-              <motion.div
-                key={filter}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.35 }}
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10"
-              >
-                {filtered.map((item, i) => (
-                  <FadeIn key={item.slug} delay={i * 0.05}>
-                    <NewsCard item={item} />
-                  </FadeIn>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </section>
+              <p className="font-sans text-ink/30 text-sm tracking-wide">Nothing to show yet.</p>
+            </motion.div>
+          ) : (
+            <motion.div
+              key={filter}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.35 }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10"
+            >
+              {filtered.map((item, i) => (
+                <FadeIn key={item.slug} delay={i * 0.05}>
+                  <NewsCard item={item} />
+                </FadeIn>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </Section>
 
       <Footer />
     </main>

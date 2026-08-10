@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useMemo } from "react";
 import { useParams } from "next/navigation";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
   Zap,
   Wind,
@@ -15,6 +15,13 @@ import {
   TreePine,
   Users,
   ArrowUpRight,
+  GraduationCap,
+  HeartPulse,
+  Utensils,
+  ShoppingBag,
+  Landmark,
+  Trees,
+  Bus,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -22,8 +29,25 @@ import Nav from "../../components/Nav";
 import Footer from "../../components/Footer";
 import AnimatedHeading from "../../components/AnimatedHeading";
 import ProjectGallery from "../../components/ProjectGallery";
+import FloorPlansSection from "../../components/FloorPlansSection";
+import { Section, FilterChip } from "../../components/ui";
 import { getProjectBySlug } from "../../data/projects";
-import type { ProjectDetail } from "../../data/projects";
+import type { ProjectDetail, NeighborhoodCategory } from "../../data/projects";
+
+// ─────────────────────────────────────────────
+// NEIGHBORHOOD CATEGORY ICONS
+// ─────────────────────────────────────────────
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const NEIGHBORHOOD_ICONS: Record<NeighborhoodCategory, any> = {
+  Education: GraduationCap,
+  Healthcare: HeartPulse,
+  Dining: Utensils,
+  Shopping: ShoppingBag,
+  Faith: Landmark,
+  Recreation: Trees,
+  Transit: Bus,
+};
 
 // ─────────────────────────────────────────────
 // ICON MAP
@@ -251,65 +275,143 @@ function FeaturesSection({ project }: { project: ProjectDetail }) {
   const renderFeature = (feature: (typeof project.features)[number]) => {
     const IconComp = ICON_MAP[feature.icon];
     return (
-      <div key={feature.label} className="flex items-start gap-6 py-7 sm:py-8 border-b border-[#1a1a1a]/10 last:border-b-0">
-        <div className="w-11 h-11 border border-[#1a1a1a]/25 flex items-center justify-center flex-shrink-0">
-          {IconComp && <IconComp size={20} strokeWidth={1.25} className="text-[#1a1a1a]/80" />}
+      <div key={feature.label} className="flex items-start gap-6 py-7 sm:py-8 border-b border-ink/10 last:border-b-0">
+        <div className="w-11 h-11 border border-ink/25 flex items-center justify-center flex-shrink-0">
+          {IconComp && <IconComp size={20} strokeWidth={1.25} className="text-ink/80" />}
         </div>
-        <span
-          className="font-sans text-[#1a1a1a] pt-2.5"
-          style={{ fontSize: "15px", lineHeight: 1.35, letterSpacing: "0.01em" }}
-        >
-          {feature.label}
-        </span>
+        <span className="font-sans text-body text-ink pt-2.5">{feature.label}</span>
       </div>
     );
   };
 
   return (
-    <section className="py-20 sm:py-28 lg:py-32" style={{ backgroundColor: "#f5f0e0" }}>
-      <div className="px-[7.5%]">
-        {/* Section heading */}
-        <FadeIn>
-          <AnimatedHeading
-            as="h2"
-            text="Features & Amenities"
-            trigger="view"
-            className="font-serif text-[#1a1a1a] uppercase text-center mb-16 sm:mb-20"
-            style={{
-              fontSize: "clamp(2rem, 5vw, 4.25rem)",
-              letterSpacing: "0.06em",
-              fontWeight: 700,
-              lineHeight: 1.05,
-            }}
-          />
+    <Section tone="cream" rhythm="loose">
+      <FadeIn>
+        <AnimatedHeading
+          as="h2"
+          text="Features & Amenities"
+          trigger="view"
+          className="font-serif text-ink uppercase text-center mb-16 sm:mb-20"
+          style={{
+            fontSize: "clamp(2rem, 5vw, 4.25rem)",
+            letterSpacing: "0.06em",
+            fontWeight: 700,
+            lineHeight: 1.05,
+          }}
+        />
+      </FadeIn>
+
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.4fr)] gap-10 lg:gap-16 items-start">
+        <FadeIn delay={0.1}>
+          <div className="relative overflow-hidden w-full" style={{ aspectRatio: "4/5" }}>
+            <Image
+              src={project.buildingImage}
+              alt={`${project.name} Features`}
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 40vw"
+              loading="lazy"
+            />
+          </div>
         </FadeIn>
 
-        {/* Image + 2-column feature list */}
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.4fr)] gap-10 lg:gap-16 items-start">
-          {/* Left — image */}
-          <FadeIn delay={0.1}>
-            <div className="relative overflow-hidden w-full" style={{ aspectRatio: "4/5" }}>
-              <Image
-                src={project.buildingImage}
-                alt={`${project.name} Features`}
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 40vw"
-                loading="lazy"
-              />
-            </div>
-          </FadeIn>
-
-          {/* Right — two columns of features */}
-          <FadeIn delay={0.2}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-16 lg:gap-x-20">
-              <div>{leftFeatures.map(renderFeature)}</div>
-              <div>{rightFeatures.map(renderFeature)}</div>
-            </div>
-          </FadeIn>
-        </div>
+        <FadeIn delay={0.2}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-16 lg:gap-x-20">
+            <div>{leftFeatures.map(renderFeature)}</div>
+            <div>{rightFeatures.map(renderFeature)}</div>
+          </div>
+        </FadeIn>
       </div>
-    </section>
+    </Section>
+  );
+}
+
+// ─────────────────────────────────────────────
+// KNOW YOUR NEIGHBORHOOD SECTION
+// ─────────────────────────────────────────────
+
+function NeighborhoodSection({ project }: { project: ProjectDetail }) {
+  const items = project.neighborhood ?? [];
+  const [filter, setFilter] = useState<"All" | NeighborhoodCategory>("All");
+
+  const categories = useMemo(() => {
+    const seen = new Set<NeighborhoodCategory>();
+    items.forEach((i) => seen.add(i.category));
+    return ["All", ...Array.from(seen)] as ("All" | NeighborhoodCategory)[];
+  }, [items]);
+
+  const filtered = useMemo(
+    () => (filter === "All" ? items : items.filter((i) => i.category === filter)),
+    [filter, items]
+  );
+
+  if (items.length === 0) return null;
+
+  return (
+    <Section tone="bone" rhythm="loose">
+      <FadeIn>
+        <p className="font-sans text-gold mb-3 text-eyebrow-sm uppercase">Around You</p>
+        <AnimatedHeading
+          as="h2"
+          text="Know Your Neighborhood"
+          trigger="view"
+          className="font-serif text-ink mb-4"
+          style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
+        />
+        <p className="font-sans text-ink/55 max-w-2xl mb-10 sm:mb-12" style={{ fontSize: "15px" }}>
+          Everything that matters — schools, care, culture, and everyday
+          essentials — within a short reach of {project.name}.
+        </p>
+      </FadeIn>
+
+      <FadeIn delay={0.1}>
+        <div className="flex items-center gap-2 sm:gap-3 flex-wrap mb-10 sm:mb-14">
+          {categories.map((c) => (
+            <FilterChip key={c} active={filter === c} onClick={() => setFilter(c)}>
+              {c}
+            </FilterChip>
+          ))}
+        </div>
+      </FadeIn>
+
+      <AnimatePresence mode="wait">
+        <motion.ul
+          key={filter}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          className="grid grid-cols-1 sm:grid-cols-2 gap-x-16 lg:gap-x-20"
+        >
+          {filtered.map((item) => {
+            const IconComp = NEIGHBORHOOD_ICONS[item.category];
+            return (
+              <li
+                key={`${item.category}-${item.name}`}
+                className="flex items-center gap-5 py-6 sm:py-7 border-b border-ink/10"
+              >
+                <div className="w-11 h-11 border border-ink/25 flex items-center justify-center flex-shrink-0">
+                  {IconComp && <IconComp size={20} strokeWidth={1.25} className="text-ink/80" />}
+                </div>
+                <div className="flex-1 flex items-baseline justify-between gap-4 min-w-0">
+                  <div className="min-w-0">
+                    <p className="font-serif text-ink truncate" style={{ fontSize: "17px", fontWeight: 500 }}>
+                      {item.name}
+                    </p>
+                    <p className="font-sans text-ink/40 text-eyebrow-sm uppercase mt-1">
+                      {item.category}
+                    </p>
+                  </div>
+                  <span className="font-sans text-gold flex-shrink-0" style={{ fontSize: "14px", letterSpacing: "0.04em" }}>
+                    {item.distance}
+                  </span>
+                </div>
+              </li>
+            );
+          })}
+        </motion.ul>
+      </AnimatePresence>
+    </Section>
   );
 }
 
@@ -426,7 +528,9 @@ export default function ProjectDetailPage() {
       <ProjectHero project={project} />
       <AtAGlance project={project} />
       <ProjectGallery images={project.gallery} projectName={project.name} />
+      <FloorPlansSection project={project} />
       <FeaturesSection project={project} />
+      <NeighborhoodSection project={project} />
       <ProjectLocation project={project} />
       <ProjectCTA project={project} />
       <Footer />
