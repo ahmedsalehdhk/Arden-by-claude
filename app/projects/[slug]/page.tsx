@@ -154,8 +154,14 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.9 }}
-          className="font-sans text-white/70 mt-6 sm:mt-8"
-          style={{ fontSize: "12px", letterSpacing: "0.36em", textTransform: "uppercase" }}
+          className="font-sans text-white mt-8 sm:mt-10 max-w-3xl"
+          style={{
+            fontSize: "clamp(15px, 1.4vw, 19px)",
+            letterSpacing: "0.28em",
+            textTransform: "uppercase",
+            fontWeight: 500,
+            textShadow: "0 1px 24px rgba(0,0,0,0.35)",
+          }}
         >
           {project.tagline}
         </motion.p>
@@ -245,7 +251,7 @@ function FeaturesSection({ project }: { project: ProjectDetail }) {
   const renderFeature = (feature: (typeof project.features)[number]) => {
     const IconComp = ICON_MAP[feature.icon];
     return (
-      <div key={feature.label} className="flex items-start gap-5 py-4">
+      <div key={feature.label} className="flex items-start gap-6 py-7 sm:py-8 border-b border-[#1a1a1a]/10 last:border-b-0">
         <div className="w-11 h-11 border border-[#1a1a1a]/25 flex items-center justify-center flex-shrink-0">
           {IconComp && <IconComp size={20} strokeWidth={1.25} className="text-[#1a1a1a]/80" />}
         </div>
@@ -296,7 +302,7 @@ function FeaturesSection({ project }: { project: ProjectDetail }) {
 
           {/* Right — two columns of features */}
           <FadeIn delay={0.2}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-16 lg:gap-x-20">
               <div>{leftFeatures.map(renderFeature)}</div>
               <div>{rightFeatures.map(renderFeature)}</div>
             </div>

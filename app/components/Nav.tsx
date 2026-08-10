@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "About Arden", href: "/about" },
   { label: "Projects", href: "/projects" },
+  { label: "News & Events", href: "/news" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -78,9 +79,9 @@ export default function Nav({ transparent = false }: { transparent?: boolean } =
             <Image
               src="/logo.png"
               alt="Arden Holdings"
-              width={180}
-              height={45}
-              className={`h-[38px] w-auto transition-[filter] duration-300 ${
+              width={240}
+              height={60}
+              className={`h-[50px] sm:h-[56px] md:h-[60px] w-auto transition-[filter] duration-300 ${
                 isTransparent ? "brightness-0 invert" : ""
               }`}
               priority

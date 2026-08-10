@@ -15,7 +15,7 @@ const SOCIALS = [
 
 const COMPANY = [
   { label: "Careers", href: "#" },
-  { label: "Blogs", href: "#" },
+  { label: "News & Events", href: "/news" },
 ];
 
 export default function Footer() {
