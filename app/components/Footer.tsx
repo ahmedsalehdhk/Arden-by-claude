@@ -14,7 +14,7 @@ const SOCIALS = [
 ];
 
 const COMPANY = [
-  { label: "Careers", href: "#" },
+  { label: "Careers", href: "/careers" },
   { label: "News & Events", href: "/news" },
 ];
 

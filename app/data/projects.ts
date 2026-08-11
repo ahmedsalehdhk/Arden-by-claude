@@ -11,27 +11,11 @@ export interface ProjectFeature {
   label: string;
 }
 
-export type NeighborhoodCategory =
-  | "Education"
-  | "Healthcare"
-  | "Dining"
-  | "Shopping"
-  | "Faith"
-  | "Recreation"
-  | "Transit";
-
-export interface NeighborhoodItem {
-  category: NeighborhoodCategory;
-  name: string;
-  distance: string; // e.g., "0.6 km", "5 min walk"
+export interface Neighborhood {
+  image: string;
+  paragraphs: string[]; // typically two short paragraphs about what the area offers
 }
 
-export interface FloorPlan {
-  label: string;       // e.g., "Type A"
-  sizeSft: string;     // e.g., "2,200 sft"
-  bedrooms: number;
-  image: string;       // placeholder for now; drop real renders into /public/projectimages/<slug>/floorplans/
-}
 
 export interface ProjectDetail {
   slug: string;
@@ -48,8 +32,8 @@ export interface ProjectDetail {
   features: ProjectFeature[];
   gallery: string[];
   mapEmbedSrc?: string;
-  neighborhood?: NeighborhoodItem[];
-  floorPlans?: FloorPlan[];
+  neighborhood?: Neighborhood;
+  floorPlanImage?: string; // single typical floor layout for the project
 }
 
 export const PROJECT_DETAILS: ProjectDetail[] = [
@@ -98,23 +82,14 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
       "/projectimages/amanat/rooftop-02.jpg",
       "/projectimages/amanat/lobby-view-01.jpg",
     ],
-    neighborhood: [
-      { category: "Faith", name: "Banani Central Mosque", distance: "0.5 km" },
-      { category: "Recreation", name: "Banani Lake Park", distance: "0.7 km" },
-      { category: "Dining", name: "Cafe Kaldi, Banani 11", distance: "0.6 km" },
-      { category: "Dining", name: "Izumi Japanese Restaurant", distance: "0.9 km" },
-      { category: "Shopping", name: "Banani Super Market", distance: "0.8 km" },
-      { category: "Education", name: "Sunbeams School, Banani", distance: "1.4 km" },
-      { category: "Healthcare", name: "Ibn Sina Diagnostic, Banani", distance: "1.1 km" },
-      { category: "Healthcare", name: "United Hospital, Gulshan", distance: "2.5 km" },
-      { category: "Shopping", name: "Gulshan Avenue Shops", distance: "2.1 km" },
-      { category: "Transit", name: "Banani Bus Stand", distance: "1.0 km" },
-    ],
-    floorPlans: [
-      { label: "Type A", sizeSft: "2,200 sft", bedrooms: 3, image: "/projectimages/amanat/eye-level-view-01.jpg" },
-      { label: "Type B", sizeSft: "2,800 sft", bedrooms: 3, image: "/projectimages/amanat/high-eye-level-view-04.jpg" },
-      { label: "Type C — Duplex", sizeSft: "3,600 sft", bedrooms: 4, image: "/projectimages/amanat/rooftop-01.jpg" },
-    ],
+    neighborhood: {
+      image: "/neighborhoods/field.jpg",
+      paragraphs: [
+        "Banani sits at the quiet edge of Dhaka's diplomatic core — a neighborhood that has kept its residential feel while everything around it grew louder. Amanat is a short walk from Banani Lake, the Sunday farmers' market at Road 11, and the coffee-and-brunch strip that anchors weekend mornings here.",
+        "Groceries, salons, tailors, and a mosque are all within five minutes on foot. Gulshan Avenue, United Hospital, and the international schools of Baridhara are a five-minute drive; the airport and Uttara are twenty on a clear day. It is a rare pocket of the city where you can live without your car needing to leave the driveway.",
+      ],
+    },
+    floorPlanImage: "/floorplans/typical.jpg",
   },
   {
     slug: "rahma",
@@ -163,23 +138,14 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
       "/projectimages/rahma/view-10.jpg",
       "/projectimages/rahma/construction-jan-2026.jpg",
     ],
-    neighborhood: [
-      { category: "Faith", name: "Jolshiri Jame Masjid", distance: "0.4 km" },
-      { category: "Recreation", name: "Jolshiri Lakeside Park", distance: "0.6 km" },
-      { category: "Dining", name: "Sultan's Dine, Jolshiri", distance: "1.0 km" },
-      { category: "Shopping", name: "Jolshiri Bazaar", distance: "0.5 km" },
-      { category: "Education", name: "Cambrian School, Jolshiri", distance: "1.5 km" },
-      { category: "Education", name: "Purbachal International School", distance: "2.2 km" },
-      { category: "Healthcare", name: "CMH Dhaka Cantonment", distance: "3.0 km" },
-      { category: "Healthcare", name: "Popular Diagnostic, Uttara", distance: "4.5 km" },
-      { category: "Transit", name: "300 Feet Highway", distance: "1.0 km" },
-      { category: "Shopping", name: "Bashundhara City Mall", distance: "8.0 km" },
-    ],
-    floorPlans: [
-      { label: "Type A", sizeSft: "1,800 sft", bedrooms: 3, image: "/projectimages/rahma/view-01.jpg" },
-      { label: "Type B", sizeSft: "2,400 sft", bedrooms: 3, image: "/projectimages/rahma/view-03.jpg" },
-      { label: "Type C — Penthouse", sizeSft: "3,200 sft", bedrooms: 4, image: "/projectimages/rahma/view-06.jpg" },
-    ],
+    neighborhood: {
+      image: "/neighborhoods/field.jpg",
+      paragraphs: [
+        "Jolshiri Abashon is Dhaka's most deliberately planned residential district — wide roads, low density, and lakes that were dug before the first foundation was poured. Rahma sits on Sector 11, a five-minute walk from the lakeside promenade that families use for evening strolls and morning runs.",
+        "The 300 Feet Highway puts Bashundhara, Baridhara, and the airport within twenty minutes without touching Dhaka's older gridlock. Cambrian and Purbachal International cover schools; CMH is the nearest hospital; and the neighborhood mosque, bazaar, and everyday shops sit just off the main sector road. Quiet by day, safe at night, and built for the way people actually live.",
+      ],
+    },
+    floorPlanImage: "/floorplans/typical.jpg",
   },
 ];
 

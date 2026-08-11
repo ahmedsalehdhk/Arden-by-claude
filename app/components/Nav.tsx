@@ -5,7 +5,36 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronRight } from "lucide-react";
+
+// Inline social glyphs — the installed lucide-react is old and does not ship brand icons.
+type IconProps = { size?: number; className?: string };
+
+const FacebookIcon = ({ size = 16, className }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+    <path d="M13.5 21v-7.5h2.6l.4-3.1h-3V8.4c0-.9.3-1.5 1.5-1.5H16.7V4.1c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4v2.4H7.6v3.1h2.7V21h3.2z" />
+  </svg>
+);
+
+const InstagramIcon = ({ size = 16, className }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+    <rect x="3" y="3" width="18" height="18" rx="5" />
+    <circle cx="12" cy="12" r="4" />
+    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+  </svg>
+);
+
+const LinkedinIcon = ({ size = 16, className }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
+    <path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5zM3 9.75h4v11H3v-11zm7 0h3.8v1.5h.05c.53-1 1.83-2.06 3.77-2.06 4.03 0 4.78 2.65 4.78 6.1v5.46h-4v-4.84c0-1.16-.02-2.65-1.62-2.65-1.62 0-1.87 1.26-1.87 2.57v4.92h-4v-11z" />
+  </svg>
+);
+
+const SOCIALS = [
+  { label: "Facebook", href: "#", Icon: FacebookIcon },
+  { label: "Instagram", href: "#", Icon: InstagramIcon },
+  { label: "LinkedIn", href: "#", Icon: LinkedinIcon },
+];
 import { useIsLoaded } from "../context/LoadContext";
 
 const NAV_LINKS = [
@@ -13,6 +42,7 @@ const NAV_LINKS = [
   { label: "About Arden", href: "/about" },
   { label: "Projects", href: "/projects" },
   { label: "News & Events", href: "/news" },
+  { label: "Careers", href: "/careers" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -108,54 +138,100 @@ export default function Nav({ transparent = false }: { transparent?: boolean } =
         </div>
       </motion.nav>
 
-      {/* Full-screen overlay */}
+      {/* Slide-in nav panel from the right */}
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 bg-[#faf9f6] flex flex-col justify-center items-center"
-          >
-            <button
+          <>
+            {/* Backdrop — dim the page, click to close */}
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
               onClick={() => setMenuOpen(false)}
-              className="absolute top-[28px] right-5 sm:right-8 flex items-center gap-2.5"
+              aria-label="Close menu"
+              className="fixed inset-0 z-40 bg-black/45 cursor-default"
+            />
+
+            {/* Panel */}
+            <motion.aside
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              className="fixed top-0 right-0 bottom-0 z-50 w-full sm:w-[440px] md:w-[500px] bg-[#111111] text-white flex flex-col"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Main navigation"
             >
-              <span className="font-sans text-[12px] tracking-[0.2em] uppercase text-[#1a1a1a]/50">
-                Close
-              </span>
-              <X size={15} strokeWidth={1.5} className="text-[#1a1a1a]" />
-            </button>
-            <ul className="space-y-6 text-center">
-              {NAV_LINKS.map((link, i) => (
-                <motion.li
-                  key={link.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.07 }}
+              {/* Close */}
+              <div className="flex justify-end px-8 sm:px-10 pt-8">
+                <button
+                  onClick={() => setMenuOpen(false)}
+                  className="flex items-center gap-2.5 text-white/70 hover:text-white transition-colors"
                 >
-                  <Link
-                    href={link.href}
-                    onClick={() => setMenuOpen(false)}
-                    className="font-serif text-[3rem] sm:text-[4rem] text-[#1a1a1a] hover:text-[#c9a54a] transition-colors tracking-[0.04em] block"
-                    style={{ fontWeight: 400 }}
-                  >
-                    {link.label}
-                  </Link>
-                </motion.li>
-              ))}
-            </ul>
-            <div className="absolute bottom-10 flex items-center gap-6">
-              <span className="font-sans text-[11px] tracking-[0.22em] uppercase text-[#1a1a1a]/25">
-                Mohakhali DOHS, Dhaka-1206
-              </span>
-              <span className="w-px h-3 bg-[#1a1a1a]/15" />
-              <span className="font-sans text-[11px] tracking-[0.22em] uppercase text-[#1a1a1a]/25">
-                +88 016 1575 9822
-              </span>
-            </div>
-          </motion.div>
+                  <span className="font-sans text-[12px] tracking-[0.24em] uppercase">Close</span>
+                  <X size={16} strokeWidth={1.75} />
+                </button>
+              </div>
+
+              {/* Nav items */}
+              <nav className="flex-1 flex flex-col justify-center px-8 sm:px-10">
+                <ul>
+                  {NAV_LINKS.map((link, i) => {
+                    const active = pathname === link.href;
+                    return (
+                      <motion.li
+                        key={link.label}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.08 + i * 0.05, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                      >
+                        <Link
+                          href={link.href}
+                          onClick={() => setMenuOpen(false)}
+                          className={`group flex items-center justify-between py-5 border-b border-white/10 transition-colors ${
+                            active ? "text-[#c9a54a]" : "text-white hover:text-[#c9a54a]"
+                          }`}
+                        >
+                          <span
+                            className="font-sans"
+                            style={{ fontSize: "clamp(1.4rem, 2.2vw, 1.75rem)", fontWeight: 500, letterSpacing: "0.01em" }}
+                          >
+                            {link.label}
+                          </span>
+                          <ChevronRight
+                            size={20}
+                            strokeWidth={1.5}
+                            className="text-white/30 group-hover:text-[#c9a54a] group-hover:translate-x-1 transition-all duration-300"
+                          />
+                        </Link>
+                      </motion.li>
+                    );
+                  })}
+                </ul>
+              </nav>
+
+              {/* Follow Us */}
+              <div className="px-8 sm:px-10 pb-10 pt-6">
+                <p className="font-sans text-white/40 mb-4" style={{ fontSize: "12px", letterSpacing: "0.24em", textTransform: "uppercase" }}>
+                  Follow Us
+                </p>
+                <div className="flex items-center gap-4">
+                  {SOCIALS.map(({ label, href, Icon }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      aria-label={label}
+                      className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white/70 hover:text-[#c9a54a] hover:border-[#c9a54a]/50 transition-colors"
+                    >
+                      <Icon size={16} />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </motion.aside>
+          </>
         )}
       </AnimatePresence>
     </>

@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useState, useMemo } from "react";
+import { useRef } from "react";
 import { useParams } from "next/navigation";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import {
   Zap,
   Wind,
@@ -15,13 +15,6 @@ import {
   TreePine,
   Users,
   ArrowUpRight,
-  GraduationCap,
-  HeartPulse,
-  Utensils,
-  ShoppingBag,
-  Landmark,
-  Trees,
-  Bus,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -30,24 +23,9 @@ import Footer from "../../components/Footer";
 import AnimatedHeading from "../../components/AnimatedHeading";
 import ProjectGallery from "../../components/ProjectGallery";
 import FloorPlansSection from "../../components/FloorPlansSection";
-import { Section, FilterChip } from "../../components/ui";
+import { Section } from "../../components/ui";
 import { getProjectBySlug } from "../../data/projects";
-import type { ProjectDetail, NeighborhoodCategory } from "../../data/projects";
-
-// ─────────────────────────────────────────────
-// NEIGHBORHOOD CATEGORY ICONS
-// ─────────────────────────────────────────────
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const NEIGHBORHOOD_ICONS: Record<NeighborhoodCategory, any> = {
-  Education: GraduationCap,
-  Healthcare: HeartPulse,
-  Dining: Utensils,
-  Shopping: ShoppingBag,
-  Faith: Landmark,
-  Recreation: Trees,
-  Transit: Bus,
-};
+import type { ProjectDetail } from "../../data/projects";
 
 // ─────────────────────────────────────────────
 // ICON MAP
@@ -331,21 +309,8 @@ function FeaturesSection({ project }: { project: ProjectDetail }) {
 // ─────────────────────────────────────────────
 
 function NeighborhoodSection({ project }: { project: ProjectDetail }) {
-  const items = project.neighborhood ?? [];
-  const [filter, setFilter] = useState<"All" | NeighborhoodCategory>("All");
-
-  const categories = useMemo(() => {
-    const seen = new Set<NeighborhoodCategory>();
-    items.forEach((i) => seen.add(i.category));
-    return ["All", ...Array.from(seen)] as ("All" | NeighborhoodCategory)[];
-  }, [items]);
-
-  const filtered = useMemo(
-    () => (filter === "All" ? items : items.filter((i) => i.category === filter)),
-    [filter, items]
-  );
-
-  if (items.length === 0) return null;
+  const n = project.neighborhood;
+  if (!n) return null;
 
   return (
     <Section tone="bone" rhythm="loose">
@@ -355,62 +320,39 @@ function NeighborhoodSection({ project }: { project: ProjectDetail }) {
           as="h2"
           text="Know Your Neighborhood"
           trigger="view"
-          className="font-serif text-ink mb-4"
+          className="font-serif text-ink mb-10 sm:mb-14"
           style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
         />
-        <p className="font-sans text-ink/55 max-w-2xl mb-10 sm:mb-12" style={{ fontSize: "15px" }}>
-          Everything that matters — schools, care, culture, and everyday
-          essentials — within a short reach of {project.name}.
-        </p>
       </FadeIn>
 
-      <FadeIn delay={0.1}>
-        <div className="flex items-center gap-2 sm:gap-3 flex-wrap mb-10 sm:mb-14">
-          {categories.map((c) => (
-            <FilterChip key={c} active={filter === c} onClick={() => setFilter(c)}>
-              {c}
-            </FilterChip>
-          ))}
-        </div>
-      </FadeIn>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <FadeIn delay={0.05}>
+          <div className="relative overflow-hidden w-full" style={{ aspectRatio: "4/3" }}>
+            <Image
+              src={n.image}
+              alt={`${project.location} neighborhood`}
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              loading="lazy"
+            />
+          </div>
+        </FadeIn>
 
-      <AnimatePresence mode="wait">
-        <motion.ul
-          key={filter}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className="grid grid-cols-1 sm:grid-cols-2 gap-x-16 lg:gap-x-20"
-        >
-          {filtered.map((item) => {
-            const IconComp = NEIGHBORHOOD_ICONS[item.category];
-            return (
-              <li
-                key={`${item.category}-${item.name}`}
-                className="flex items-center gap-5 py-6 sm:py-7 border-b border-ink/10"
+        <FadeIn delay={0.15}>
+          <div className="space-y-6">
+            {n.paragraphs.map((para, i) => (
+              <p
+                key={i}
+                className="font-sans font-medium text-ink/70 leading-[1.9]"
+                style={{ fontSize: "clamp(15px, 1.4vw, 18px)" }}
               >
-                <div className="w-11 h-11 border border-ink/25 flex items-center justify-center flex-shrink-0">
-                  {IconComp && <IconComp size={20} strokeWidth={1.25} className="text-ink/80" />}
-                </div>
-                <div className="flex-1 flex items-baseline justify-between gap-4 min-w-0">
-                  <div className="min-w-0">
-                    <p className="font-serif text-ink truncate" style={{ fontSize: "17px", fontWeight: 500 }}>
-                      {item.name}
-                    </p>
-                    <p className="font-sans text-ink/40 text-eyebrow-sm uppercase mt-1">
-                      {item.category}
-                    </p>
-                  </div>
-                  <span className="font-sans text-gold flex-shrink-0" style={{ fontSize: "14px", letterSpacing: "0.04em" }}>
-                    {item.distance}
-                  </span>
-                </div>
-              </li>
-            );
-          })}
-        </motion.ul>
-      </AnimatePresence>
+                {para}
+              </p>
+            ))}
+          </div>
+        </FadeIn>
+      </div>
     </Section>
   );
 }

@@ -190,6 +190,18 @@ function AboutSection() {
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             className="max-w-3xl"
           >
+            <AnimatedHeading
+              as="h2"
+              text="Who We Are"
+              trigger="view"
+              className="font-serif text-[#1a1a1a] uppercase mb-8"
+              style={{
+                fontSize: "clamp(2rem, 3.6vw, 3.2rem)",
+                letterSpacing: "0.06em",
+                fontWeight: 700,
+                lineHeight: 1.05,
+              }}
+            />
             <p
               className="font-sans font-medium text-[#1a1a1a] leading-[2] mb-10"
               style={{ fontSize: "20px" }}
