@@ -87,13 +87,16 @@ export default function Nav({ transparent = false }: { transparent?: boolean } =
   }, [menuOpen]);
 
   // Transparent-over-hero mode: only while the requested page opts in AND user hasn't scrolled past the hero
-  const isTransparent = transparent && !scrolled && !menuOpen;
+  // Transparency depends only on the page's own state (transparent prop + scroll
+  // position). Opening the menu should not flip the nav to opaque — the menu
+  // panel has its own background and sits above the nav.
+  const isTransparent = transparent && !scrolled;
 
   return (
     <>
       <motion.nav
-        initial={{ y: -100, opacity: 0 }}
-        animate={visible ? { y: hidden && !menuOpen ? -100 : 0, opacity: 1 } : {}}
+        initial={{ y: "-100%", opacity: 0 }}
+        animate={visible ? { y: hidden && !menuOpen ? "-100%" : 0, opacity: 1 } : {}}
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isTransparent

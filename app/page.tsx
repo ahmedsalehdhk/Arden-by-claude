@@ -194,12 +194,12 @@ function AboutSection() {
               as="h2"
               text="Who We Are"
               trigger="view"
-              className="font-serif text-[#1a1a1a] uppercase mb-8"
+              className="font-serif text-[#1a1a1a] uppercase mb-6"
               style={{
-                fontSize: "clamp(2rem, 3.6vw, 3.2rem)",
-                letterSpacing: "0.06em",
-                fontWeight: 700,
-                lineHeight: 1.05,
+                fontSize: "clamp(1.3rem, 2vw, 1.8rem)",
+                letterSpacing: "0.18em",
+                fontWeight: 500,
+                lineHeight: 1.1,
               }}
             />
             <p
