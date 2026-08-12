@@ -10,6 +10,7 @@ export interface ProjectCardData {
   type: "Residential" | "Commercial" | string;
   image?: string;
   color?: string;
+  consortium?: "alliance-arden";
 }
 
 export default function ProjectCard({ project }: { project: ProjectCardData }) {
@@ -39,7 +40,7 @@ export default function ProjectCard({ project }: { project: ProjectCardData }) {
             />
           )}
           {/* Status badge */}
-          <div className="absolute top-4 left-4">
+          <div className="absolute top-4 left-4 flex flex-col items-start gap-2">
             <span
               className="font-sans text-[10px] tracking-[0.22em] uppercase px-2.5 py-1.5"
               style={{
@@ -54,6 +55,14 @@ export default function ProjectCard({ project }: { project: ProjectCardData }) {
             >
               {project.status}
             </span>
+            {project.consortium === "alliance-arden" && (
+              <span
+                className="font-sans text-[10px] tracking-[0.22em] uppercase px-2.5 py-1.5 bg-white/95 text-[#1a1a1a]"
+                title="Alliance-Arden Consortium"
+              >
+                Alliance × Arden
+              </span>
+            )}
           </div>
           {/* Hover overlay */}
           <div className="absolute inset-0 bg-[#1a1a1a]/0 group-hover:bg-[#1a1a1a]/20 transition-colors duration-500 flex items-end justify-end p-5">

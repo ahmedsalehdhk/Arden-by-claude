@@ -123,12 +123,13 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
           priority
           sizes="100vw"
         />
-        {/* Top-down dark fade — keeps the transparent nav legible on any image */}
+        {/* Top-down dark fade — keeps the transparent nav legible and carries a
+            richer wash down almost the full hero for better text contrast. */}
         <div
           className="absolute inset-x-0 top-0"
           style={{
-            height: "45%",
-            background: "linear-gradient(to bottom, rgba(10,10,10,0.72) 0%, rgba(10,10,10,0.35) 45%, rgba(10,10,10,0) 100%)",
+            height: "95%",
+            background: "linear-gradient(to bottom, rgba(10,10,10,0.9) 0%, rgba(10,10,10,0.7) 35%, rgba(10,10,10,0.5) 65%, rgba(10,10,10,0.2) 90%, rgba(10,10,10,0) 100%)",
           }}
         />
         {/* Subtle overall darkening so centered text reads on any shot */}
@@ -167,6 +168,49 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
         >
           {project.tagline}
         </motion.p>
+
+        {project.consortium === "alliance-arden" && (
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.1 }}
+            className="mt-8 sm:mt-10 flex flex-col items-center gap-6 sm:gap-7 text-center"
+          >
+            <span
+              className="font-sans text-white/75 uppercase"
+              style={{ fontSize: "clamp(13px, 1.1vw, 15px)", letterSpacing: "0.3em", lineHeight: 1 }}
+            >
+              by Alliance-Arden Consortium
+            </span>
+            {/* Alliance PNG was cropped to remove tagline/whitespace so both logos can
+                share a single height class and read as a matched co-lockup. */}
+            <div className="flex items-center justify-center gap-6 sm:gap-8">
+              <Image
+                src="/logo.png"
+                alt="Arden Holdings"
+                width={280}
+                height={96}
+                className="h-14 sm:h-16 w-auto brightness-0 invert opacity-90 shrink-0"
+                priority={false}
+              />
+              <span
+                className="font-sans text-white/50 leading-none flex-shrink-0 flex items-center"
+                style={{ fontSize: "24px", fontWeight: 300 }}
+                aria-hidden="true"
+              >
+                ×
+              </span>
+              <Image
+                src="/logos/apl-white.png"
+                alt="Alliance Properties"
+                width={280}
+                height={96}
+                className="h-14 sm:h-16 w-auto brightness-0 invert opacity-90 shrink-0"
+                priority={false}
+              />
+            </div>
+          </motion.div>
+        )}
       </div>
     </section>
   );
@@ -298,6 +342,54 @@ function FeaturesSection({ project }: { project: ProjectDetail }) {
             <div>{leftFeatures.map(renderFeature)}</div>
             <div>{rightFeatures.map(renderFeature)}</div>
           </div>
+        </FadeIn>
+      </div>
+    </Section>
+  );
+}
+
+// ─────────────────────────────────────────────
+// MEET THE ARCHITECT SECTION
+// ─────────────────────────────────────────────
+
+function ArchitectSection({ project }: { project: ProjectDetail }) {
+  const a = project.architect;
+  if (!a) return null;
+
+  return (
+    <Section tone="cream" rhythm="loose">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)] gap-10 lg:gap-16 items-center">
+        <FadeIn>
+          <div className="relative overflow-hidden bg-ink/5 w-full max-w-md" style={{ aspectRatio: "4/5" }}>
+            <Image
+              src={a.image}
+              alt={a.name}
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 90vw, 40vw"
+              loading="lazy"
+            />
+          </div>
+        </FadeIn>
+
+        <FadeIn delay={0.1}>
+          <p className="font-sans text-gold mb-3 text-eyebrow-sm uppercase">Meet the Architect</p>
+          <AnimatedHeading
+            as="h2"
+            text={a.name}
+            trigger="view"
+            className="font-serif text-ink mb-2"
+            style={{ fontSize: "clamp(2rem, 3.2vw, 2.75rem)", fontWeight: 400 }}
+          />
+          <p className="font-sans text-ink/50 mb-8 uppercase" style={{ fontSize: "12px", letterSpacing: "0.24em" }}>
+            {a.title}
+          </p>
+          <blockquote
+            className="font-serif text-ink/80 italic border-l-2 border-gold/40 pl-6"
+            style={{ fontSize: "clamp(17px, 1.6vw, 22px)", lineHeight: 1.7 }}
+          >
+            &ldquo;{a.quote}&rdquo;
+          </blockquote>
         </FadeIn>
       </div>
     </Section>
@@ -472,6 +564,7 @@ export default function ProjectDetailPage() {
       <ProjectGallery images={project.gallery} projectName={project.name} />
       <FloorPlansSection project={project} />
       <FeaturesSection project={project} />
+      <ArchitectSection project={project} />
       <NeighborhoodSection project={project} />
       <ProjectLocation project={project} />
       <ProjectCTA project={project} />

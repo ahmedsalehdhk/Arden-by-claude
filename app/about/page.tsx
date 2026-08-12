@@ -9,6 +9,33 @@ import Footer from "../components/Footer";
 import AnimatedHeading from "../components/AnimatedHeading";
 import { useIsLoaded } from "../context/LoadContext";
 
+const TEAM = [
+  {
+    name: "Rafiq Ahmed",
+    role: "Founder & Chairman",
+    quote: "We measure a building the way people measure a home — by how it lives, not how it looks on day one.",
+    image: "/team/rafiq.jpg",
+  },
+  {
+    name: "Aisha Rahman",
+    role: "Managing Director",
+    quote: "The best projects begin with saying no to the wrong ones. Discipline is the quiet part of luxury.",
+    image: "/team/aisha.jpg",
+  },
+  {
+    name: "Kamran Hossain",
+    role: "Head of Design",
+    quote: "Good architecture disappears — the light, the flow, the way a door closes. That's the work.",
+    image: "/team/kamran.jpg",
+  },
+  {
+    name: "Nadia Chowdhury",
+    role: "Head of Client Relations",
+    quote: "We're building someone's home. The paperwork should be as considered as the drawings.",
+    image: "/team/nadia.jpg",
+  },
+];
+
 const VALUES = [
   {
     num: "01",
@@ -177,6 +204,76 @@ export default function AboutPage() {
               </FadeIn>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── TEAM ── */}
+      <section className="bg-[#faf9f6] py-20 sm:py-28 lg:py-36">
+        <div className="px-[7.5%]">
+          <FadeIn className="mb-14 sm:mb-20 max-w-3xl">
+            <p className="font-sans text-[#c9a54a] mb-4" style={{ fontSize: "11px", letterSpacing: "0.32em", textTransform: "uppercase" }}>
+              The People Behind Arden
+            </p>
+            <AnimatedHeading
+              as="h2"
+              text="Meet the team."
+              trigger="view"
+              className="font-serif text-[#1a1a1a]"
+              style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
+            />
+          </FadeIn>
+
+          {/* Key members */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 mb-20 sm:mb-28">
+            {TEAM.map((member, i) => (
+              <FadeIn key={member.name} delay={i * 0.06}>
+                <article className="flex flex-col">
+                  <div className="relative overflow-hidden bg-[#1a1a1a]/5 mb-6" style={{ aspectRatio: "4/5" }}>
+                    <Image
+                      src={member.image}
+                      alt={member.name}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 22vw"
+                      loading="lazy"
+                    />
+                  </div>
+                  <h3
+                    className="font-serif text-[#1a1a1a] mb-1"
+                    style={{ fontSize: "clamp(1.25rem, 1.8vw, 1.5rem)", fontWeight: 500 }}
+                  >
+                    {member.name}
+                  </h3>
+                  <p className="font-sans text-[#c9a54a] mb-5" style={{ fontSize: "12px", letterSpacing: "0.22em", textTransform: "uppercase" }}>
+                    {member.role}
+                  </p>
+                  <blockquote
+                    className="font-serif text-[#1a1a1a]/70 italic border-l-2 border-[#c9a54a]/40 pl-4"
+                    style={{ fontSize: "15px", lineHeight: 1.7 }}
+                  >
+                    &ldquo;{member.quote}&rdquo;
+                  </blockquote>
+                </article>
+              </FadeIn>
+            ))}
+          </div>
+
+          {/* Group photo */}
+          <FadeIn delay={0.1}>
+            <div className="relative overflow-hidden w-full mb-6" style={{ aspectRatio: "16/7" }}>
+              <Image
+                src="/team/group.jpg"
+                alt="The Arden Holdings team"
+                fill
+                className="object-cover"
+                sizes="100vw"
+                loading="lazy"
+              />
+            </div>
+            <p className="font-sans text-[#1a1a1a]/40 text-center" style={{ fontSize: "12px", letterSpacing: "0.22em", textTransform: "uppercase" }}>
+              The Arden team, Dhaka
+            </p>
+          </FadeIn>
         </div>
       </section>
 

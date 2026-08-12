@@ -16,6 +16,13 @@ export interface Neighborhood {
   paragraphs: string[]; // typically two short paragraphs about what the area offers
 }
 
+export interface Architect {
+  name: string;
+  title: string;   // e.g., "Principal Architect"
+  image: string;
+  quote: string;   // a few words from them about this project or their approach
+}
+
 
 export interface ProjectDetail {
   slug: string;
@@ -34,6 +41,8 @@ export interface ProjectDetail {
   mapEmbedSrc?: string;
   neighborhood?: Neighborhood;
   floorPlanImage?: string; // single typical floor layout for the project
+  architect?: Architect;
+  consortium?: "alliance-arden"; // co-branded projects
 }
 
 export const PROJECT_DETAILS: ProjectDetail[] = [
@@ -90,6 +99,14 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
       ],
     },
     floorPlanImage: "/floorplans/typical.jpg",
+    architect: {
+      name: "Farhan Kabir",
+      title: "Principal Architect",
+      image: "/architects/farhan.jpg",
+      quote:
+        "Amanat is a house that listens — the way morning light finds the kitchen, the pause between the entry and the family room. Every corner had to earn its place.",
+    },
+    consortium: "alliance-arden",
   },
   {
     slug: "rahma",
@@ -146,6 +163,14 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
       ],
     },
     floorPlanImage: "/floorplans/typical.jpg",
+    architect: {
+      name: "Sadia Islam",
+      title: "Design Director",
+      image: "/architects/sadia.jpg",
+      quote:
+        "In Jolshiri, the site does half the design work. Rahma opens toward the lake and quietly turns its back to the road — calm inside, alive outside.",
+    },
+    consortium: "alliance-arden",
   },
 ];
 
