@@ -12,32 +12,13 @@ import { Section, FadeIn } from "../components/ui";
 import { useIsLoaded } from "../context/LoadContext";
 
 // Dummy openings — replace when the actual roles are confirmed.
-const OPENINGS = [
-  {
-    title: "Senior Architect",
-    location: "Dhaka HQ",
-    type: "Full-time",
-    department: "Design",
-    summary:
-      "Lead residential concept development from schematic through construction documentation, working directly with the design principal.",
-  },
-  {
-    title: "Site Engineer",
-    location: "Jolshiri — Rahma Project",
-    type: "Full-time",
-    department: "Construction",
-    summary:
-      "Day-to-day site supervision, quality control, and coordination with subcontractors on an active residential build.",
-  },
-  {
-    title: "Sales Executive",
-    location: "Banani Showroom",
-    type: "Full-time",
-    department: "Sales",
-    summary:
-      "Guide prospective buyers through project visits, negotiate terms, and own the client relationship through handover.",
-  },
-];
+const OPENINGS: {
+  title: string;
+  location: string;
+  type: string;
+  department: string;
+  summary: string;
+}[] = [];
 
 export default function CareersPage() {
   const isLoaded = useIsLoaded();
@@ -108,58 +89,62 @@ export default function CareersPage() {
           <p className="font-sans text-gold mb-4 text-eyebrow-sm uppercase">Open Roles</p>
           <AnimatedHeading
             as="h2"
-            text="Currently hiring."
+            text={OPENINGS.length > 0 ? "Currently hiring." : "No open roles right now."}
             trigger="view"
             className="font-serif text-ink"
             style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
           />
         </FadeIn>
 
-        <ul className="divide-y divide-ink/10 border-t border-b border-ink/10">
-          {OPENINGS.map((role, i) => (
-            <FadeIn key={role.title} delay={i * 0.06}>
-              <li>
-                <Link
-                  href={`/contact?role=${encodeURIComponent(role.title)}`}
-                  className="group grid grid-cols-1 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1.6fr)_auto] items-start gap-4 md:gap-8 py-8 sm:py-10"
-                >
-                  <div>
-                    <h3
-                      className="font-serif text-ink group-hover:text-gold transition-colors duration-300"
-                      style={{ fontSize: "clamp(1.4rem, 2.2vw, 1.9rem)", fontWeight: 500 }}
-                    >
-                      {role.title}
-                    </h3>
-                    <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-3 text-ink/50">
-                      <span className="inline-flex items-center gap-1.5 font-sans" style={{ fontSize: "13px", letterSpacing: "0.02em" }}>
-                        <MapPin size={13} strokeWidth={1.5} />
-                        {role.location}
-                      </span>
-                      <span className="inline-flex items-center gap-1.5 font-sans" style={{ fontSize: "13px", letterSpacing: "0.02em" }}>
-                        <Briefcase size={13} strokeWidth={1.5} />
-                        {role.type} · {role.department}
-                      </span>
+        {OPENINGS.length > 0 && (
+          <ul className="divide-y divide-ink/10 border-t border-b border-ink/10">
+            {OPENINGS.map((role, i) => (
+              <FadeIn key={role.title} delay={i * 0.06}>
+                <li>
+                  <Link
+                    href={`/contact?role=${encodeURIComponent(role.title)}`}
+                    className="group grid grid-cols-1 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1.6fr)_auto] items-start gap-4 md:gap-8 py-8 sm:py-10"
+                  >
+                    <div>
+                      <h3
+                        className="font-serif text-ink group-hover:text-gold transition-colors duration-300"
+                        style={{ fontSize: "clamp(1.4rem, 2.2vw, 1.9rem)", fontWeight: 500 }}
+                      >
+                        {role.title}
+                      </h3>
+                      <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-3 text-ink/50">
+                        <span className="inline-flex items-center gap-1.5 font-sans" style={{ fontSize: "13px", letterSpacing: "0.02em" }}>
+                          <MapPin size={13} strokeWidth={1.5} />
+                          {role.location}
+                        </span>
+                        <span className="inline-flex items-center gap-1.5 font-sans" style={{ fontSize: "13px", letterSpacing: "0.02em" }}>
+                          <Briefcase size={13} strokeWidth={1.5} />
+                          {role.type} · {role.department}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                  <p className="font-sans text-ink/70 leading-[1.7]" style={{ fontSize: "15px" }}>
-                    {role.summary}
-                  </p>
-                  <span className="hidden md:inline-flex self-center items-center gap-2 font-sans text-eyebrow uppercase text-ink group-hover:text-gold transition-colors">
-                    Apply
-                    <ArrowUpRight
-                      size={14}
-                      className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
-                    />
-                  </span>
-                </Link>
-              </li>
-            </FadeIn>
-          ))}
-        </ul>
+                    <p className="font-sans text-ink/70 leading-[1.7]" style={{ fontSize: "15px" }}>
+                      {role.summary}
+                    </p>
+                    <span className="hidden md:inline-flex self-center items-center gap-2 font-sans text-eyebrow uppercase text-ink group-hover:text-gold transition-colors">
+                      Apply
+                      <ArrowUpRight
+                        size={14}
+                        className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                      />
+                    </span>
+                  </Link>
+                </li>
+              </FadeIn>
+            ))}
+          </ul>
+        )}
 
         <FadeIn delay={0.1}>
-          <p className="font-sans text-ink/50 mt-10" style={{ fontSize: "14px" }}>
-            Don&apos;t see a role that fits?{" "}
+          <p className="font-sans text-ink/60 mt-10 max-w-2xl" style={{ fontSize: "15px", lineHeight: 1.7 }}>
+            {OPENINGS.length > 0
+              ? <>Don&apos;t see a role that fits? </>
+              : <>We aren&apos;t actively hiring, but we&apos;re always open to hearing from great people. </>}
             <Link href="/contact" className="text-ink underline underline-offset-4 decoration-ink/30 hover:decoration-gold hover:text-gold transition-colors">
               Write to us anyway
             </Link>

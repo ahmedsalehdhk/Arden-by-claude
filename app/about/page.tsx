@@ -11,28 +11,22 @@ import { useIsLoaded } from "../context/LoadContext";
 
 const TEAM = [
   {
-    name: "Rafiq Ahmed",
+    name: "Mazharul Haque",
     role: "Founder & Chairman",
     quote: "We measure a building the way people measure a home — by how it lives, not how it looks on day one.",
-    image: "/team/rafiq.jpg",
+    image: "/team/mazharul.jpg",
   },
   {
-    name: "Aisha Rahman",
-    role: "Managing Director",
+    name: "Mohiuddin Ahmed",
+    role: "Director",
     quote: "The best projects begin with saying no to the wrong ones. Discipline is the quiet part of luxury.",
-    image: "/team/aisha.jpg",
+    image: "/team/mohiuddin.jpg",
   },
   {
-    name: "Kamran Hossain",
-    role: "Head of Design",
+    name: "Yaminul Haq",
+    role: "Director, Alliance-Arden Consortium",
     quote: "Good architecture disappears — the light, the flow, the way a door closes. That's the work.",
-    image: "/team/kamran.jpg",
-  },
-  {
-    name: "Nadia Chowdhury",
-    role: "Head of Client Relations",
-    quote: "We're building someone's home. The paperwork should be as considered as the drawings.",
-    image: "/team/nadia.jpg",
+    image: "/team/yaminul.jpg",
   },
 ];
 
@@ -224,7 +218,7 @@ export default function AboutPage() {
           </FadeIn>
 
           {/* Key members */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 mb-20 sm:mb-28">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 mb-20 sm:mb-28">
             {TEAM.map((member, i) => (
               <FadeIn key={member.name} delay={i * 0.06}>
                 <article className="flex flex-col">
