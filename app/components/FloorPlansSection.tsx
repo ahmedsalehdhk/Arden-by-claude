@@ -3,10 +3,10 @@
 import { useState, useEffect, FormEvent } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, X } from "lucide-react";
+import { ArrowRight, X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import AnimatedHeading from "./AnimatedHeading";
 import { Section, FadeIn } from "./ui";
-import type { ProjectDetail } from "../data/projects";
+import type { ProjectDetail, FloorPlan } from "../data/projects";
 
 // localStorage keys — one flag per site (unlock once, see everywhere).
 const UNLOCK_KEY = "arden.floorplans.unlocked";
@@ -47,7 +47,9 @@ function isValidBdMobile(local: string): boolean {
 }
 
 export default function FloorPlansSection({ project }: { project: ProjectDetail }) {
-  const image = project.floorPlanImage;
+  // Data is authored bottom-to-top (basement → roof). Display top-to-bottom so the
+  // strip mirrors an actual building — roof at the top, basement at the bottom.
+  const plans = (project.floorPlans ?? []).slice().reverse();
 
   // Gate state. Hydrate from localStorage after mount to avoid SSR mismatch.
   const [unlocked, setUnlocked] = useState(false);
@@ -58,14 +60,23 @@ export default function FloorPlansSection({ project }: { project: ProjectDetail 
   }, []);
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  // Default to Ground Floor if present; otherwise the bottom-most floor in the display.
+  const initialIndex = (() => {
+    const groundIdx = plans.findIndex((p) => p.kind === "ground");
+    if (groundIdx >= 0) return groundIdx;
+    return plans.length - 1;
+  })();
+  const [activePlan, setActivePlan] = useState(initialIndex);
 
-  if (!image) return null;
+  if (plans.length === 0) return null;
+  const activePlanData = plans[activePlan] ?? plans[0];
   const isUnlocked = hydrated && unlocked;
 
   return (
     <Section tone="bone" rhythm="loose">
       <FadeIn>
-        <p className="font-sans text-gold mb-3 text-eyebrow-sm uppercase">Floor Plan</p>
+        <p className="font-sans text-gold mb-3 text-eyebrow-sm uppercase">Floor Plans</p>
         <AnimatedHeading
           as="h2"
           text={`See floor layout of ${project.name}`}
@@ -75,40 +86,52 @@ export default function FloorPlansSection({ project }: { project: ProjectDetail 
         />
         <p className="font-sans text-ink/55 max-w-2xl mb-10 sm:mb-14" style={{ fontSize: "15px" }}>
           {isUnlocked
-            ? `A representative layout for a typical residence at ${project.name}.`
-            : `A quick look at the typical layout of a residence at ${project.name}. Share your details to view it in full.`}
+            ? `Every floor at ${project.name} — pick a level from the strip to view its layout.`
+            : `A quick look at every floor of ${project.name}. Share your details to view them in full.`}
         </p>
       </FadeIn>
 
-      {/* Floor plan image — blurred while locked, sharp when unlocked. Same image, one file. */}
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="relative overflow-hidden bg-white"
-        style={{ aspectRatio: "16/10" }}
-      >
-        <Image
-          src={image}
-          alt={`${project.name} floor plan`}
-          fill
-          className="object-contain transition-[filter] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]"
-          style={{ filter: isUnlocked ? "none" : "blur(24px)", transform: isUnlocked ? "none" : "scale(1.04)" }}
-          loading="lazy"
-          sizes="100vw"
-        />
-        {!isUnlocked && (
+      {/* Locked: single blurred preview with a centered CTA */}
+      {!isUnlocked && (
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="relative overflow-hidden bg-white"
+          style={{ aspectRatio: "16/10" }}
+        >
+          <Image
+            src={plans[0].image}
+            alt={`${project.name} floor plan`}
+            fill
+            className="object-contain"
+            style={{ filter: "blur(24px)", transform: "scale(1.04)" }}
+            loading="lazy"
+            sizes="100vw"
+          />
           <div className="absolute inset-0 bg-ink/25 flex items-center justify-center">
             <button
               onClick={() => setModalOpen(true)}
               className="inline-flex items-center gap-3 font-sans uppercase bg-white text-ink px-8 py-4 tracking-[0.24em] text-[12px] hover:bg-gold hover:text-white transition-colors duration-300 shadow-lg"
             >
-              View Floor Plan
+              View Floor Plans
               <ArrowRight size={14} />
             </button>
           </div>
-        )}
-      </motion.div>
+        </motion.div>
+      )}
+
+      {/* Unlocked: elevator strip on the left, active plan on the right */}
+      {isUnlocked && (
+        <FloorPlanViewer
+          plans={plans}
+          activeIndex={activePlan}
+          setActiveIndex={setActivePlan}
+          projectName={project.name}
+          activePlanData={activePlanData}
+          onOpenLightbox={() => setLightboxOpen(true)}
+        />
+      )}
 
       <AnimatePresence>
         {modalOpen && !isUnlocked && (
@@ -123,7 +146,261 @@ export default function FloorPlansSection({ project }: { project: ProjectDetail 
           />
         )}
       </AnimatePresence>
+
+      <AnimatePresence>
+        {lightboxOpen && isUnlocked && (
+          <FloorPlanLightbox
+            plans={plans}
+            activeIndex={activePlan}
+            setActiveIndex={setActivePlan}
+            projectName={project.name}
+            onClose={() => setLightboxOpen(false)}
+          />
+        )}
+      </AnimatePresence>
     </Section>
+  );
+}
+
+// ─────────────────────────────────────────────
+// UNLOCKED VIEWER — elevator strip + plan
+// ─────────────────────────────────────────────
+
+function FloorPlanViewer({
+  plans,
+  activeIndex,
+  setActiveIndex,
+  projectName,
+  activePlanData,
+  onOpenLightbox,
+}: {
+  plans: FloorPlan[];
+  activeIndex: number;
+  setActiveIndex: (i: number) => void;
+  projectName: string;
+  activePlanData: FloorPlan;
+  onOpenLightbox: () => void;
+}) {
+  return (
+    <div className="grid grid-cols-1 lg:grid-cols-[auto_minmax(0,1fr)] gap-6 lg:gap-10 items-stretch">
+      {/* Elevator strip — vertical on desktop, horizontal-scroll on mobile */}
+      <ul
+        className="flex lg:flex-col gap-1 lg:gap-0 overflow-x-auto lg:overflow-visible lg:border-l lg:border-ink/10 shrink-0"
+        role="tablist"
+        aria-label={`${projectName} floors`}
+      >
+        {plans.map((plan, i) => {
+          const active = i === activeIndex;
+          return (
+            <li key={plan.label} className="lg:relative">
+              <button
+                role="tab"
+                aria-selected={active}
+                onClick={() => setActiveIndex(i)}
+                className={`group relative w-full flex flex-col items-center justify-center px-5 lg:px-6 py-4 lg:py-5 min-w-[74px] lg:min-w-[96px] font-sans transition-colors duration-300 ${
+                  active
+                    ? "text-gold"
+                    : "text-ink/45 hover:text-ink"
+                }`}
+              >
+                <span
+                  className="uppercase leading-none"
+                  style={{
+                    fontSize: "clamp(15px, 1.4vw, 18px)",
+                    letterSpacing: "0.14em",
+                    fontWeight: active ? 600 : 500,
+                  }}
+                >
+                  {plan.label}
+                </span>
+                {/* Active indicator — gold line on the left (desktop) or bottom (mobile) */}
+                <span
+                  aria-hidden="true"
+                  className={`absolute transition-all duration-300 bg-gold ${
+                    active
+                      ? "lg:left-[-1px] lg:top-2 lg:bottom-2 lg:w-[3px] lg:h-auto left-3 right-3 bottom-0 h-[2px] w-auto"
+                      : "opacity-0"
+                  }`}
+                />
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+
+      {/* Plan viewer — click to expand full-screen */}
+      <div>
+        <button
+          type="button"
+          onClick={onOpenLightbox}
+          aria-label={`Expand ${activePlanData.fullLabel} floor plan`}
+          className="group relative block w-full overflow-hidden bg-white"
+          style={{ aspectRatio: "16/10", cursor: "zoom-in" }}
+        >
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activePlanData.label}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="absolute inset-0"
+            >
+              <Image
+                src={activePlanData.image}
+                alt={`${projectName} ${activePlanData.fullLabel}`}
+                fill
+                className="object-contain"
+                loading="lazy"
+                sizes="(max-width: 1024px) 100vw, 80vw"
+              />
+            </motion.div>
+          </AnimatePresence>
+          {/* Expand affordance — appears on hover */}
+          <div className="absolute top-3 right-3 w-10 h-10 rounded-full bg-ink/70 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <Maximize2 size={16} strokeWidth={1.75} />
+          </div>
+        </button>
+
+        <div className="flex items-baseline justify-between mt-5">
+          <p className="font-serif text-ink" style={{ fontSize: "clamp(17px, 1.6vw, 22px)", fontWeight: 500 }}>
+            {activePlanData.fullLabel}
+          </p>
+          <p className="font-sans text-ink/40 uppercase" style={{ fontSize: "12px", letterSpacing: "0.24em" }}>
+            {activeIndex + 1} / {plans.length}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────
+// LIGHTBOX — full-screen floor plan viewer
+// ─────────────────────────────────────────────
+
+function FloorPlanLightbox({
+  plans,
+  activeIndex,
+  setActiveIndex,
+  projectName,
+  onClose,
+}: {
+  plans: FloorPlan[];
+  activeIndex: number;
+  setActiveIndex: (i: number) => void;
+  projectName: string;
+  onClose: () => void;
+}) {
+  const count = plans.length;
+  const wrap = (i: number) => ((i % count) + count) % count;
+  const goNext = () => setActiveIndex(wrap(activeIndex + 1));
+  const goPrev = () => setActiveIndex(wrap(activeIndex - 1));
+
+  const active = plans[activeIndex];
+
+  // Lock body scroll + arrow key nav + Esc to close
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      else if (e.key === "ArrowRight") goNext();
+      else if (e.key === "ArrowLeft") goPrev();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeIndex, count]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      className="fixed inset-0 z-[100] bg-ink/95 flex items-center justify-center"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${projectName} floor plans — full view`}
+    >
+      {/* Close */}
+      <button
+        type="button"
+        aria-label="Close"
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
+        className="absolute top-6 right-6 w-11 h-11 rounded-full border border-white/25 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
+      >
+        <X size={18} strokeWidth={1.5} />
+      </button>
+
+      {/* Prev */}
+      {count > 1 && (
+        <button
+          type="button"
+          aria-label="Previous floor"
+          onClick={(e) => {
+            e.stopPropagation();
+            goPrev();
+          }}
+          className="absolute left-4 sm:left-8 w-12 h-12 rounded-full border border-white/25 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
+        >
+          <ChevronLeft size={20} strokeWidth={1.5} />
+        </button>
+      )}
+
+      {/* Plan */}
+      <motion.div
+        key={activeIndex}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+        className="relative w-[92vw] h-[85vh]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <Image
+          src={active.image}
+          alt={`${projectName} ${active.fullLabel}`}
+          fill
+          className="object-contain"
+          sizes="92vw"
+          priority
+        />
+      </motion.div>
+
+      {/* Next */}
+      {count > 1 && (
+        <button
+          type="button"
+          aria-label="Next floor"
+          onClick={(e) => {
+            e.stopPropagation();
+            goNext();
+          }}
+          className="absolute right-4 sm:right-8 w-12 h-12 rounded-full border border-white/25 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
+        >
+          <ChevronRight size={20} strokeWidth={1.5} />
+        </button>
+      )}
+
+      {/* Caption + counter */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 pointer-events-none">
+        <p className="font-serif text-white" style={{ fontSize: "17px", fontWeight: 500 }}>
+          {active.fullLabel}
+        </p>
+        <span className="w-px h-4 bg-white/25" />
+        <span className="font-sans text-white/60 tabular-nums" style={{ fontSize: "12px", letterSpacing: "0.28em" }}>
+          {String(activeIndex + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
+        </span>
+      </div>
+    </motion.div>
   );
 }
 
@@ -145,7 +422,6 @@ function UnlockModal({
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  // Lock body scroll while modal is open, and close on Escape.
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -193,7 +469,7 @@ function UnlockModal({
       onClick={onClose}
       role="dialog"
       aria-modal="true"
-      aria-label={`View floor plan for ${projectName}`}
+      aria-label={`View floor plans for ${projectName}`}
     >
       <motion.div
         initial={{ opacity: 0, y: 20, scale: 0.98 }}
@@ -212,7 +488,7 @@ function UnlockModal({
         </button>
 
         <div className="p-8 sm:p-10">
-          <p className="font-sans text-gold text-eyebrow-sm uppercase mb-3">Floor Plan</p>
+          <p className="font-sans text-gold text-eyebrow-sm uppercase mb-3">Floor Plans</p>
           <h3
             className="font-serif text-ink mb-3"
             style={{ fontSize: "clamp(1.5rem, 2.4vw, 1.9rem)", fontWeight: 500 }}
@@ -220,7 +496,7 @@ function UnlockModal({
             View {projectName}&apos;s layout
           </h3>
           <p className="font-sans text-ink/55 mb-8" style={{ fontSize: "14px", lineHeight: 1.6 }}>
-            Share your details to view the floor plan.
+            Share your details to view every floor of {projectName}.
           </p>
 
           <form onSubmit={handleSubmit}>
@@ -272,7 +548,7 @@ function UnlockModal({
               disabled={submitting}
               className="inline-flex items-center justify-center gap-3 font-sans uppercase bg-ink text-white px-8 py-4 tracking-[0.24em] text-[12px] hover:bg-gold transition-colors duration-300 disabled:opacity-60 w-full sm:w-auto"
             >
-              {submitting ? "Unlocking…" : "View Floor Plan"}
+              {submitting ? "Unlocking…" : "View Floor Plans"}
               <ArrowRight size={14} />
             </button>
 

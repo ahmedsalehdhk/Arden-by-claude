@@ -23,6 +23,17 @@ export interface Architect {
   quote: string;   // a few words from them about this project or their approach
 }
 
+// Author floor plans in physical bottom-to-top order (basement first, roof last).
+// The elevator strip reverses this for display so the top floor sits at the top.
+export type FloorKind = "basement" | "ground" | "mezzanine" | "typical" | "roof";
+
+export interface FloorPlan {
+  label: string;      // short label for the elevator strip, e.g., "GF", "Typ", "Roof"
+  fullLabel: string;  // full name shown under the plan, e.g., "Ground Floor", "Typical Floor (2F–8F)"
+  image: string;
+  kind?: FloorKind;   // optional semantic tag — reserved for icons/filtering later
+}
+
 
 export interface ProjectDetail {
   slug: string;
@@ -40,7 +51,7 @@ export interface ProjectDetail {
   gallery: string[];
   mapEmbedSrc?: string;
   neighborhood?: Neighborhood;
-  floorPlanImage?: string; // single typical floor layout for the project
+  floorPlans?: FloorPlan[]; // one entry per floor; drives the elevator-strip gallery
   architect?: Architect;
   consortium?: "alliance-arden"; // co-branded projects
 }
@@ -57,10 +68,10 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
     heroImage: "/projectimages/amanat/front-side-view-01.jpg",
     buildingImage: "/projectimages/amanat/eye-level-view-01.jpg",
     specsLeft: [
-      { label: "Land", value: "8 Katha" },
+      { label: "Land", value: "7.125 Katha" },
       { label: "Floors", value: "G + 12" },
-      { label: "Size", value: "2,200 - 3,600 sft" },
-      { label: "Car Parking", value: "2 Basements" },
+      { label: "Size", value: "3,200 sft" },
+      { label: "Car Parking", value: "1 Basements" },
     ],
     specsRight: [
       { label: "Facing", value: "South" },
@@ -98,7 +109,14 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
         "Groceries, salons, tailors, and a mosque are all within five minutes on foot. Gulshan Avenue, United Hospital, and the international schools of Baridhara are a five-minute drive; the airport and Uttara are twenty on a clear day. It is a rare pocket of the city where you can live without your car needing to leave the driveway.",
       ],
     },
-    floorPlanImage: "/floorplans/typical.jpg",
+    // Bottom-to-top order; component reverses for display.
+    // Amanat has a basement + ground floor + typical residential floors + roof (no mezzanine).
+    floorPlans: [
+      { kind: "basement", label: "B1",   fullLabel: "Basement Parking",   image: "/floorplans/typical.jpg" },
+      { kind: "ground",   label: "GF",   fullLabel: "Ground Floor",       image: "/floorplans/typical.jpg" },
+      { kind: "typical",  label: "Typ",  fullLabel: "Typical Floor (1F–10F)", image: "/floorplans/typical.jpg" },
+      { kind: "roof",     label: "Roof", fullLabel: "Rooftop",            image: "/floorplans/typical.jpg" },
+    ],
     architect: {
       name: "Farhan Kabir",
       title: "Principal Architect",
@@ -162,7 +180,14 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
         "The 300 Feet Highway puts Bashundhara, Baridhara, and the airport within twenty minutes without touching Dhaka's older gridlock. Cambrian and Purbachal International cover schools; CMH is the nearest hospital; and the neighborhood mosque, bazaar, and everyday shops sit just off the main sector road. Quiet by day, safe at night, and built for the way people actually live.",
       ],
     },
-    floorPlanImage: "/floorplans/typical.jpg",
+    // Bottom-to-top order; component reverses for display.
+    // Rahma has a ground floor + mezzanine + typical residential floors + roof (no basement).
+    floorPlans: [
+      { kind: "ground",    label: "GF",   fullLabel: "Ground Floor",        image: "/floorplans/typical.jpg" },
+      { kind: "mezzanine", label: "M",    fullLabel: "Mezzanine",           image: "/floorplans/typical.jpg" },
+      { kind: "typical",   label: "Typ",  fullLabel: "Typical Floor (2F–8F)", image: "/floorplans/typical.jpg" },
+      { kind: "roof",      label: "Roof", fullLabel: "Rooftop",             image: "/floorplans/typical.jpg" },
+    ],
     architect: {
       name: "Sadia Islam",
       title: "Design Director",
