@@ -258,11 +258,11 @@ function ContactInner() {
                 <div>
                   <p className="font-sans text-[11px] tracking-[0.26em] uppercase text-[#1a1a1a]/40 mb-2">Email</p>
                   <a
-                    href="mailto:inquiries@ardengroup.com"
+                    href="mailto:contact@ardenholdingsltd.com"
                     className="font-serif text-[#1a1a1a] hover:text-[#c9a54a] transition-colors break-all"
                     style={{ fontSize: "1.1rem" }}
                   >
-                    inquiries@ardengroup.com
+                    contact@ardenholdingsltd.com
                   </a>
                 </div>
               </div>

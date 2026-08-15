@@ -192,9 +192,9 @@ function AboutSection() {
           >
             <AnimatedHeading
               as="h2"
-              text="Who We Are"
+              text="Our Strategy"
               trigger="view"
-              className="font-serif text-[#1a1a1a] uppercase mb-6"
+              className="font-serif text-[#1a1a1a]  mb-6"
               style={{
                 fontSize: "clamp(1.3rem, 2vw, 1.8rem)",
                 letterSpacing: "0.18em",

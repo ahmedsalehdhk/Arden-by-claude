@@ -59,11 +59,11 @@ export default function Footer() {
             </li>
             <li>
               <a
-                href="mailto:inquiries@ardengroup.com"
+                href="mailto:contact@ardenholdingsltd.com"
                 className="font-sans text-white/60 hover:text-white transition-colors break-all"
                 style={{ fontSize: "15px" }}
               >
-                inquiries@ardengroup.com
+                contact@ardenholdingsltd.com
               </a>
             </li>
             <li className="font-sans text-white/60" style={{ fontSize: "15px" }}>
