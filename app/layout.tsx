@@ -10,10 +10,50 @@ const openSans = Open_Sans({
   style: ["normal", "italic"],
 });
 
+const SITE_URL = "https://arden-by-claude.vercel.app"; // TODO: swap to the production domain once live
+const SITE_NAME = "Arden Holdings Ltd";
+const SITE_TITLE = "Arden Holdings Ltd — Legacy In Every Landmark";
+const SITE_DESCRIPTION =
+  "Arden Holdings Ltd. — a legacy of luxury residential developments across Dhaka. Featuring the country's most selective projects, we deliver an uncompromising standard of quality, craftsmanship, and trust.";
+
 export const metadata: Metadata = {
-  title: "Arden — Setting Standards in Real Estate",
-  description:
-    "A mark of distinction. Featuring the country's most selective developments, we promise investors and buyers an unmatched level of service.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE_TITLE,
+    template: "%s | Arden Holdings Ltd",
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  keywords: [
+    "Arden Holdings",
+    "Arden Holdings Ltd",
+    "real estate Dhaka",
+    "luxury apartments Dhaka",
+    "Banani real estate",
+    "Jolshiri real estate",
+    "Alliance-Arden Consortium",
+    "Bangladesh property developer",
+  ],
+  authors: [{ name: SITE_NAME }],
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    locale: "en_US",
+    // opengraph-image.png in /app is picked up automatically by Next.js
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    // twitter-image.png in /app is picked up automatically
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

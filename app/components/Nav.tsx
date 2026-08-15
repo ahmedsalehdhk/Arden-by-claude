@@ -114,7 +114,7 @@ export default function Nav({ transparent = false }: { transparent?: boolean } =
               alt="Arden Holdings"
               width={240}
               height={60}
-              className={`h-[50px] sm:h-[56px] md:h-[60px] w-auto transition-[filter] duration-300 ${
+              className={`h-[38px] sm:h-[56px] md:h-[60px] w-auto transition-[filter] duration-300 ${
                 isTransparent ? "brightness-0 invert" : ""
               }`}
               priority

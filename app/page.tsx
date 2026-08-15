@@ -109,7 +109,7 @@ function Hero() {
   }, []);
 
   return (
-    <section className="bg-[#faf9f6] pt-[140px]" aria-label="Hero">
+    <section className="bg-[#faf9f6] pt-[calc(69px_+_7.5vw)] sm:pt-[140px] pb-[7.5vw] sm:pb-0" aria-label="Hero">
       {/* Main headline */}
       <div className="px-[7.5%] pt-6 sm:pt-10 pb-6 sm:pb-8">
         <AnimatedHeading
@@ -120,7 +120,7 @@ function Hero() {
           delay={0.4}
           className="font-serif text-[#1a1a1a] text-center select-none uppercase w-full sm:whitespace-nowrap"
           style={{
-            fontSize: "clamp(2.2rem, 4.5vw, 4.5vw)",
+            fontSize: "clamp(1.5rem, 4.5vw, 4.5vw)",
             letterSpacing: "0.22em",
             lineHeight: 1.25,
             fontWeight: 400,
@@ -128,8 +128,10 @@ function Hero() {
         />
       </div>
 
-      {/* Hero image */}
-      <div className="relative w-full overflow-hidden" style={{ height: "78vh" }}>
+      {/* Hero image — mobile height is derived so the whole hero fits one viewport
+          with a bottom gap that mirrors the top nav offset + text padding (~164px).
+          Desktop keeps the original fixed 78vh. */}
+      <div className="relative w-full overflow-hidden h-[calc(100svh_-_177px_-_15vw)] sm:h-[78vh]">
         <motion.div
           initial={{ y: -60, opacity: 0 }}
           animate={isLoaded ? { y: 0, opacity: 1 } : {}}
@@ -301,15 +303,26 @@ function FeaturedProjectsSection() {
                 ? { duration: FEATURED_SWIPE_DURATION_MS / 1000, ease: [0.65, 0, 0.35, 1] }
                 : { duration: 0 }}
             >
-              <Image
-                src={p.image}
-                alt={p.name}
-                fill
-                className="object-cover"
-                sizes="100vw"
-                priority={i === 0}
-                loading={i === 0 ? undefined : "lazy"}
-              />
+              {/* Subtle Ken Burns — scale down from 1.18 → 1 across the full slide
+                  duration so motion runs right up to the handoff. Keyed on activeIndex
+                  so each new slide restarts fresh. */}
+              <motion.div
+                key={`kb-${p.name}-${isActive ? activeIndex : "idle"}`}
+                initial={{ scale: isActive ? 1.18 : 1 }}
+                animate={{ scale: isActive ? 1 : 1.18 }}
+                transition={{ duration: FEATURED_AUTO_ADVANCE_MS / 1000, ease: "linear" }}
+                className="absolute inset-0 will-change-transform"
+              >
+                <Image
+                  src={p.image}
+                  alt={p.name}
+                  fill
+                  className="object-cover"
+                  sizes="100vw"
+                  priority={i === 0}
+                  loading={i === 0 ? undefined : "lazy"}
+                />
+              </motion.div>
             </motion.div>
           );
         })}
@@ -646,24 +659,6 @@ function ContactSection() {
           </div>
         </motion.div>
 
-        {/* Mobile image — shown below text on small screens */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.85, delay: 0.25 }}
-          className="lg:hidden mt-12"
-        >
-          <div className="relative overflow-hidden" style={{ aspectRatio: "4/3" }}>
-            <Image
-              src="/projectimages/rahma/view-07.jpg"
-              alt="Arden Holdings development"
-              fill
-              className="object-cover"
-              sizes="85vw"
-              loading="lazy"
-            />
-          </div>
-        </motion.div>
       </div>
     </section>
   );
