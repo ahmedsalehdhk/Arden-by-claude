@@ -475,7 +475,7 @@ function ProjectLocation({ project }: { project: ProjectDetail }) {
 // CTA SECTION
 // ─────────────────────────────────────────────
 
-function ProjectCTA({ project }: { project: ProjectDetail }) {
+function ProjectCTA() {
   return (
     <section className="bg-cream py-20 sm:py-28">
       <div className="px-[7.5%] text-center">
@@ -533,7 +533,7 @@ export default function ProjectDetailPage() {
       <ArchitectSection project={project} />
       <NeighborhoodSection project={project} />
       <ProjectLocation project={project} />
-      <ProjectCTA project={project} />
+      <ProjectCTA />
       <Footer />
     </main>
   );
