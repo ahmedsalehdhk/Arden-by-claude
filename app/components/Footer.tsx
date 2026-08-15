@@ -1,5 +1,3 @@
-import Link from "next/link";
-import Image from "next/image";
 
 // Inline social glyphs — matches the set used in the mobile nav overlay.
 type IconProps = { size?: number; className?: string };
@@ -32,59 +30,50 @@ const SOCIALS = [
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0f0f0f] pt-16 sm:pt-20 pb-8 px-[7.5%]">
-      {/* Top: logo only */}
-      <div className="pb-6 sm:pb-8">
-        <Link href="/" className="inline-block">
-          <Image
-            src="/logo.png"
-            alt="Arden Holdings"
-            width={220}
-            height={56}
-            className="h-[52px] sm:h-[60px] w-auto brightness-0 invert"
-          />
-        </Link>
-      </div>
-
-      {/* Contact + Address row */}
+    <footer className="bg-[#0f0f0f] py-8 px-[7.5%]">
+      {/* Contact + Address row — both columns share the same top baseline */}
       <div className="pb-6 sm:pb-8 grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-16 items-start">
-        {/* Left — Phone + Email */}
-        <ul className="space-y-3 sm:space-y-4">
-          <li className="font-sans text-white/70" style={{ fontSize: "15px" }}>
-            Phone:&nbsp;
-            <a href="tel:+8801615759822" className="text-white hover:text-[#c9a54a] transition-colors">
-              +88 016 1575 9822
-            </a>
-          </li>
-          <li className="font-sans text-white/70" style={{ fontSize: "15px" }}>
-            Email:&nbsp;
-            <a
-              href="mailto:contact@ardenholdingsltd.com"
-              className="text-white hover:text-[#c9a54a] transition-colors break-all"
-            >
-              contact@ardenholdingsltd.com
-            </a>
-          </li>
-        </ul>
+        {/* Left — Contact */}
+        <div>
+          <p className="font-sans text-eyebrow uppercase text-white mb-3">
+            Contact
+          </p>
+          <ul className="space-y-3 sm:space-y-4">
+            <li className="font-sans text-body text-white/70">
+              Phone:&nbsp;
+              <a href="tel:+8801615759822" className="text-white hover:text-[#c9a54a] transition-colors">
+                +88 016 1575 9822
+              </a>
+            </li>
+            <li className="font-sans text-body text-white/70">
+              Email:&nbsp;
+              <a
+                href="mailto:contact@ardenholdingsltd.com"
+                className="text-white hover:text-[#c9a54a] transition-colors break-all"
+              >
+                contact@ardenholdingsltd.com
+              </a>
+            </li>
+          </ul>
+        </div>
 
-        {/* Right — Address, right-aligned on wider screens */}
+        {/* Right — Address */}
         <div className="sm:text-right">
-          <p
-            className="font-sans text-white mb-3"
-            style={{ fontSize: "13px", letterSpacing: "0.28em", textTransform: "uppercase" }}
-          >
+          <p className="font-sans text-eyebrow uppercase text-white mb-3">
             Address
           </p>
-          <p className="font-sans text-white/70" style={{ fontSize: "15px", lineHeight: 1.6 }}>
+          <p className="font-sans text-body text-white/70">
             House 40 (2nd Floor), Road 20,<br />Mohakhali DOHS, Dhaka-1206
           </p>
         </div>
       </div>
 
+      <hr className="-mx-[7.5%] border-0 border-t border-white/15 mb-6 sm:mb-8" />
+
       {/* Bottom bar — on mobile: socials first, copyright below.
           On desktop: copyright left, socials right. */}
       <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-6 sm:gap-4">
-        <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 font-sans text-white/50" style={{ fontSize: "12px" }}>
+        <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 font-sans text-body-sm text-white/50">
           <p>&copy; {new Date().getFullYear()} Arden Holdings Ltd. All rights reserved.</p>
           <span className="hidden sm:inline text-white/25">|</span>
           <p>

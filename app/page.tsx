@@ -7,6 +7,7 @@ import {
   useScroll,
   useTransform,
   useInView,
+  cubicBezier,
 } from "framer-motion";
 import { ChevronLeft, ChevronRight, ArrowUpRight, ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -86,7 +87,9 @@ function useCountUp(target: number, duration = 2400, start = false) {
 function Hero() {
   const imageRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
-  const clipPercent = useTransform(scrollY, [0, 600], [7.5, 0]);
+  const clipPercent = useTransform(scrollY, [0, 600], [7.5, 0], {
+    ease: cubicBezier(0.22, 1, 0.36, 1),
+  });
   const isLoaded = useIsLoaded();
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
@@ -204,10 +207,7 @@ function AboutSection() {
                 lineHeight: 1.1,
               }}
             />
-            <p
-              className="font-sans font-medium text-[#1a1a1a] leading-[2] mb-10"
-              style={{ fontSize: "20px" }}
-            >
+            <p className="font-sans font-medium text-body-lg text-[#1a1a1a] mb-10">
               Building the country&apos;s most selective projects requires more than just a vision—it requires a standard of excellence that never wavers. Discover a portfolio where luxury meets structural perfection.
             </p>
             <Link href="/about" className="self-start font-sans font-semibold text-[13px] tracking-[0.24em] uppercase text-[#1a1a1a] flex items-center gap-2 group hover:text-[#c9a54a] transition-colors duration-300">
@@ -236,17 +236,6 @@ function FeaturedProjectsSection() {
   const [prevIndex, setPrevIndex] = useState<number | null>(null);
   const [fading, setFading] = useState(false);
   const total = FEATURED_PROJECTS.length;
-  const sectionRef = useRef<HTMLElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  // Background moves DOWN as we scroll DOWN → feels distant (slower than scroll)
-  const bgY = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
-  // Building card moves UP as we scroll DOWN → feels close (faster than scroll)
-  const cardY = useTransform(scrollYProgress, [0, 1], ["12%", "-12%"]);
 
   const switchTo = (next: number) => {
     if (next === activeIndex || fading) return;
@@ -281,9 +270,8 @@ function FeaturedProjectsSection() {
   const project = FEATURED_PROJECTS[activeIndex];
 
   return (
-    <section ref={sectionRef} id="projects" className="relative w-full overflow-hidden min-h-[100svh] lg:min-h-0 lg:h-[80vh]">
-      {/* Background parallax layer (scaled 1.2x so ±8% translate stays covered) */}
-      <motion.div className="absolute inset-0" style={{ y: bgY, scale: 1.2 }}>
+    <section id="projects" className="relative w-full overflow-hidden min-h-[100svh] lg:min-h-0 lg:h-[80vh]">
+      <div className="absolute inset-0">
         {FEATURED_PROJECTS.map((p, i) => {
           const isActive = i === activeIndex;
           const isExiting = i === prevIndex;
@@ -300,7 +288,7 @@ function FeaturedProjectsSection() {
               initial={{ y: 0 }}
               animate={{ y: isExiting ? "-100%" : "0%" }}
               transition={isExiting
-                ? { duration: FEATURED_SWIPE_DURATION_MS / 1000, ease: [0.65, 0, 0.35, 1] }
+                ? { duration: FEATURED_SWIPE_DURATION_MS / 1000, ease: [0.22, 1, 0.36, 1] }
                 : { duration: 0 }}
             >
               {/* Subtle Ken Burns — scale down from 1.18 → 1 across the full slide
@@ -310,7 +298,7 @@ function FeaturedProjectsSection() {
                 key={`kb-${p.name}-${isActive ? activeIndex : "idle"}`}
                 initial={{ scale: isActive ? 1.18 : 1 }}
                 animate={{ scale: isActive ? 1 : 1.18 }}
-                transition={{ duration: FEATURED_AUTO_ADVANCE_MS / 1000, ease: "linear" }}
+                transition={{ duration: FEATURED_AUTO_ADVANCE_MS / 1000, ease: [0.22, 1, 0.36, 1] }}
                 className="absolute inset-0 will-change-transform"
               >
                 <Image
@@ -326,14 +314,14 @@ function FeaturedProjectsSection() {
             </motion.div>
           );
         })}
-      </motion.div>
+      </div>
       {/* Uniform dark overlay */}
       <div className="absolute inset-0 bg-[#1a1a1a]/60 z-[1]" />
 
       {/* Content */}
       <div className="relative z-10 h-full flex flex-col lg:flex-row lg:items-center lg:justify-between">
         {/* Building image — top on mobile, right column on desktop */}
-        <motion.div className="lg:hidden flex justify-center pt-4 sm:pt-6 px-[7.5%]" style={{ y: cardY }}>
+        <motion.div className="lg:hidden flex justify-center pt-4 sm:pt-6 px-[7.5%]">
           <div
             className="relative shadow-lg"
             style={{ width: "88vw", maxWidth: "480px", height: "56vh", maxHeight: "540px" }}
@@ -364,7 +352,7 @@ function FeaturedProjectsSection() {
         {/* Left column — text */}
         <div className="flex flex-col justify-center px-[7.5%] max-w-2xl w-full lg:w-auto flex-1 pt-4 sm:pt-6 lg:pt-0 pb-6 lg:pb-0">
           {/* Static category label — doesn't re-animate on slide change */}
-          <p className="font-sans text-[13px] sm:text-[15px] tracking-[0.35em] uppercase text-white mb-5 sm:mb-7">
+          <p className="font-sans text-eyebrow-lg uppercase text-white mb-5 sm:mb-7">
             {project.category}
           </p>
 
@@ -389,8 +377,8 @@ function FeaturedProjectsSection() {
                   initial={{ y: 18, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.6, delay: 0.32, ease: [0.22, 1, 0.36, 1] }}
-                  className="font-sans text-white/85 mb-8 sm:mb-12"
-                  style={{ fontSize: "clamp(17px, 1.6vw, 22px)", letterSpacing: "0.06em" }}
+                  className="font-sans text-body-lg text-white/85 mb-8 sm:mb-12"
+                  style={{ letterSpacing: "0.06em" }}
                 >
                   {project.location}
                 </motion.p>
@@ -405,7 +393,7 @@ function FeaturedProjectsSection() {
               href={`/projects/${project.slug}`}
               className="group inline-flex items-center gap-3 mb-10 sm:mb-14 w-fit"
             >
-              <span className="font-serif text-[19px] sm:text-[22px] text-white group-hover:text-[#c9a54a] transition-colors duration-300 tracking-wide">
+              <span className="font-sans font-semibold text-eyebrow uppercase text-white group-hover:text-[#c9a54a] transition-colors duration-300">
                 View Project
               </span>
               <ArrowRight
@@ -454,7 +442,7 @@ function FeaturedProjectsSection() {
         </div>
 
         {/* Right column — building image (desktop only) */}
-        <motion.div className="hidden lg:block pr-[7.5%] flex-shrink-0" style={{ y: cardY }}>
+        <motion.div className="hidden lg:block pr-[7.5%] flex-shrink-0">
           <div className="relative" style={{ width: "min(520px, 38vw)", height: "75vh", maxHeight: "640px" }}>
             {FEATURED_PROJECTS.map((p, i) => (
               <div
@@ -615,14 +603,14 @@ function ContactSection() {
           {/* Clients */}
           <div className="pb-10 border-b border-[#1a1a1a]/8">
             <h3
-              className="font-sans text-[#c9a54a] mb-3 tracking-[0.06em]"
-              style={{ fontSize: "20px", fontWeight: 500 }}
+              className="font-serif text-[#c9a54a] mb-3 tracking-[0.04em]"
+              style={{ fontSize: "clamp(1.4rem, 1.9vw, 1.6rem)", fontWeight: 500 }}
             >
               Clients
             </h3>
             <p
-              className="font-sans text-[#1a1a1a] leading-[1.95] mb-5"
-              style={{ fontSize: "20px", maxWidth: "500px" }}
+              className="font-sans text-body-lg text-[#1a1a1a] mb-5"
+              style={{ maxWidth: "500px" }}
             >
               Discover exclusive real estate opportunities designed for the modern investor. We don&apos;t just develop land, we create landmarks that stand the test of time.
             </p>
@@ -638,14 +626,14 @@ function ContactSection() {
           {/* Landowners */}
           <div className="pt-10">
             <h3
-              className="font-sans text-[#c9a54a] mb-3 tracking-[0.06em]"
-              style={{ fontSize: "20px", fontWeight: 500 }}
+              className="font-serif text-[#c9a54a] mb-3 tracking-[0.04em]"
+              style={{ fontSize: "clamp(1.4rem, 1.9vw, 1.6rem)", fontWeight: 500 }}
             >
               Landowners
             </h3>
             <p
-              className="font-sans text-[#1a1a1a] leading-[1.95] mb-5"
-              style={{ fontSize: "20px", maxWidth: "500px" }}
+              className="font-sans text-body-lg text-[#1a1a1a] mb-5"
+              style={{ maxWidth: "500px" }}
             >
               Partner with Arden to leave a lasting mark on the city&apos;s skyline. Let&apos;s start the conversation—share your information to explore partnership opportunities.
             </p>

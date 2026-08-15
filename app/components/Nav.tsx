@@ -127,7 +127,7 @@ export default function Nav({ transparent = false }: { transparent?: boolean } =
             className="ml-auto flex items-center gap-2.5"
             aria-label="Toggle menu"
           >
-            <span className={`font-sans text-[14px] font-semibold tracking-[0.2em] uppercase transition-colors duration-300 ${
+            <span className={`font-sans text-eyebrow-lg font-semibold uppercase transition-colors duration-300 ${
               isTransparent ? "text-white/85" : "text-[#1a1a1a]"
             }`}>
               Menu
@@ -173,7 +173,7 @@ export default function Nav({ transparent = false }: { transparent?: boolean } =
                   onClick={() => setMenuOpen(false)}
                   className="flex items-center gap-2.5 text-white/70 hover:text-white transition-colors"
                 >
-                  <span className="font-sans text-[12px] tracking-[0.24em] uppercase">Close</span>
+                  <span className="font-sans text-eyebrow uppercase">Close</span>
                   <X size={16} strokeWidth={1.75} />
                 </button>
               </div>
@@ -217,7 +217,7 @@ export default function Nav({ transparent = false }: { transparent?: boolean } =
 
               {/* Follow Us */}
               <div className="px-8 sm:px-10 pb-10 pt-6">
-                <p className="font-sans text-white/40 mb-4" style={{ fontSize: "12px", letterSpacing: "0.24em", textTransform: "uppercase" }}>
+                <p className="font-sans text-eyebrow-sm uppercase text-white/40 mb-4">
                   Follow Us
                 </p>
                 <div className="flex items-center gap-4">
