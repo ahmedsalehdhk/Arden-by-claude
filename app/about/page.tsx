@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { useEffect, useRef } from "react";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useInView, useScroll, useTransform, cubicBezier } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Nav from "../components/Nav";
@@ -74,7 +74,9 @@ export default function AboutPage() {
   const isLoaded = useIsLoaded();
   const imageRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
-  const clipPercent = useTransform(scrollY, [0, 600], [7.5, 0]);
+  const clipPercent = useTransform(scrollY, [0, 600], [7.5, 0], {
+    ease: cubicBezier(0.22, 1, 0.36, 1),
+  });
 
   useEffect(() => {
     const unsub = clipPercent.on("change", (v) => {
@@ -140,9 +142,6 @@ export default function AboutPage() {
         <div className="px-[7.5%]">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-start">
             <FadeIn>
-              <p className="font-sans text-[#c9a54a] mb-5" style={{ fontSize: "11px", letterSpacing: "0.32em", textTransform: "uppercase" }}>
-                Our Story
-              </p>
               <AnimatedHeading
                 as="h2"
                 text="Built on ambition, delivered with precision."
@@ -164,12 +163,9 @@ export default function AboutPage() {
       </section>
 
       {/* ── VALUES ── */}
-      <section className="py-20 sm:py-28 lg:py-36" style={{ backgroundColor: "#f0ede6" }}>
+      <section className="bg-cream py-20 sm:py-28 lg:py-36">
         <div className="px-[7.5%]">
           <FadeIn className="mb-14 sm:mb-20">
-            <p className="font-sans text-[#c9a54a] mb-4" style={{ fontSize: "11px", letterSpacing: "0.32em", textTransform: "uppercase" }}>
-              What We Stand For
-            </p>
             <AnimatedHeading
               as="h2"
               text="Our principles guide every decision we make."
@@ -181,7 +177,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-[#1a1a1a]/[0.07]">
             {VALUES.map((v, i) => (
               <FadeIn key={v.title} delay={i * 0.08} className="h-full">
-                <div className="bg-[#f0ede6] p-8 sm:p-10 lg:p-12 h-full">
+                <div className="bg-cream p-8 sm:p-10 lg:p-12 h-full">
                   <p className="font-sans text-[#c9a54a] mb-5" style={{ fontSize: "12px", letterSpacing: "0.22em" }}>
                     {v.num}
                   </p>
@@ -205,9 +201,6 @@ export default function AboutPage() {
       <section className="bg-[#faf9f6] py-20 sm:py-28 lg:py-36">
         <div className="px-[7.5%]">
           <FadeIn className="mb-14 sm:mb-20 max-w-3xl">
-            <p className="font-sans text-[#c9a54a] mb-4" style={{ fontSize: "11px", letterSpacing: "0.32em", textTransform: "uppercase" }}>
-              The People Behind Arden
-            </p>
             <AnimatedHeading
               as="h2"
               text="Meet the team."
@@ -272,22 +265,19 @@ export default function AboutPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="bg-[#1a1a1a] py-20 sm:py-28">
+      <section className="bg-cream py-20 sm:py-28">
         <div className="px-[7.5%] text-center">
           <FadeIn>
-            <p className="font-sans text-white/40 mb-5" style={{ fontSize: "11px", letterSpacing: "0.32em", textTransform: "uppercase" }}>
-              Work With Us
-            </p>
             <AnimatedHeading
               as="h2"
               text="How about we catch up over coffee?"
               trigger="view"
-              className="font-serif text-white mb-10"
+              className="font-serif text-[#1a1a1a] mb-10"
               style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", fontWeight: 400, letterSpacing: "0.03em" }}
             />
             <a
               href="/contact"
-              className="inline-flex items-center gap-2.5 font-sans text-[12px] tracking-[0.26em] uppercase text-[#c9a54a] border border-[#c9a54a]/40 px-8 py-4 hover:bg-[#c9a54a] hover:text-white transition-all duration-300"
+              className="inline-flex items-center gap-2.5 font-sans text-[12px] tracking-[0.26em] uppercase text-[#1a1a1a] border border-[#1a1a1a]/40 px-8 py-4 hover:bg-[#1a1a1a] hover:text-white transition-all duration-300"
             >
               Get In Touch
               <ArrowUpRight size={13} />

@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useInView, useScroll, useTransform, cubicBezier } from "framer-motion";
 import { ArrowUpRight, Phone, Mail, MapPin } from "lucide-react";
 import Image from "next/image";
 import Nav from "../components/Nav";
@@ -29,21 +29,19 @@ function FadeIn({ children, delay = 0, className = "" }: { children: React.React
 function InputField({ label, type = "text", textarea = false }: { label: string; type?: string; textarea?: boolean }) {
   return (
     <div className="group">
-      <label
-        className="block font-sans text-[11px] tracking-[0.26em] uppercase text-[#1a1a1a]/75 mb-2"
-      >
+      <label className="block font-sans text-eyebrow-sm uppercase text-[#1a1a1a]/75 mb-2">
         {label}
       </label>
       {textarea ? (
         <textarea
           rows={4}
-          className="w-full bg-transparent border-b border-[#1a1a1a]/15 py-3 font-sans text-[15px] text-[#1a1a1a] placeholder-[#1a1a1a]/20 focus:outline-none focus:border-[#c9a54a] transition-colors resize-none"
+          className="w-full bg-transparent border-b border-[#1a1a1a]/15 py-3 font-sans text-body text-[#1a1a1a] placeholder-[#1a1a1a]/20 focus:outline-none focus:border-[#c9a54a] transition-colors resize-none"
           placeholder={`Your ${label.toLowerCase()}`}
         />
       ) : (
         <input
           type={type}
-          className="w-full bg-transparent border-b border-[#1a1a1a]/15 py-3 font-sans text-[15px] text-[#1a1a1a] placeholder-[#1a1a1a]/20 focus:outline-none focus:border-[#c9a54a] transition-colors"
+          className="w-full bg-transparent border-b border-[#1a1a1a]/15 py-3 font-sans text-body text-[#1a1a1a] placeholder-[#1a1a1a]/20 focus:outline-none focus:border-[#c9a54a] transition-colors"
           placeholder={`Your ${label.toLowerCase()}`}
         />
       )}
@@ -60,7 +58,9 @@ function ContactInner() {
   const isLoaded = useIsLoaded();
   const imageRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
-  const clipPercent = useTransform(scrollY, [0, 600], [7.5, 0]);
+  const clipPercent = useTransform(scrollY, [0, 600], [7.5, 0], {
+    ease: cubicBezier(0.22, 1, 0.36, 1),
+  });
 
   useEffect(() => {
     if (searchParams.get("tab") === "landowners") {
@@ -146,7 +146,7 @@ function ContactInner() {
                   <button
                     key={tab}
                     onClick={() => setActiveForm(tab)}
-                    className={`font-sans text-[12px] tracking-[0.24em] uppercase pb-4 pr-8 transition-all duration-300 border-b-2 -mb-px ${
+                    className={`font-sans text-eyebrow uppercase pb-4 pr-8 transition-all duration-300 border-b-2 -mb-px ${
                       activeForm === tab
                         ? "text-[#1a1a1a] border-[#c9a54a]"
                         : "text-[#1a1a1a]/35 border-transparent hover:text-[#1a1a1a]/70"
@@ -165,7 +165,7 @@ function ContactInner() {
                   >
                     Clients
                   </h2>
-                  <p className="font-sans text-[#1a1a1a]/45 leading-[2] mb-0" style={{ fontSize: "16px", maxWidth: "420px" }}>
+                  <p className="font-sans text-body-lg text-[#1a1a1a]/45 mb-0" style={{ maxWidth: "420px" }}>
                     Discover exquisite apartments, commercial spaces, and investment opportunities with Arden Holdings Ltd. Let us turn your dreams into a reality.
                   </p>
                 </div>
@@ -177,7 +177,7 @@ function ContactInner() {
                   >
                     Landowners
                   </h2>
-                  <p className="font-sans text-[#1a1a1a]/45 leading-[2]" style={{ fontSize: "16px", maxWidth: "420px" }}>
+                  <p className="font-sans text-body-lg text-[#1a1a1a]/45" style={{ maxWidth: "420px" }}>
                     Share your land with Arden Holdings and be part of the architectural splendor. Fill out the form to explore this partnership and help shape Dhaka&apos;s skyline.
                   </p>
                 </div>
@@ -201,7 +201,7 @@ function ContactInner() {
                 {submitted ? (
                   <div className="flex items-center gap-3 py-4">
                     <div className="w-1.5 h-1.5 rounded-full bg-[#c9a54a]" />
-                    <span className="font-sans text-[13px] tracking-[0.18em] uppercase text-[#1a1a1a]/50">
+                    <span className="font-sans text-eyebrow uppercase text-[#1a1a1a]/50">
                       Message received — we&apos;ll be in touch soon.
                     </span>
                   </div>
@@ -221,12 +221,9 @@ function ContactInner() {
       </section>
 
       {/* ── CONTACT INFO ── */}
-      <section style={{ backgroundColor: "#f0ede6" }} className="py-16 sm:py-24">
+      <section className="bg-cream py-16 sm:py-24">
         <div className="px-[7.5%]">
           <FadeIn className="mb-12 sm:mb-16">
-            <p className="font-sans text-[#c9a54a] mb-2" style={{ fontSize: "11px", letterSpacing: "0.32em", textTransform: "uppercase" }}>
-              Get In Touch
-            </p>
             <h2
               className="font-serif text-[#1a1a1a]"
               style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
@@ -242,8 +239,8 @@ function ContactInner() {
                   <Phone size={14} className="text-[#c9a54a]" strokeWidth={1.5} />
                 </div>
                 <div>
-                  <p className="font-sans text-[11px] tracking-[0.26em] uppercase text-[#1a1a1a]/40 mb-2">Phone</p>
-                  <a href="tel:+8801615759822" className="font-serif text-[#1a1a1a] hover:text-[#c9a54a] transition-colors" style={{ fontSize: "1.3rem" }}>
+                  <p className="font-sans text-eyebrow-sm uppercase text-[#1a1a1a]/40 mb-2">Phone</p>
+                  <a href="tel:+8801615759822" className="font-serif text-body-lg text-[#1a1a1a] hover:text-[#c9a54a] transition-colors">
                     +88 016 1575 9822
                   </a>
                 </div>
@@ -256,11 +253,10 @@ function ContactInner() {
                   <Mail size={14} className="text-[#c9a54a]" strokeWidth={1.5} />
                 </div>
                 <div>
-                  <p className="font-sans text-[11px] tracking-[0.26em] uppercase text-[#1a1a1a]/40 mb-2">Email</p>
+                  <p className="font-sans text-eyebrow-sm uppercase text-[#1a1a1a]/40 mb-2">Email</p>
                   <a
                     href="mailto:contact@ardenholdingsltd.com"
-                    className="font-serif text-[#1a1a1a] hover:text-[#c9a54a] transition-colors break-all"
-                    style={{ fontSize: "1.1rem" }}
+                    className="font-serif text-body-lg text-[#1a1a1a] hover:text-[#c9a54a] transition-colors break-all"
                   >
                     contact@ardenholdingsltd.com
                   </a>
@@ -274,8 +270,8 @@ function ContactInner() {
                   <MapPin size={14} className="text-[#c9a54a]" strokeWidth={1.5} />
                 </div>
                 <div>
-                  <p className="font-sans text-[11px] tracking-[0.26em] uppercase text-[#1a1a1a]/40 mb-2">Address</p>
-                  <p className="font-serif text-[#1a1a1a]" style={{ fontSize: "1.1rem", lineHeight: 1.5 }}>
+                  <p className="font-sans text-eyebrow-sm uppercase text-[#1a1a1a]/40 mb-2">Address</p>
+                  <p className="font-serif text-body-lg text-[#1a1a1a]">
                     House 40 (2nd Floor), Road 20,<br />
                     Mohakhali DOHS, Dhaka-1206
                   </p>
@@ -290,9 +286,6 @@ function ContactInner() {
       <section className="w-full pt-16 sm:pt-24 pb-16 sm:pb-24">
         <div className="px-[7.5%]">
           <FadeIn className="mb-8 sm:mb-12">
-            <p className="font-sans text-[#c9a54a] mb-3" style={{ fontSize: "11px", letterSpacing: "0.32em", textTransform: "uppercase" }}>
-              Our Office
-            </p>
             <AnimatedHeading
               as="h2"
               text="Come visit us"

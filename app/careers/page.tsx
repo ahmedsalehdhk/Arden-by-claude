@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, cubicBezier } from "framer-motion";
 import { ArrowUpRight, MapPin, Briefcase } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,7 +24,9 @@ export default function CareersPage() {
   const isLoaded = useIsLoaded();
   const imageRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
-  const clipPercent = useTransform(scrollY, [0, 600], [7.5, 0]);
+  const clipPercent = useTransform(scrollY, [0, 600], [7.5, 0], {
+    ease: cubicBezier(0.22, 1, 0.36, 1),
+  });
 
   useEffect(() => {
     const unsub = clipPercent.on("change", (v) => {
@@ -113,17 +115,17 @@ export default function CareersPage() {
                         {role.title}
                       </h3>
                       <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-3 text-ink/50">
-                        <span className="inline-flex items-center gap-1.5 font-sans" style={{ fontSize: "13px", letterSpacing: "0.02em" }}>
+                        <span className="inline-flex items-center gap-1.5 font-sans text-body-sm">
                           <MapPin size={13} strokeWidth={1.5} />
                           {role.location}
                         </span>
-                        <span className="inline-flex items-center gap-1.5 font-sans" style={{ fontSize: "13px", letterSpacing: "0.02em" }}>
+                        <span className="inline-flex items-center gap-1.5 font-sans text-body-sm">
                           <Briefcase size={13} strokeWidth={1.5} />
                           {role.type} · {role.department}
                         </span>
                       </div>
                     </div>
-                    <p className="font-sans text-ink/70 leading-[1.7]" style={{ fontSize: "15px" }}>
+                    <p className="font-sans text-body text-ink/70">
                       {role.summary}
                     </p>
                     <span className="hidden md:inline-flex self-center items-center gap-2 font-sans text-eyebrow uppercase text-ink group-hover:text-gold transition-colors">
@@ -141,7 +143,7 @@ export default function CareersPage() {
         )}
 
         <FadeIn delay={0.1}>
-          <p className="font-sans text-ink/60 mt-10 max-w-2xl" style={{ fontSize: "15px", lineHeight: 1.7 }}>
+          <p className="font-sans text-body text-ink/60 mt-10 max-w-2xl">
             {OPENINGS.length > 0
               ? <>Don&apos;t see a role that fits? </>
               : <>We aren&apos;t actively hiring, but we&apos;re always open to hearing from great people. </>}

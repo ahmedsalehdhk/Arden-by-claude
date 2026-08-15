@@ -21,7 +21,7 @@ const config: Config = {
         bone: "#faf9f6",       // primary background
         ink: "#1a1a1a",        // primary text + dark section bg
         gold: "#c9a54a",       // accent + hover
-        cream: "#f5f0e8",      // alt section background
+        cream: "#f0ede6",      // accent section bg — used for all non-bone sections + CTAs
         // Legacy aliases (kept so existing files don't break during migration)
         charcoal: "#1a1a1a",
         "off-white": "#faf9f6",

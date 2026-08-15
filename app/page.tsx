@@ -271,7 +271,7 @@ function FeaturedProjectsSection() {
 
   return (
     <section id="projects" className="relative w-full overflow-hidden min-h-[100svh] lg:min-h-0 lg:h-[80vh]">
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 isolate">
         {FEATURED_PROJECTS.map((p, i) => {
           const isActive = i === activeIndex;
           const isExiting = i === prevIndex;
@@ -279,7 +279,7 @@ function FeaturedProjectsSection() {
           return (
             <motion.div
               key={p.name}
-              className="absolute inset-0"
+              className="absolute inset-0 overflow-hidden"
               style={{
                 zIndex: isExiting ? 3 : isActive ? 2 : 1,
                 visibility: isRelevant ? "visible" : "hidden",

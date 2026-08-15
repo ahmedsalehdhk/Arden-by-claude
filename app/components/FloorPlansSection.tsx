@@ -76,7 +76,6 @@ export default function FloorPlansSection({ project }: { project: ProjectDetail 
   return (
     <Section tone="bone" rhythm="loose">
       <FadeIn>
-        <p className="font-sans text-gold mb-3 text-eyebrow-sm uppercase">Floor Plans</p>
         <AnimatedHeading
           as="h2"
           text={`See floor layout of ${project.name}`}
@@ -84,7 +83,7 @@ export default function FloorPlansSection({ project }: { project: ProjectDetail 
           className="font-serif text-ink mb-4"
           style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
         />
-        <p className="font-sans text-ink/55 max-w-2xl mb-10 sm:mb-14" style={{ fontSize: "15px" }}>
+        <p className="font-sans text-body text-ink/55 max-w-2xl mb-10 sm:mb-14">
           {isUnlocked
             ? `Every floor at ${project.name} — pick a level from the strip to view its layout.`
             : `A quick look at every floor of ${project.name}. Share your details to view them in full.`}

@@ -95,8 +95,7 @@ export default function NewsPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={isLoaded ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="font-sans text-ink/60 lg:text-right"
-            style={{ fontSize: "15px", letterSpacing: "0.03em" }}
+            className="font-sans text-body text-ink/60 lg:text-right"
           >
             Stay updated with us
           </motion.p>

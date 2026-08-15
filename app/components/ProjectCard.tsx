@@ -42,7 +42,7 @@ export default function ProjectCard({ project }: { project: ProjectCardData }) {
           {/* Status badge */}
           <div className="absolute top-4 left-4 flex flex-col items-start gap-2">
             <span
-              className="font-sans text-[10px] tracking-[0.22em] uppercase px-2.5 py-1.5"
+              className="font-sans text-eyebrow-sm uppercase px-2.5 py-1.5"
               style={{
                 backgroundColor:
                   project.status === "Ongoing"
@@ -57,7 +57,7 @@ export default function ProjectCard({ project }: { project: ProjectCardData }) {
             </span>
             {project.consortium === "alliance-arden" && (
               <span
-                className="font-sans text-[10px] tracking-[0.22em] uppercase px-2.5 py-1.5 bg-white/95 text-[#1a1a1a]"
+                className="font-sans text-eyebrow-sm uppercase px-2.5 py-1.5 bg-white/95 text-[#1a1a1a]"
                 title="Alliance-Arden Consortium"
               >
                 Alliance × Arden
@@ -80,17 +80,11 @@ export default function ProjectCard({ project }: { project: ProjectCardData }) {
             >
               {project.name}
             </h3>
-            <span
-              className="font-sans text-[#c9a54a] flex-shrink-0 mt-1"
-              style={{ fontSize: "11px", letterSpacing: "0.18em", textTransform: "uppercase" }}
-            >
+            <span className="font-sans text-eyebrow-sm uppercase text-[#c9a54a] flex-shrink-0 mt-1">
               {project.type}
             </span>
           </div>
-          <p
-            className="font-sans text-[#1a1a1a]/40"
-            style={{ fontSize: "14px", letterSpacing: "0.04em" }}
-          >
+          <p className="font-sans text-body-sm text-[#1a1a1a]/40">
             {project.address}
           </p>
         </div>

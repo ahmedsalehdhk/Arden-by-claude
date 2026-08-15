@@ -87,18 +87,9 @@ export default function ProjectGallery({ images, projectName }: ProjectGalleryPr
           as="h2"
           text="Gallery"
           trigger="view"
-          className="font-serif text-[#1a1a1a] uppercase"
-          style={{
-            fontSize: "clamp(1.9rem, 4vw, 3.4rem)",
-            letterSpacing: "0.14em",
-            fontWeight: 400,
-          }}
+          className="font-serif text-[#1a1a1a]"
+          style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
         />
-        <div className="mt-6 flex items-center justify-center gap-3">
-          <div className="w-12 h-px bg-[#c9a54a]/40" />
-          <div className="w-2 h-2 rotate-45 border border-[#c9a54a]/40" />
-          <div className="w-12 h-px bg-[#c9a54a]/40" />
-        </div>
       </div>
 
       {/* Carousel */}

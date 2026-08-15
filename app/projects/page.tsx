@@ -57,7 +57,7 @@ export default function ProjectsPage() {
             delay={0.4}
             className="font-serif text-[#1a1a1a] text-center select-none uppercase mx-auto text-balance"
             style={{
-              fontSize: "clamp(1.4rem, 4.5vw, 4.5vw)",
+              fontSize: "clamp(2.2rem, 4.5vw, 4.5vw)",
               letterSpacing: "0.22em",
               lineHeight: 1.25,
               fontWeight: 400,
@@ -76,8 +76,7 @@ export default function ProjectsPage() {
         <div className="px-[7.5%] pt-12 sm:pt-16 pb-2 sm:pb-3">
           <label
             htmlFor="project-search"
-            className="block font-sans text-[#c9a54a] mb-3"
-            style={{ fontSize: "11px", letterSpacing: "0.32em", textTransform: "uppercase" }}
+            className="block font-sans text-eyebrow-sm uppercase text-[#c9a54a] mb-3"
           >
             Find a Project
           </label>
@@ -93,7 +92,7 @@ export default function ProjectsPage() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search by name or location…"
-              className="w-full bg-transparent border-b border-[#1a1a1a]/25 pl-7 pr-8 py-3 font-sans text-[15px] text-[#1a1a1a] placeholder-[#1a1a1a]/45 focus:outline-none focus:border-[#c9a54a] transition-colors"
+              className="w-full bg-transparent border-b border-[#1a1a1a]/25 pl-7 pr-8 py-3 font-sans text-body text-[#1a1a1a] placeholder-[#1a1a1a]/45 focus:outline-none focus:border-[#c9a54a] transition-colors"
             />
             {query && (
               <button
@@ -143,22 +142,19 @@ export default function ProjectsPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="bg-[#1a1a1a] py-20 sm:py-28">
+      <section className="bg-cream py-20 sm:py-28">
         <div className="px-[7.5%] text-center">
           <FadeIn>
-            <p className="font-sans text-white/40 mb-5" style={{ fontSize: "11px", letterSpacing: "0.32em", textTransform: "uppercase" }}>
-              Work With Us
-            </p>
             <AnimatedHeading
               as="h2"
               text="Partner with us to build something extraordinary."
               trigger="view"
-              className="font-serif text-white mb-10"
+              className="font-serif text-ink mb-10"
               style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", fontWeight: 400, letterSpacing: "0.03em" }}
             />
             <a
               href="/contact"
-              className="inline-flex items-center gap-2.5 font-sans text-[12px] tracking-[0.26em] uppercase text-[#c9a54a] border border-[#c9a54a]/40 px-8 py-4 hover:bg-[#c9a54a] hover:text-white transition-all duration-300"
+              className="inline-flex items-center gap-2.5 font-sans text-eyebrow uppercase text-ink border border-ink/40 px-8 py-4 hover:bg-ink hover:text-white transition-all duration-300"
             >
               Get In Touch
               <ArrowUpRight size={13} />

@@ -182,15 +182,15 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
             >
               by Alliance-Arden Consortium
             </span>
-            {/* Alliance PNG was cropped to remove tagline/whitespace so both logos can
-                share a single height class and read as a matched co-lockup. */}
+            {/* Both PNGs are pre-cropped lockup versions with matched padding, so a single
+                height class renders them at the same optical size. */}
             <div className="flex items-center justify-center gap-6 sm:gap-8">
               <Image
-                src="/logo.png"
-                alt="Arden Holdings"
+                src="/logos/alliance-lockup.png"
+                alt="Alliance Properties"
                 width={280}
                 height={96}
-                className="h-14 sm:h-16 w-auto brightness-0 invert opacity-90 shrink-0"
+                className="h-14 sm:h-16 w-auto opacity-90 shrink-0"
                 priority={false}
               />
               <span
@@ -201,11 +201,11 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
                 ×
               </span>
               <Image
-                src="/logos/apl-white.png"
-                alt="Alliance Properties"
+                src="/arden-lockup.png"
+                alt="Arden Holdings"
                 width={280}
                 height={96}
-                className="h-14 sm:h-16 w-auto brightness-0 invert opacity-90 shrink-0"
+                className="h-14 sm:h-16 w-auto opacity-90 shrink-0"
                 priority={false}
               />
             </div>
@@ -224,7 +224,7 @@ function AtAGlance({ project }: { project: ProjectDetail }) {
   const allSpecs = [...project.specsLeft, ...project.specsRight];
 
   return (
-    <section className="py-20 sm:py-28 lg:py-36" style={{ backgroundColor: "#f5f0e8" }}>
+    <section className="bg-cream py-20 sm:py-28 lg:py-36">
       <div className="px-[7.5%]">
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.55fr)] gap-14 lg:gap-24 items-start">
 
@@ -234,13 +234,8 @@ function AtAGlance({ project }: { project: ProjectDetail }) {
               as="h2"
               text="At a Glance"
               trigger="view"
-              className="font-serif text-[#1a1a1a] uppercase mb-10 sm:mb-14"
-              style={{
-                fontSize: "clamp(1.9rem, 4vw, 3.4rem)",
-                letterSpacing: "0.04em",
-                fontWeight: 400,
-                lineHeight: 1.15,
-              }}
+              className="font-serif text-[#1a1a1a] mb-10 sm:mb-14"
+              style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
             />
             <p
               className="font-sans text-[#c9a54a] mb-8"
@@ -313,13 +308,8 @@ function FeaturesSection({ project }: { project: ProjectDetail }) {
           as="h2"
           text="Features & Amenities"
           trigger="view"
-          className="font-serif text-ink uppercase text-center mb-16 sm:mb-20"
-          style={{
-            fontSize: "clamp(2rem, 5vw, 4.25rem)",
-            letterSpacing: "0.06em",
-            fontWeight: 700,
-            lineHeight: 1.05,
-          }}
+          className="font-serif text-ink mb-16 sm:mb-20"
+          style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
         />
       </FadeIn>
 
@@ -373,21 +363,17 @@ function ArchitectSection({ project }: { project: ProjectDetail }) {
         </FadeIn>
 
         <FadeIn delay={0.1}>
-          <p className="font-sans text-gold mb-3 text-eyebrow-sm uppercase">Meet the Architect</p>
           <AnimatedHeading
             as="h2"
             text={a.name}
             trigger="view"
             className="font-serif text-ink mb-2"
-            style={{ fontSize: "clamp(2rem, 3.2vw, 2.75rem)", fontWeight: 400 }}
+            style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
           />
-          <p className="font-sans text-ink/50 mb-8 uppercase" style={{ fontSize: "12px", letterSpacing: "0.24em" }}>
+          <p className="font-sans text-eyebrow uppercase text-ink/50 mb-8">
             {a.title}
           </p>
-          <blockquote
-            className="font-serif text-ink/80 italic border-l-2 border-gold/40 pl-6"
-            style={{ fontSize: "clamp(17px, 1.6vw, 22px)", lineHeight: 1.7 }}
-          >
+          <blockquote className="font-serif text-body-lg text-ink/80 italic border-l-2 border-gold/40 pl-6">
             &ldquo;{a.quote}&rdquo;
           </blockquote>
         </FadeIn>
@@ -407,7 +393,6 @@ function NeighborhoodSection({ project }: { project: ProjectDetail }) {
   return (
     <Section tone="bone" rhythm="loose">
       <FadeIn>
-        <p className="font-sans text-gold mb-3 text-eyebrow-sm uppercase">Around You</p>
         <AnimatedHeading
           as="h2"
           text="Know Your Neighborhood"
@@ -434,11 +419,7 @@ function NeighborhoodSection({ project }: { project: ProjectDetail }) {
         <FadeIn delay={0.15}>
           <div className="space-y-6">
             {n.paragraphs.map((para, i) => (
-              <p
-                key={i}
-                className="font-sans font-medium text-ink/70 leading-[1.9]"
-                style={{ fontSize: "clamp(15px, 1.4vw, 18px)" }}
-              >
+              <p key={i} className="font-sans font-medium text-body-lg text-ink/70">
                 {para}
               </p>
             ))}
@@ -462,12 +443,6 @@ function ProjectLocation({ project }: { project: ProjectDetail }) {
     <section className="w-full py-20 sm:py-28 lg:py-32" style={{ backgroundColor: "#faf9f6" }}>
       <div className="px-[7.5%]">
         <FadeIn className="mb-8 sm:mb-12">
-          <p
-            className="font-sans text-[#c9a54a] mb-3"
-            style={{ fontSize: "11px", letterSpacing: "0.32em", textTransform: "uppercase" }}
-          >
-            Location
-          </p>
           <AnimatedHeading
             as="h2"
             text={`Find ${project.name} in ${project.location}`}
@@ -475,10 +450,7 @@ function ProjectLocation({ project }: { project: ProjectDetail }) {
             className="font-serif text-[#1a1a1a] mb-4"
             style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
           />
-          <p
-            className="font-sans text-[#1a1a1a]/60"
-            style={{ fontSize: "15px", letterSpacing: "0.02em" }}
-          >
+          <p className="font-sans text-body text-[#1a1a1a]/60">
             {project.address}
           </p>
         </FadeIn>
@@ -505,33 +477,27 @@ function ProjectLocation({ project }: { project: ProjectDetail }) {
 
 function ProjectCTA({ project }: { project: ProjectDetail }) {
   return (
-    <section className="bg-[#1a1a1a] py-20 sm:py-28">
+    <section className="bg-cream py-20 sm:py-28">
       <div className="px-[7.5%] text-center">
         <FadeIn>
-          <p
-            className="font-sans text-white/40 mb-5"
-            style={{ fontSize: "12px", letterSpacing: "0.32em", textTransform: "uppercase" }}
-          >
-            Interested in {project.name}?
-          </p>
           <AnimatedHeading
             as="h2"
             text="Schedule a private viewing or inquire today."
             trigger="view"
-            className="font-serif text-white mb-10"
+            className="font-serif text-ink mb-10"
             style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", fontWeight: 400 }}
           />
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2.5 font-sans text-[13px] tracking-[0.22em] uppercase text-[#c9a54a] border border-[#c9a54a]/40 px-8 py-4 hover:bg-[#c9a54a] hover:text-white transition-all duration-300"
+              className="inline-flex items-center gap-2.5 font-sans text-eyebrow uppercase text-ink border border-ink/40 px-8 py-4 hover:bg-ink hover:text-white transition-all duration-300"
             >
               Contact Us
               <ArrowUpRight size={14} />
             </Link>
             <Link
               href="/projects"
-              className="inline-flex items-center gap-2.5 font-sans text-[13px] tracking-[0.22em] uppercase text-white/50 border border-white/15 px-8 py-4 hover:border-white/40 hover:text-white transition-all duration-300"
+              className="inline-flex items-center gap-2.5 font-sans text-eyebrow uppercase text-ink/50 border border-ink/15 px-8 py-4 hover:border-ink/40 hover:text-ink transition-all duration-300"
             >
               All Projects
               <ArrowUpRight size={14} />
