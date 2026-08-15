@@ -75,31 +75,21 @@ export default function NewsPage() {
 
       {/* HERO */}
       <Section tone="bone" rhythm="flush" className="pt-nav-offset" innerClassName="pt-6 sm:pt-12 pb-10 sm:pb-16">
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-          <AnimatedHeading
-            as="h1"
-            text="News & Events"
-            trigger="load"
-            active={isLoaded}
-            delay={0.4}
-            className="font-serif text-ink select-none uppercase text-balance"
-            style={{
-              fontSize: "clamp(2.5rem, 8vw, 7rem)",
-              letterSpacing: "0.02em",
-              lineHeight: 1.02,
-              fontWeight: 400,
-              maxWidth: "12ch",
-            }}
-          />
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={isLoaded ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="font-sans text-body text-ink/60 lg:text-right"
-          >
-            Stay updated with us
-          </motion.p>
-        </div>
+        <AnimatedHeading
+          as="h1"
+          text="News & Events"
+          trigger="load"
+          active={isLoaded}
+          delay={0.4}
+          className="font-serif text-ink select-none uppercase text-balance"
+          style={{
+            fontSize: "clamp(2.5rem, 8vw, 7rem)",
+            letterSpacing: "0.02em",
+            lineHeight: 1.02,
+            fontWeight: 400,
+            maxWidth: "12ch",
+          }}
+        />
       </Section>
 
       {/* FILTERS */}

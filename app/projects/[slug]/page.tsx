@@ -182,15 +182,13 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
             >
               by Alliance-Arden Consortium
             </span>
-            {/* Both PNGs are pre-cropped lockup versions with matched padding, so a single
-                height class renders them at the same optical size. */}
             <div className="flex items-center justify-center gap-6 sm:gap-8">
               <Image
-                src="/logos/alliance-lockup.png"
-                alt="Alliance Properties"
+                src="/logo.png"
+                alt="Arden Holdings"
                 width={280}
                 height={96}
-                className="h-14 sm:h-16 w-auto opacity-90 shrink-0"
+                className="h-14 sm:h-16 w-auto brightness-0 invert opacity-90 shrink-0"
                 priority={false}
               />
               <span
@@ -201,11 +199,11 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
                 ×
               </span>
               <Image
-                src="/arden-lockup.png"
-                alt="Arden Holdings"
+                src="/logos/apl-white.png"
+                alt="Alliance Properties"
                 width={280}
                 height={96}
-                className="h-14 sm:h-16 w-auto opacity-90 shrink-0"
+                className="h-14 sm:h-16 w-auto brightness-0 invert opacity-90 shrink-0"
                 priority={false}
               />
             </div>
