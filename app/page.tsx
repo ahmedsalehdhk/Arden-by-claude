@@ -229,7 +229,7 @@ function AboutSection() {
 // ─────────────────────────────────────────────
 
 const FEATURED_AUTO_ADVANCE_MS = 7000;
-const FEATURED_SWIPE_DURATION_MS = 900;
+const FEATURED_SWIPE_DURATION_MS = 1600;
 
 function FeaturedProjectsSection() {
   const [activeIndex, setActiveIndex] = useState(0);

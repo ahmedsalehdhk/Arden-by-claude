@@ -14,19 +14,19 @@ const TEAM = [
     name: "Mazharul Haque",
     role: "Founder & Chairman",
     quote: "We measure a building the way people measure a home — by how it lives, not how it looks on day one.",
-    image: "/team/mazharul.jpg",
+    image: "/team/mazharul.png",
+  },
+  {
+    name: "Yaminul Haq",
+    role: "Managing Director, Alliance-Arden Consortium",
+    quote: "Setting a new standard in property development through high-level strategies, uncompromised execution and honesty.",
+    image: "/team/yaminul.png",
   },
   {
     name: "Mohiuddin Ahmed",
     role: "Director",
     quote: "The best projects begin with saying no to the wrong ones. Discipline is the quiet part of luxury.",
     image: "/team/mohiuddin.jpg",
-  },
-  {
-    name: "Yaminul Haq",
-    role: "Director, Alliance-Arden Consortium",
-    quote: "Setting a new standard in property development through high-level strategies, uncompromised execution and honesty.",
-    image: "/team/yaminul.jpg",
   },
 ];
 
@@ -125,7 +125,7 @@ export default function AboutPage() {
               style={{ clipPath: "inset(0 7.5%)" }}
             >
               <Image
-                src="/projectimages/amanat/front-side-view-01.jpg"
+                src="/about/hero-01.jpg"
                 alt="Amanat by Arden Holdings"
                 fill
                 className="object-cover"
@@ -151,13 +151,13 @@ export default function AboutPage() {
           </FadeIn>
 
           {/* Row 1 — text left, image right */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 lg:items-stretch items-start mb-16 sm:mb-24">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 lg:items-stretch items-start">
             <FadeIn delay={0.15}>
               <div className="space-y-6">
-                <p className="font-sans font-medium text-body-lg text-[#1a1a1a]/60">
+                <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
                   Arden Holdings was established with a singular vision—to bring a new dimension of architectural excellence, refined living and enduring value to Bangladesh.
                 </p>
-                <p className="font-sans font-medium text-body-lg text-[#1a1a1a]/60">
+                <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
                   From the very beginning, Arden has chosen a distinctive path: not to simply develop properties, but to create addresses that become landmarks in their own right. Every project is conceived with a clear purpose—to harmonise exceptional architecture, uncompromising quality, contemporary lifestyle and timeless elegance.
                 </p>
               </div>
@@ -165,7 +165,7 @@ export default function AboutPage() {
             <FadeIn delay={0.2} className="lg:h-full">
               <div className="relative w-full bg-[#1a1a1a]/5 overflow-hidden aspect-[16/10] lg:aspect-auto lg:h-full">
                 <Image
-                  src="/about/hero-01.jpg"
+                  src="/about/hero-02.jpg"
                   alt="Arden project view"
                   fill
                   className="object-cover"
@@ -176,30 +176,38 @@ export default function AboutPage() {
             </FadeIn>
           </div>
 
-          {/* Row 2 — full-width text */}
-          <FadeIn delay={0.15}>
-            <div className="space-y-6">
-              <p className="font-sans font-medium text-body-lg text-[#1a1a1a]/60">
+        </div>
+
+        {/* Row 2 — full-bleed swatch background, text kept within padding */}
+        <FadeIn delay={0.15}>
+          <div
+            className="w-full py-8 sm:py-10 lg:py-12"
+            style={{
+              backgroundImage: "url('/swatch-light.png')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }}
+          >
+            <div className="px-[7.5%] space-y-6">
+              <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
                 Our journey has taken us to some of the most prestigious and coveted locations of Dhaka. From the historic Chairman Bari, Banani, to the distinguished Banani DOHS; from the emerging landmark of Jolshiri to the heritage-rich surroundings of Dhanmondi—Arden is steadily establishing its presence through projects that aspire to stand apart.
               </p>
-              <p className="font-sans font-medium text-body-lg text-[#1a1a1a]/60">
-                For Arden, a building is never merely a structure. It is an expression of character, an embodiment of aspiration and, ultimately, a legacy that transcends generations.
-              </p>
-              <p className="font-sans font-medium text-body-lg text-[#1a1a1a]/60">
-                We do not simply build spaces. We create addresses that endure.
+              <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
+                For Arden, a building is never merely a structure. It is an expression of character, an embodiment of aspiration and, ultimately, a legacy that transcends generations. We do not simply build spaces, we create addresses that endure.
               </p>
             </div>
-          </FadeIn>
-        </div>
+          </div>
+        </FadeIn>
       </section>
 
       {/* ── VALUES ── */}
-      <section className="bg-cream py-20 sm:py-28 lg:py-36">
+      <section className="bg-cream py-14 sm:py-18 lg:py-22">
         <div className="px-[7.5%]">
-          <FadeIn className="mb-14 sm:mb-20">
+          <FadeIn className="mb-8 sm:mb-10">
             <AnimatedHeading
               as="h2"
-              text="Our principles guide every decision we make."
+              text="Our principles guide every decision we make"
               trigger="view"
               className="font-serif text-[#1a1a1a]"
               style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400, maxWidth: "500px" }}
@@ -208,17 +216,17 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-[#1a1a1a]/[0.07]">
             {VALUES.map((v, i) => (
               <FadeIn key={v.title} delay={i * 0.08} className="h-full">
-                <div className="bg-cream p-8 sm:p-10 lg:p-12 h-full">
-                  <p className="font-sans text-[#c9a54a] mb-5" style={{ fontSize: "12px", letterSpacing: "0.22em" }}>
+                <div className="bg-cream px-6 sm:px-8 lg:px-10 py-5 sm:py-6 lg:py-7 h-full">
+                  <p className="font-sans text-[#c9a54a] mb-2" style={{ fontSize: "12px", letterSpacing: "0.22em" }}>
                     {v.num}
                   </p>
                   <h3
-                    className="font-serif text-[#1a1a1a] mb-4"
+                    className="font-serif text-[#1a1a1a] mb-2"
                     style={{ fontSize: "clamp(1.4rem, 2.2vw, 1.9rem)", fontWeight: 500 }}
                   >
                     {v.title}
                   </h3>
-                  <p className="font-sans text-left text-[#1a1a1a] leading-[1.9]" style={{ fontSize: "clamp(15px, 2vw, 20px)" }}>
+                  <p className="font-sans font-medium text-body-lg text-[#1a1a1a] text-left !leading-[1.5]">
                     {v.body}
                   </p>
                 </div>
@@ -231,10 +239,76 @@ export default function AboutPage() {
       {/* ── TEAM ── */}
       <section className="bg-[#faf9f6] py-20 sm:py-28 lg:py-36">
         <div className="px-[7.5%]">
+          <FadeIn>
+            <AnimatedHeading
+              as="h2"
+              text="The Team Behind Arden"
+              trigger="view"
+              className="font-serif text-[#1a1a1a] leading-[1.2] mb-8 sm:mb-10"
+              style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
+            />
+          </FadeIn>
+
+          <FadeIn delay={0.1}>
+            <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify mb-6">
+              Leadership with vision. Execution with integrity. Behind every enduring institution is a team that believes in something greater than business.
+            </p>
+          </FadeIn>
+        </div>
+
+        {/* Full-bleed swatch block for the Chowdhury bio paragraphs */}
+        <FadeIn delay={0.15}>
+          <div
+            className="w-full py-8 sm:py-10 lg:py-12 mb-20 sm:mb-28"
+            style={{
+              backgroundImage: "url('/swatch-light.png')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }}
+          >
+            <div className="px-[7.5%] space-y-6">
+              <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
+                Arden Holdings is driven by a dedicated, resilient and dependable team committed to transforming vision into reality. At the heart of this leadership is Mr. Mazharul Haque Chowdhury, a visionary business leader whose professional journey began in 1997 and spans nearly three decades of experience across media, communications, marketing, business and entrepreneurship. He played a pivotal role in establishing and developing Havas Group Bangladesh, building a significant presence in the country&rsquo;s media and communications landscape in association with the Impress Group (Channel i).
+              </p>
+              <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
+                His career has been defined by a combination of strategic vision, professional integrity, relationship-building and an ability to identify opportunities ahead of the curve. His entrepreneurial journey subsequently expanded into diversified business ventures, including Trilliant Holdings, established in 2021, which has undertaken and delivered a number of projects across Dhaka with a strong emphasis on customer satisfaction, quality and execution. These experiences have shaped the philosophy behind Arden Holdings.
+              </p>
+            </div>
+          </div>
+        </FadeIn>
+
+        <div className="px-[7.5%]">
+          {/* Image left, text right */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 lg:items-stretch items-start mb-20 sm:mb-28">
+            <FadeIn delay={0.15} className="lg:h-full lg:order-1">
+              <div className="relative w-full bg-[#1a1a1a]/5 overflow-hidden aspect-[16/10] lg:aspect-auto lg:h-full">
+                <Image
+                  src="/about/hero-03.png"
+                  alt="Arden project view"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 45vw"
+                  loading="lazy"
+                />
+              </div>
+            </FadeIn>
+            <FadeIn delay={0.2} className="lg:order-2">
+              <div className="space-y-6">
+                <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
+                  Arden was created with a clear and ambitious objective: to develop exceptional architectural destinations for discerning customers in the most prestigious locations of Dhaka and its emerging premium neighborhoods. The philosophy is simple but uncompromising&mdash;select the right location, envision the extraordinary, execute with discipline and deliver a standard of living worthy of those who aspire to the very best.
+                </p>
+                <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
+                  With a leadership grounded in experience, a team committed to excellence and a vision that reaches beyond the present, Arden Holdings is building not merely for today, but for the generations that will follow.
+                </p>
+              </div>
+            </FadeIn>
+          </div>
+
           <FadeIn className="mb-14 sm:mb-20 max-w-3xl">
             <AnimatedHeading
               as="h2"
-              text="Meet the team."
+              text="Meet the team"
               trigger="view"
               className="font-serif text-[#1a1a1a]"
               style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
@@ -246,7 +320,7 @@ export default function AboutPage() {
             {TEAM.map((member, i) => (
               <FadeIn key={member.name} delay={i * 0.06}>
                 <article className="flex flex-col">
-                  <div className="relative overflow-hidden bg-[#1a1a1a]/5 mb-6" style={{ aspectRatio: "1/1" }}>
+                  <div className="relative overflow-hidden bg-[#1a1a1a]/5 mb-6" style={{ aspectRatio: "3/4" }}>
                     <Image
                       src={member.image}
                       alt={member.name}
@@ -262,7 +336,7 @@ export default function AboutPage() {
                   >
                     {member.name}
                   </h3>
-                  <p className="font-sans text-[#c9a54a] mb-5" style={{ fontSize: "12px", letterSpacing: "0.22em", textTransform: "uppercase" }}>
+                  <p className="font-sans text-[#c9a54a] mb-5 min-h-[3em]" style={{ fontSize: "12px", letterSpacing: "0.22em", textTransform: "uppercase", lineHeight: 1.5 }}>
                     {member.role}
                   </p>
                   <blockquote

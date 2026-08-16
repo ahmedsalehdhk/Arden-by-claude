@@ -41,6 +41,7 @@ const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "About Arden", href: "/about" },
   { label: "Projects", href: "/projects" },
+  { label: "Alliance-Arden Consortium", href: "/consortium" },
   { label: "News & Events", href: "/news" },
   { label: "Careers", href: "/careers" },
   { label: "Contact", href: "/contact" },
@@ -106,7 +107,7 @@ export default function Nav({ transparent = false }: { transparent?: boolean } =
               : "bg-[#faf9f6] border-b border-[#1a1a1a]/[0.07]"
         }`}
       >
-        <div className="mx-auto flex items-center" style={{ paddingTop: "27px", paddingBottom: "27px", paddingLeft: "7.5%", paddingRight: "7.5%" }}>
+        <div className="mx-auto flex items-center" style={{ paddingTop: "18px", paddingBottom: "18px", paddingLeft: "7.5%", paddingRight: "7.5%" }}>
           {/* Logo */}
           <Link href="/" className="flex items-center flex-shrink-0">
             <Image
@@ -114,7 +115,7 @@ export default function Nav({ transparent = false }: { transparent?: boolean } =
               alt="Arden Holdings"
               width={240}
               height={60}
-              className={`h-[38px] sm:h-[56px] md:h-[60px] w-auto transition-[filter] duration-300 ${
+              className={`h-[32px] sm:h-[40px] md:h-[44px] w-auto transition-[filter] duration-300 ${
                 isTransparent ? "brightness-0 invert" : ""
               }`}
               priority
@@ -193,13 +194,13 @@ export default function Nav({ transparent = false }: { transparent?: boolean } =
                         <Link
                           href={link.href}
                           onClick={() => setMenuOpen(false)}
-                          className={`group flex items-center justify-between py-5 border-b border-white/10 transition-colors ${
+                          className={`group flex items-center justify-between py-4 border-b border-white/10 transition-colors ${
                             active ? "text-[#c9a54a]" : "text-white hover:text-[#c9a54a]"
                           }`}
                         >
                           <span
                             className="font-sans"
-                            style={{ fontSize: "clamp(1.4rem, 2.2vw, 1.75rem)", fontWeight: 500, letterSpacing: "0.01em" }}
+                            style={{ fontSize: "clamp(1.2rem, 1.9vw, 1.55rem)", fontWeight: 500, letterSpacing: "0.01em" }}
                           >
                             {link.label}
                           </span>

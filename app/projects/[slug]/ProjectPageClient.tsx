@@ -183,48 +183,44 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
           {project.tagline}
         </motion.p>
 
-        {project.consortium === "alliance-arden" && (
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.1 }}
-            className="mt-8 sm:mt-10 flex flex-col items-center gap-6 sm:gap-7 text-center"
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.1 }}
+          className="mt-8 sm:mt-10 flex flex-col items-center gap-6 sm:gap-7 text-center"
+        >
+          <span
+            className="font-sans text-white/75 uppercase"
+            style={{ fontSize: "clamp(13px, 1.1vw, 15px)", letterSpacing: "0.3em", lineHeight: 1 }}
           >
+            by Alliance-Arden Consortium
+          </span>
+          <div className="flex items-center justify-center gap-6 sm:gap-8">
+            <Image
+              src="/logos/apl-lockup.png"
+              alt="Alliance Properties"
+              width={280}
+              height={164}
+              className="h-11 sm:h-14 w-auto brightness-0 invert opacity-90 shrink-0"
+              priority={false}
+            />
             <span
-              className="font-sans text-white/75 uppercase"
-              style={{ fontSize: "clamp(13px, 1.1vw, 15px)", letterSpacing: "0.3em", lineHeight: 1 }}
+              className="font-sans text-white/50 leading-none flex-shrink-0 flex items-center"
+              style={{ fontSize: "24px", fontWeight: 300 }}
+              aria-hidden="true"
             >
-              by Alliance-Arden Consortium
+              ×
             </span>
-            {/* Lockup order: Alliance × Arden. Both use the matched lockup PNGs
-                so a shared height class renders them at similar visual weight. */}
-            <div className="flex items-center justify-center gap-6 sm:gap-8">
-              <Image
-                src="/logos/apl-lockup.png"
-                alt="Alliance Properties"
-                width={280}
-                height={164}
-                className="h-11 sm:h-14 w-auto brightness-0 invert opacity-90 shrink-0"
-                priority={false}
-              />
-              <span
-                className="font-sans text-white/50 leading-none flex-shrink-0 flex items-center"
-                style={{ fontSize: "24px", fontWeight: 300 }}
-                aria-hidden="true"
-              >
-                ×
-              </span>
-              <Image
-                src="/logo-lockup.png"
-                alt="Arden Holdings"
-                width={280}
-                height={119}
-                className="h-11 sm:h-14 w-auto brightness-0 invert opacity-90 shrink-0"
-                priority={false}
-              />
-            </div>
-          </motion.div>
-        )}
+            <Image
+              src="/logo-lockup.png"
+              alt="Arden Holdings"
+              width={280}
+              height={119}
+              className="h-11 sm:h-14 w-auto brightness-0 invert opacity-90 shrink-0"
+              priority={false}
+            />
+          </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -299,16 +295,15 @@ function AtAGlance({ project }: { project: ProjectDetail }) {
 // ─────────────────────────────────────────────
 
 function FeaturesSection({ project }: { project: ProjectDetail }) {
-  const mid = Math.ceil(project.features.length / 2);
-  const leftFeatures = project.features.slice(0, mid);
-  const rightFeatures = project.features.slice(mid);
-
   const renderFeature = (feature: (typeof project.features)[number]) => {
     const IconComp = ICON_MAP[feature.icon];
     return (
-      <li key={feature.label} className="flex items-center gap-4 py-2.5 sm:py-3 border-b border-ink/10 last:border-b-0">
-        <div className="w-9 h-9 border border-ink/25 flex items-center justify-center flex-shrink-0">
-          {IconComp && <IconComp size={17} strokeWidth={1.25} className="text-ink/80" />}
+      <li
+        key={feature.label}
+        className="flex items-center gap-4 py-4 sm:py-5 border-b border-ink/15"
+      >
+        <div className="w-10 h-10 border border-ink/25 flex items-center justify-center flex-shrink-0">
+          {IconComp && <IconComp size={18} strokeWidth={1.25} className="text-ink/80" />}
         </div>
         <span className="font-sans text-body-sm text-ink">{feature.label}</span>
       </li>
@@ -316,7 +311,7 @@ function FeaturesSection({ project }: { project: ProjectDetail }) {
   };
 
   return (
-    <Section tone="cream" rhythm="loose">
+    <Section tone="bone" rhythm="loose">
       <FadeIn>
         <AnimatedHeading
           as="h2"
@@ -327,8 +322,6 @@ function FeaturesSection({ project }: { project: ProjectDetail }) {
         />
       </FadeIn>
 
-      {/* items-stretch + h-full on the right column so the features list matches
-          the image height. justify-between spreads the rows to fill that height. */}
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.4fr)] gap-10 lg:gap-16 items-stretch">
         <FadeIn delay={0.1}>
           <div className="relative overflow-hidden w-full h-full" style={{ aspectRatio: "4/5" }}>
@@ -343,11 +336,10 @@ function FeaturesSection({ project }: { project: ProjectDetail }) {
           </div>
         </FadeIn>
 
-        <FadeIn delay={0.2} className="h-full">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 lg:gap-x-16 h-full">
-            <ul className="flex flex-col justify-between">{leftFeatures.map(renderFeature)}</ul>
-            <ul className="flex flex-col justify-between">{rightFeatures.map(renderFeature)}</ul>
-          </div>
+        <FadeIn delay={0.2}>
+          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 lg:gap-x-16">
+            {project.features.map(renderFeature)}
+          </ul>
         </FadeIn>
       </div>
     </Section>
@@ -363,38 +355,46 @@ function ArchitectSection({ project }: { project: ProjectDetail }) {
   if (!a) return null;
 
   return (
-    <Section tone="cream" rhythm="loose">
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)] gap-10 lg:gap-16 items-center">
+    <section
+      className="w-full py-20 sm:py-28 lg:py-32"
+      style={{
+        backgroundImage: "url('/swatch-dark.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      <div className="px-[7.5%]">
         <FadeIn>
-          <div className="relative overflow-hidden bg-ink/5 w-full max-w-md" style={{ aspectRatio: "4/5" }}>
-            <Image
-              src={a.image}
-              alt={a.name}
-              fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 90vw, 40vw"
-              loading="lazy"
+          <div className="flex flex-col items-center text-center max-w-2xl mx-auto">
+            <div className="relative overflow-hidden rounded-full bg-ink/5 mb-6" style={{ width: 112, height: 64 }}>
+              <Image
+                src={a.image}
+                alt={a.name}
+                fill
+                className="object-cover"
+                sizes="128px"
+                loading="lazy"
+              />
+            </div>
+
+            <AnimatedHeading
+              as="h2"
+              text={a.name}
+              trigger="view"
+              className="font-serif text-ink mb-2"
+              style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)", fontWeight: 500 }}
             />
+            <p className="font-sans text-body-sm text-ink/55 mb-6">
+              {a.title}
+            </p>
+            <p className="font-sans font-medium text-body-lg text-ink !leading-[1.6]">
+              {a.quote}
+            </p>
           </div>
         </FadeIn>
-
-        <FadeIn delay={0.1}>
-          <AnimatedHeading
-            as="h2"
-            text={a.name}
-            trigger="view"
-            className="font-serif text-ink mb-2"
-            style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
-          />
-          <p className="font-sans text-eyebrow uppercase text-ink/50 mb-8">
-            {a.title}
-          </p>
-          <blockquote className="font-serif text-body-lg text-ink/80 italic border-l-2 border-gold/40 pl-6">
-            &ldquo;{a.quote}&rdquo;
-          </blockquote>
-        </FadeIn>
       </div>
-    </Section>
+    </section>
   );
 }
 
@@ -418,9 +418,16 @@ function NeighborhoodSection({ project }: { project: ProjectDetail }) {
         />
       </FadeIn>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+      {/* Row 1 — paragraph 1 left, image right */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 lg:items-stretch items-start mb-10 sm:mb-14">
         <FadeIn delay={0.05}>
-          <div className="relative overflow-hidden w-full" style={{ aspectRatio: "4/3" }}>
+          <p className="font-sans font-medium text-body-lg text-ink !leading-[1.6] sm:text-justify">
+            {n.paragraphs[0]}
+          </p>
+        </FadeIn>
+
+        <FadeIn delay={0.15} className="lg:h-full">
+          <div className="relative overflow-hidden w-full bg-ink/5 aspect-[4/3] lg:aspect-auto lg:h-full">
             <Image
               src={n.image}
               alt={`${project.location} neighborhood`}
@@ -431,17 +438,16 @@ function NeighborhoodSection({ project }: { project: ProjectDetail }) {
             />
           </div>
         </FadeIn>
-
-        <FadeIn delay={0.15}>
-          <div className="space-y-6">
-            {n.paragraphs.map((para, i) => (
-              <p key={i} className="font-sans font-medium text-body-lg text-ink/70">
-                {para}
-              </p>
-            ))}
-          </div>
-        </FadeIn>
       </div>
+
+      {/* Row 2 — paragraph 2 full width */}
+      {n.paragraphs[1] && (
+        <FadeIn delay={0.1}>
+          <p className="font-sans font-medium text-body-lg text-ink !leading-[1.6] sm:text-justify">
+            {n.paragraphs[1]}
+          </p>
+        </FadeIn>
+      )}
     </Section>
   );
 }

@@ -10,7 +10,6 @@ export interface ProjectCardData {
   type: "Residential" | "Commercial" | string;
   image?: string;
   color?: string;
-  consortium?: "alliance-arden";
 }
 
 export default function ProjectCard({ project }: { project: ProjectCardData }) {
@@ -29,7 +28,7 @@ export default function ProjectCard({ project }: { project: ProjectCardData }) {
               src={project.image}
               alt={project.name}
               fill
-              className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
+              className="object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
               loading="lazy"
               sizes="(max-width: 640px) 85vw, (max-width: 1024px) 45vw, 30vw"
             />
@@ -55,14 +54,6 @@ export default function ProjectCard({ project }: { project: ProjectCardData }) {
             >
               {project.status}
             </span>
-            {project.consortium === "alliance-arden" && (
-              <span
-                className="font-sans text-eyebrow-sm uppercase px-2.5 py-1.5 bg-white/95 text-[#1a1a1a]"
-                title="Alliance-Arden Consortium"
-              >
-                Alliance × Arden
-              </span>
-            )}
           </div>
           {/* Hover overlay */}
           <div className="absolute inset-0 bg-[#1a1a1a]/0 group-hover:bg-[#1a1a1a]/20 transition-colors duration-500 flex items-end justify-end p-5">

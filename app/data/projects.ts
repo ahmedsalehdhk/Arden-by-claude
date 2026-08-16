@@ -53,7 +53,6 @@ export interface ProjectDetail {
   neighborhood?: Neighborhood;
   floorPlans?: FloorPlan[]; // one entry per floor; drives the elevator-strip gallery
   architect?: Architect;
-  consortium?: "alliance-arden"; // co-branded projects
 }
 
 export const PROJECT_DETAILS: ProjectDetail[] = [
@@ -133,7 +132,6 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
       quote:
         "Amanat is a house that listens — the way morning light finds the kitchen, the pause between the entry and the family room. Every corner had to earn its place.",
     },
-    consortium: "alliance-arden",
   },
   {
     slug: "rahma",
@@ -156,7 +154,7 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
       { label: "Number of Apartments", value: "8" },
       // { label: "Number of Basements", value: "0" },
       { label: "Number of Parking", value: "8" },
-      { label: "Specialty of Land", value: "Open forever on 3 sides and lake adjacant" },
+      { label: "Specialty of Land", value: "Lake adjacant" },
     ],
     features: [
       // { icon: "Zap",         label: "Full Load Power Backup Generator" },
@@ -210,7 +208,6 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
       quote:
         "In Jolshiri, the site does half the design work. Rahma opens toward the lake and quietly turns its back to the road — calm inside, alive outside.",
     },
-    consortium: "alliance-arden",
   },
     {
     slug: "mumin",
@@ -283,7 +280,6 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
       quote:
         "Redacted",
     },
-    // consortium: "alliance-arden",
   },
 ];
 
