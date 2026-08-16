@@ -31,9 +31,9 @@ const LinkedinIcon = ({ size = 16, className }: IconProps) => (
 );
 
 const SOCIALS = [
-  { label: "Facebook", href: "#", Icon: FacebookIcon },
-  { label: "Instagram", href: "#", Icon: InstagramIcon },
-  { label: "LinkedIn", href: "#", Icon: LinkedinIcon },
+  { label: "Facebook",  href: "https://www.facebook.com/profile.php?id=61567335483561", Icon: FacebookIcon },
+  { label: "Instagram", href: "https://www.instagram.com/arden_holdings_ltd/",         Icon: InstagramIcon },
+  { label: "LinkedIn",  href: "https://www.linkedin.com/company/116103933/",           Icon: LinkedinIcon },
 ];
 import { useIsLoaded } from "../context/LoadContext";
 

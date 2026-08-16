@@ -9,10 +9,11 @@ import AnimatedHeading from "../components/AnimatedHeading";
 import ProjectCard from "../components/ProjectCard";
 import { useIsLoaded } from "../context/LoadContext";
 
-// Project data extracted from Shanta — adapted for Arden
+// Project data
 const PROJECTS = [
   { name: "Amanat", address: "House 64, Road 1, Block I, Banani, Dhaka", location: "Banani", status: "Ongoing", type: "Residential", image: "/projectimages/amanat/front-side-view-01.jpg", consortium: "alliance-arden" as const },
   { name: "Rahma", address: "Plot 16, Road 410, Sector 11, Jolshiri", location: "Jolshiri", status: "Ongoing", type: "Residential", image: "/projectimages/rahma/view-02.jpg", consortium: "alliance-arden" as const },
+  { name: "Mumin", address: "Plot 43, Road 512, Sector 11, Jolshiri", location: "Jolshiri", status: "Completed", type: "Residential", image: "/projectimages/mumin/view-03.jpg" },
 ];
 
 

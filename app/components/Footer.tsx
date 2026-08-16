@@ -23,9 +23,9 @@ const LinkedinIcon = ({ size = 16, className }: IconProps) => (
 );
 
 const SOCIALS = [
-  { label: "Facebook",  href: "#", Icon: FacebookIcon },
-  { label: "Instagram", href: "#", Icon: InstagramIcon },
-  { label: "LinkedIn",  href: "#", Icon: LinkedinIcon },
+  { label: "Facebook",  href: "https://www.facebook.com/profile.php?id=61567335483561", Icon: FacebookIcon },
+  { label: "Instagram", href: "https://www.instagram.com/arden_holdings_ltd/",         Icon: InstagramIcon },
+  { label: "LinkedIn",  href: "https://www.linkedin.com/company/116103933/",           Icon: LinkedinIcon },
 ];
 
 export default function Footer() {
@@ -41,17 +41,17 @@ export default function Footer() {
           <ul className="space-y-3 sm:space-y-4">
             <li className="font-sans text-body text-white/70">
               Phone:&nbsp;
-              <a href="tel:+8801615759822" className="text-white hover:text-[#c9a54a] transition-colors">
-                +88 016 1575 9822
+              <a href="tel:+8801916882330" className="text-white hover:text-[#c9a54a] transition-colors">
+                +88 019 1688 2330
               </a>
             </li>
             <li className="font-sans text-body text-white/70">
               Email:&nbsp;
               <a
-                href="mailto:contact@ardenholdingsltd.com"
+                href="mailto:info@ardenholdingsltd.com"
                 className="text-white hover:text-[#c9a54a] transition-colors break-all"
               >
-                contact@ardenholdingsltd.com
+                info@ardenholdingsltd.com
               </a>
             </li>
           </ul>

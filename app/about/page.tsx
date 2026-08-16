@@ -25,7 +25,7 @@ const TEAM = [
   {
     name: "Yaminul Haq",
     role: "Director, Alliance-Arden Consortium",
-    quote: "Good architecture disappears — the light, the flow, the way a door closes. That's the work.",
+    quote: "Setting a new standard in property development through high-level strategies, uncompromised execution and honesty.",
     image: "/team/yaminul.jpg",
   },
 ];
@@ -215,7 +215,7 @@ export default function AboutPage() {
             {TEAM.map((member, i) => (
               <FadeIn key={member.name} delay={i * 0.06}>
                 <article className="flex flex-col">
-                  <div className="relative overflow-hidden bg-[#1a1a1a]/5 mb-6" style={{ aspectRatio: "4/5" }}>
+                  <div className="relative overflow-hidden bg-[#1a1a1a]/5 mb-6" style={{ aspectRatio: "1/1" }}>
                     <Image
                       src={member.image}
                       alt={member.name}

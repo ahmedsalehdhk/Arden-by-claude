@@ -37,9 +37,9 @@ const FEATURED_PROJECTS = [
     tag: "Residential",
     name: "Amanat",
     slug: "amanat",
-    location: "Plot 64, Road 1, Block I, Banani, Dhaka",
+    location: "Plot 64, Road 1, Banani",
     image: "/projectimages/amanat/front-side-view-01.jpg",
-    buildingImage: "/projectimages/amanat/eye-level-view-01.jpg",
+    buildingImage: "/projectimages/amanat/hero-night.jpg",
   },
   {
     category: "Featured Projects",

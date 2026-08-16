@@ -15,6 +15,13 @@ import {
   TreePine,
   Users,
   ArrowUpRight,
+  ArrowUpDown,
+  Waves,
+  Sofa,
+  DoorOpen,
+  Video,
+  ChefHat,
+  Sparkles,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -43,6 +50,13 @@ const ICON_MAP: Record<string, any> = {
   Dumbbell,
   TreePine,
   Users,
+  ArrowUpDown,
+  Waves,
+  Sofa,
+  DoorOpen,
+  Video,
+  ChefHat,
+  Sparkles,
 };
 
 // ─────────────────────────────────────────────
@@ -182,13 +196,15 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
             >
               by Alliance-Arden Consortium
             </span>
+            {/* Lockup order: Alliance × Arden. Both use the matched lockup PNGs
+                so a shared height class renders them at similar visual weight. */}
             <div className="flex items-center justify-center gap-6 sm:gap-8">
               <Image
-                src="/logo.png"
-                alt="Arden Holdings"
+                src="/logos/apl-lockup.png"
+                alt="Alliance Properties"
                 width={280}
-                height={96}
-                className="h-14 sm:h-16 w-auto brightness-0 invert opacity-90 shrink-0"
+                height={164}
+                className="h-11 sm:h-14 w-auto brightness-0 invert opacity-90 shrink-0"
                 priority={false}
               />
               <span
@@ -199,11 +215,11 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
                 ×
               </span>
               <Image
-                src="/logos/apl-white.png"
-                alt="Alliance Properties"
+                src="/logo-lockup.png"
+                alt="Arden Holdings"
                 width={280}
-                height={96}
-                className="h-14 sm:h-16 w-auto brightness-0 invert opacity-90 shrink-0"
+                height={119}
+                className="h-11 sm:h-14 w-auto brightness-0 invert opacity-90 shrink-0"
                 priority={false}
               />
             </div>
@@ -290,12 +306,12 @@ function FeaturesSection({ project }: { project: ProjectDetail }) {
   const renderFeature = (feature: (typeof project.features)[number]) => {
     const IconComp = ICON_MAP[feature.icon];
     return (
-      <div key={feature.label} className="flex items-start gap-6 py-7 sm:py-8 border-b border-ink/10 last:border-b-0">
-        <div className="w-11 h-11 border border-ink/25 flex items-center justify-center flex-shrink-0">
-          {IconComp && <IconComp size={20} strokeWidth={1.25} className="text-ink/80" />}
+      <li key={feature.label} className="flex items-center gap-4 py-2.5 sm:py-3 border-b border-ink/10 last:border-b-0">
+        <div className="w-9 h-9 border border-ink/25 flex items-center justify-center flex-shrink-0">
+          {IconComp && <IconComp size={17} strokeWidth={1.25} className="text-ink/80" />}
         </div>
-        <span className="font-sans text-body text-ink pt-2.5">{feature.label}</span>
-      </div>
+        <span className="font-sans text-body-sm text-ink">{feature.label}</span>
+      </li>
     );
   };
 
@@ -311,9 +327,11 @@ function FeaturesSection({ project }: { project: ProjectDetail }) {
         />
       </FadeIn>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.4fr)] gap-10 lg:gap-16 items-start">
+      {/* items-stretch + h-full on the right column so the features list matches
+          the image height. justify-between spreads the rows to fill that height. */}
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.4fr)] gap-10 lg:gap-16 items-stretch">
         <FadeIn delay={0.1}>
-          <div className="relative overflow-hidden w-full" style={{ aspectRatio: "4/5" }}>
+          <div className="relative overflow-hidden w-full h-full" style={{ aspectRatio: "4/5" }}>
             <Image
               src={project.buildingImage}
               alt={`${project.name} Features`}
@@ -325,10 +343,10 @@ function FeaturesSection({ project }: { project: ProjectDetail }) {
           </div>
         </FadeIn>
 
-        <FadeIn delay={0.2}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-16 lg:gap-x-20">
-            <div>{leftFeatures.map(renderFeature)}</div>
-            <div>{rightFeatures.map(renderFeature)}</div>
+        <FadeIn delay={0.2} className="h-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 lg:gap-x-16 h-full">
+            <ul className="flex flex-col justify-between">{leftFeatures.map(renderFeature)}</ul>
+            <ul className="flex flex-col justify-between">{rightFeatures.map(renderFeature)}</ul>
           </div>
         </FadeIn>
       </div>

@@ -240,8 +240,8 @@ function ContactInner() {
                 </div>
                 <div>
                   <p className="font-sans text-eyebrow-sm uppercase text-[#1a1a1a]/40 mb-2">Phone</p>
-                  <a href="tel:+8801615759822" className="font-serif text-body-lg text-[#1a1a1a] hover:text-[#c9a54a] transition-colors">
-                    +88 016 1575 9822
+                  <a href="tel:+8801916882330" className="font-serif text-body-lg text-[#1a1a1a] hover:text-[#c9a54a] transition-colors">
+                    +88 019 1688 2330
                   </a>
                 </div>
               </div>
@@ -255,10 +255,10 @@ function ContactInner() {
                 <div>
                   <p className="font-sans text-eyebrow-sm uppercase text-[#1a1a1a]/40 mb-2">Email</p>
                   <a
-                    href="mailto:contact@ardenholdingsltd.com"
+                    href="mailto:info@ardenholdingsltd.com"
                     className="font-serif text-body-lg text-[#1a1a1a] hover:text-[#c9a54a] transition-colors break-all"
                   >
-                    contact@ardenholdingsltd.com
+                    info@ardenholdingsltd.com
                   </a>
                 </div>
               </div>
