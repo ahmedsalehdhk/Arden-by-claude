@@ -140,25 +140,56 @@ export default function AboutPage() {
       {/* ── INTRO ── */}
       <section className="bg-[#faf9f6] py-20 sm:py-28 lg:py-36">
         <div className="px-[7.5%]">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-start">
-            <FadeIn>
-              <AnimatedHeading
-                as="h2"
-                text="Built on ambition, delivered with precision."
-                trigger="view"
-                className="font-serif text-[#1a1a1a] leading-[1.2]"
-                style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
-              />
-            </FadeIn>
+          <FadeIn>
+            <AnimatedHeading
+              as="h2"
+              text="Our Vision"
+              trigger="view"
+              className="font-serif text-[#1a1a1a] leading-[1.2] mb-14 sm:mb-20"
+              style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
+            />
+          </FadeIn>
+
+          {/* Row 1 — text left, image right */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 lg:items-stretch items-start mb-16 sm:mb-24">
             <FadeIn delay={0.15}>
-              <p className="font-sans font-medium text-left text-[#1a1a1a]/60 leading-[2] mb-6" style={{ fontSize: "clamp(15px, 2vw, 20px)" }}>
-                Arden Holdings Ltd. was founded with a singular vision: to redefine the standards of real estate development. Through an unwavering commitment to quality, innovation, and integrity, we have grown into one of the region&apos;s most respected property developers.
-              </p>
-              <p className="font-sans font-medium text-left text-[#1a1a1a]/60 leading-[2]" style={{ fontSize: "clamp(15px, 2vw, 20px)" }}>
-                Our reputation is built not merely on the quality of our construction, but on the trust of the clients, investors, and landowners who have chosen to partner with us. Every project we undertake carries the weight of that trust — and it is a responsibility we take seriously.
-              </p>
+              <div className="space-y-6">
+                <p className="font-sans font-medium text-body-lg text-[#1a1a1a]/60">
+                  Arden Holdings was established with a singular vision—to bring a new dimension of architectural excellence, refined living and enduring value to Bangladesh.
+                </p>
+                <p className="font-sans font-medium text-body-lg text-[#1a1a1a]/60">
+                  From the very beginning, Arden has chosen a distinctive path: not to simply develop properties, but to create addresses that become landmarks in their own right. Every project is conceived with a clear purpose—to harmonise exceptional architecture, uncompromising quality, contemporary lifestyle and timeless elegance.
+                </p>
+              </div>
+            </FadeIn>
+            <FadeIn delay={0.2} className="lg:h-full">
+              <div className="relative w-full bg-[#1a1a1a]/5 overflow-hidden aspect-[16/10] lg:aspect-auto lg:h-full">
+                <Image
+                  src="/about/hero-01.jpg"
+                  alt="Arden project view"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 45vw"
+                  loading="lazy"
+                />
+              </div>
             </FadeIn>
           </div>
+
+          {/* Row 2 — full-width text */}
+          <FadeIn delay={0.15}>
+            <div className="space-y-6">
+              <p className="font-sans font-medium text-body-lg text-[#1a1a1a]/60">
+                Our journey has taken us to some of the most prestigious and coveted locations of Dhaka. From the historic Chairman Bari, Banani, to the distinguished Banani DOHS; from the emerging landmark of Jolshiri to the heritage-rich surroundings of Dhanmondi—Arden is steadily establishing its presence through projects that aspire to stand apart.
+              </p>
+              <p className="font-sans font-medium text-body-lg text-[#1a1a1a]/60">
+                For Arden, a building is never merely a structure. It is an expression of character, an embodiment of aspiration and, ultimately, a legacy that transcends generations.
+              </p>
+              <p className="font-sans font-medium text-body-lg text-[#1a1a1a]/60">
+                We do not simply build spaces. We create addresses that endure.
+              </p>
+            </div>
+          </FadeIn>
         </div>
       </section>
 
