@@ -10,6 +10,7 @@ export interface ProjectCardData {
   type: "Residential" | "Commercial" | string;
   image?: string;
   color?: string;
+  byAllianceArden?: boolean;
 }
 
 export default function ProjectCard({ project }: { project: ProjectCardData }) {
@@ -21,7 +22,7 @@ export default function ProjectCard({ project }: { project: ProjectCardData }) {
         {/* Image / placeholder */}
         <div
           className="relative overflow-hidden mb-5"
-          style={{ aspectRatio: "4/3" }}
+          style={{ aspectRatio: "3/4" }}
         >
           {project.image ? (
             <Image
@@ -40,18 +41,7 @@ export default function ProjectCard({ project }: { project: ProjectCardData }) {
           )}
           {/* Status badge */}
           <div className="absolute top-4 left-4 flex flex-col items-start gap-2">
-            <span
-              className="font-sans text-eyebrow-sm uppercase px-2.5 py-1.5"
-              style={{
-                backgroundColor:
-                  project.status === "Ongoing"
-                    ? "#c9a54a"
-                    : project.status === "Upcoming"
-                    ? "#1a1a1a"
-                    : "rgba(26,26,26,0.45)",
-                color: "white",
-              }}
-            >
+            <span className="font-sans text-eyebrow-sm uppercase px-2.5 py-1.5 bg-white text-[#1a1a1a]">
               {project.status}
             </span>
           </div>
@@ -64,19 +54,14 @@ export default function ProjectCard({ project }: { project: ProjectCardData }) {
         </div>
         {/* Info */}
         <div>
-          <div className="flex items-start justify-between gap-3 mb-1.5">
-            <h3
-              className="font-serif text-[#1a1a1a] group-hover:text-[#c9a54a] transition-colors duration-300"
-              style={{ fontSize: "clamp(1.1rem, 1.8vw, 1.4rem)", fontWeight: 500 }}
-            >
-              {project.name}
-            </h3>
-            <span className="font-sans text-eyebrow-sm uppercase text-[#c9a54a] flex-shrink-0 mt-1">
-              {project.type}
-            </span>
-          </div>
-          <p className="font-sans text-body-sm text-[#1a1a1a]/40">
-            {project.address}
+          <h3
+            className="font-serif text-[#1a1a1a] uppercase group-hover:text-[#c9a54a] transition-colors duration-300 mb-1.5"
+            style={{ fontSize: "clamp(1.1rem, 1.8vw, 1.4rem)", fontWeight: 500, letterSpacing: "0.12em" }}
+          >
+            {project.name}{project.byAllianceArden ? " by Alliance-Arden" : ""}
+          </h3>
+          <p className="font-sans text-body text-[#1a1a1a]/65">
+            {project.location}
           </p>
         </div>
       </article>

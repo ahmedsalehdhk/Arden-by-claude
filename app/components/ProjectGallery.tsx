@@ -22,6 +22,19 @@ export default function ProjectGallery({ images, projectName }: ProjectGalleryPr
   const sectionRef = useRef<HTMLElement>(null);
   const inView = useInView(sectionRef, { margin: "-20%" });
 
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  const slideWidth = isMobile ? "min(94vw, 560px)" : "min(60vw, 900px)";
+  const containerHeight = isMobile ? "min(94vw, 560px)" : "min(62vw, 640px)";
+  const offsetVw = isMobile ? 96 : 62;
+
   const count = images.length;
   const wrap = useCallback((i: number) => ((i % count) + count) % count, [count]);
 
@@ -95,7 +108,7 @@ export default function ProjectGallery({ images, projectName }: ProjectGalleryPr
       {/* Carousel */}
       <div
         className="relative w-full select-none"
-        style={{ height: "min(62vw, 640px)" }}
+        style={{ height: containerHeight }}
       >
         {slides.map((slide, i) => {
           // Position each slide as a card centered horizontally, offset by (i - index)
@@ -117,14 +130,14 @@ export default function ProjectGallery({ images, projectName }: ProjectGalleryPr
               className="absolute top-0 left-1/2"
               initial={false}
               animate={{
-                x: `calc(-50% + ${visualOffset * 62}vw)`,
+                x: `calc(-50% + ${visualOffset * offsetVw}vw)`,
                 scale: isCenter ? 1 : 0.92,
                 opacity: isVisible ? 1 : 0,
                 zIndex: isCenter ? 2 : 1,
               }}
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
               style={{
-                width: "min(60vw, 900px)",
+                width: slideWidth,
                 height: "100%",
                 pointerEvents: isVisible ? "auto" : "none",
               }}
@@ -146,7 +159,7 @@ export default function ProjectGallery({ images, projectName }: ProjectGalleryPr
                   alt={slide.alt}
                   fill
                   className="object-cover pointer-events-none"
-                  sizes="(max-width: 900px) 60vw, 900px"
+                  sizes="(max-width: 639px) 94vw, (max-width: 900px) 60vw, 900px"
                   draggable={false}
                   priority={i === 0}
                 />

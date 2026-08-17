@@ -389,15 +389,11 @@ function FloorPlanLightbox({
         </button>
       )}
 
-      {/* Caption + counter */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4 pointer-events-none">
+      {/* Caption */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 pointer-events-none">
         <p className="font-serif text-white" style={{ fontSize: "17px", fontWeight: 500 }}>
           {active.fullLabel}
         </p>
-        <span className="w-px h-4 bg-white/25" />
-        <span className="font-sans text-white/60 tabular-nums" style={{ fontSize: "12px", letterSpacing: "0.28em" }}>
-          {String(activeIndex + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
-        </span>
       </div>
     </motion.div>
   );

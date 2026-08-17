@@ -77,7 +77,7 @@ export default function ConsortiumPage() {
               style={{ clipPath: "inset(0 7.5%)" }}
             >
               <Image
-                src="/consortium/hero-01.jpg"
+                src="/consortium/hero-01.png"
                 alt="Alliance-Arden Consortium"
                 fill
                 className="object-cover"
@@ -89,50 +89,8 @@ export default function ConsortiumPage() {
         </div>
       </section>
 
-      {/* ── ALLIANCE HOLDINGS ── */}
-      <section className="bg-[#faf9f6] py-20 sm:py-28 lg:py-36">
-        <div className="px-[7.5%]">
-          <FadeIn>
-            <AnimatedHeading
-              as="h2"
-              text="Alliance Properties"
-              trigger="view"
-              className="font-serif text-[#1a1a1a] leading-[1.2] mb-8 sm:mb-10"
-              style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
-            />
-            <p className="font-serif text-[#1a1a1a]/80 mb-12 sm:mb-16" style={{ fontSize: "clamp(1.25rem, 1.8vw, 1.6rem)", fontWeight: 400, lineHeight: 1.5 }}>
-              A legacy built on experience.
-            </p>
-          </FadeIn>
-
-          <FadeIn delay={0.1}>
-            <div className="space-y-6">
-              <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
-                For more than 15 years, Alliance Properties has been building a legacy founded on experience, integrity and a deep understanding of the aspirations of Bangladesh&rsquo;s evolving homeowners and investors.
-              </p>
-              <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
-                Across its journey, Alliance has successfully delivered a diverse portfolio of developments serving a broad spectrum of aspirations&mdash;from the middle and upper-middle segments to the country&rsquo;s discerning and aristocratic clientele.
-              </p>
-              <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
-                Its strength lies in the ability to combine practical expertise with an unwavering commitment to quality, creating homes and developments that have earned the confidence of generations of customers.
-              </p>
-              <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
-                More than a developer, Alliance represents experience translated into trust, and vision transformed into tangible value.
-              </p>
-            </div>
-          </FadeIn>
-        </div>
-      </section>
-
-      {/* ── Divider ── */}
-      <div className="bg-[#faf9f6]">
-        <div className="px-[7.5%]">
-          <div className="h-px bg-[#1a1a1a]/10" />
-        </div>
-      </div>
-
       {/* ── ALLIANCE–ARDEN CONSORTIUM ── */}
-      <section className="bg-cream py-20 sm:py-28 lg:py-36">
+      <section className="bg-[#faf9f6] py-20 sm:py-28 lg:py-36">
         <div className="px-[7.5%]">
           <FadeIn>
             <AnimatedHeading
@@ -150,29 +108,41 @@ export default function ConsortiumPage() {
           <FadeIn delay={0.1}>
             <div className="space-y-6">
               <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
-                A consortium is more than an association. It is a convergence of strengths, shared values and a common ambition.
+                The Alliance Arden Consortium represents a strategic partnership between Alliance Properties Ltd. and Arden Holdings Ltd., uniting operational strength with refined architectural design. Capitalizing on shared expertise, the consortium is dedicated to developing premier luxury projects that set new standards in structural integrity, elevated craftsmanship, and modern urban living.
               </p>
               <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
-                The Alliance&ndash;Arden Consortium brings together Alliance Properties&rsquo; more than 15 years of development expertise and Arden Holdings&rsquo; forward-looking vision for distinctive, high-end architecture and elevated urban living.
+                A consortium is more than an association. It is a convergence of strengths, shared values and a common ambition. The Alliance&ndash;Arden Consortium brings together Alliance Properties&rsquo; more than 15 years of development expertise and Arden Holdings&rsquo; forward-looking vision for distinctive, high-end architecture and elevated urban living. This partnership has been formed with a deliberate purpose: to identify and develop exceptional projects that can leave a lasting impression on the architectural landscape of Bangladesh. Together, Alliance and Arden seek opportunities where conventional thinking is not enough&mdash;projects that demand out-of-the-box creativity, bold architectural expression, intelligent planning and multidimensional lifestyle facilities.
               </p>
               <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
-                This partnership has been formed with a deliberate purpose: to identify and develop exceptional projects that can leave a lasting impression on the architectural landscape of Bangladesh.
-              </p>
-              <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
-                Together, Alliance and Arden seek opportunities where conventional thinking is not enough&mdash;projects that demand out-of-the-box creativity, bold architectural expression, intelligent planning and multidimensional lifestyle facilities.
-              </p>
-              <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
-                Our ambition extends beyond creating premium residences. We aspire to create destinations that redefine expectations of contemporary living and become reference points for the future of real estate in Bangladesh.
-              </p>
-              <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
-                And our vision does not end at the borders of Bangladesh.
-              </p>
-              <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
-                With a strong foundation of experience, a progressive mindset and an uncompromising commitment to excellence, the Alliance&ndash;Arden Consortium looks forward to taking its vision of distinctive development beyond borders and onto a broader international horizon.
+                Our ambition extends beyond creating premium residences. We aspire to create destinations that redefine expectations of contemporary living and become reference points for the future of real estate in Bangladesh. And our vision does not end at the borders of Bangladesh. With a strong foundation of experience, a progressive mindset and an uncompromising commitment to excellence, the Alliance&ndash;Arden Consortium looks forward to taking its vision of distinctive development beyond borders and onto a broader international horizon.
               </p>
             </div>
           </FadeIn>
 
+        </div>
+
+        <FadeIn delay={0.15} className="mt-16 sm:mt-20">
+          <div className="w-full py-14 sm:py-20 lg:py-24 bg-[#c9a54a]/15">
+            <div className="px-[7.5%]">
+              <h3
+                className="font-serif text-[#1a1a1a] mb-6 sm:mb-8"
+                style={{ fontSize: "clamp(1.5rem, 2.4vw, 2rem)", fontWeight: 500 }}
+              >
+                Inception of the Consortium
+              </h3>
+              <div className="space-y-6">
+                <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
+                  The Alliance-Arden Consortium relies on a sharp, clear-headed leadership team focused on building real estate that stands out for all the right reasons. Leading this joint venture is Mr. Yaminul Haq, Director of Alliance Properties Ltd. and Managing Director of the Alliance Arden Consortium. With years of hands-on experience navigating Dhaka&rsquo;s real estate landscape, he brings a practical, well-tested approach to every project the team touches.
+                </p>
+                <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
+                  Throughout his career, Yaminul has built a reputation for turning ambitious ideas into well-executed developments. After playing a key role in the growth and success of Alliance Properties Ltd., he helped form the Alliance-Arden Consortium to bring together the best strengths of both companies. For Yaminul, it isn&rsquo;t just about constructing buildings&mdash;it&rsquo;s about creating refined, high-quality spaces that deliver lasting value for the people who live in them.
+                </p>
+              </div>
+            </div>
+          </div>
+        </FadeIn>
+
+        <div className="px-[7.5%]">
           <FadeIn delay={0.2} className="mt-16 sm:mt-20">
             <p
               className="font-serif text-[#1a1a1a] text-center italic"

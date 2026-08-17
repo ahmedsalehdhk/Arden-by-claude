@@ -12,7 +12,7 @@ import { useIsLoaded } from "../context/LoadContext";
 const TEAM = [
   {
     name: "Mazharul Haque",
-    role: "Founder & Chairman",
+    role: "Founder & Managing Director",
     quote: "We measure a building the way people measure a home — by how it lives, not how it looks on day one.",
     image: "/team/mazharul.png",
   },
@@ -28,6 +28,31 @@ const TEAM = [
     quote: "The best projects begin with saying no to the wrong ones. Discipline is the quiet part of luxury.",
     image: "/team/mohiuddin.jpg",
   },
+  {
+    name: "Ahsan",
+    role: "Team Lead",
+    quote: "The best projects begin with saying no to the wrong ones. Discipline is the quiet part of luxury.",
+    image: "/team/mohiuddin.jpg",
+  },
+  {
+    name: "Sanjeeb",
+    role: "Team Lead",
+    quote: "The best projects begin with saying no to the wrong ones. Discipline is the quiet part of luxury.",
+    image: "/team/mohiuddin.jpg",
+  },
+  {
+    name: "Rafi",
+    role: "Team Lead",
+    quote: "The best projects begin with saying no to the wrong ones. Discipline is the quiet part of luxury.",
+    image: "/team/mohiuddin.jpg",
+  },
+  {
+    name: "Zahir",
+    role: "Team Lead",
+    quote: "The best projects begin with saying no to the wrong ones. Discipline is the quiet part of luxury.",
+    image: "/team/mohiuddin.jpg",
+  },
+  
 ];
 
 const VALUES = [
@@ -151,7 +176,7 @@ export default function AboutPage() {
           </FadeIn>
 
           {/* Row 1 — text left, image right */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 lg:items-stretch items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 lg:items-stretch items-start lg:min-h-[560px]">
             <FadeIn delay={0.15}>
               <div className="space-y-6">
                 <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
@@ -279,9 +304,9 @@ export default function AboutPage() {
         </FadeIn>
 
         <div className="px-[7.5%]">
-          {/* Image left, text right */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 lg:items-stretch items-start mb-20 sm:mb-28">
-            <FadeIn delay={0.15} className="lg:h-full lg:order-1">
+          {/* Text left, image right */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 lg:items-stretch items-start mb-20 sm:mb-28 lg:min-h-[560px]">
+            <FadeIn delay={0.15} className="lg:h-full lg:order-2">
               <div className="relative w-full bg-[#1a1a1a]/5 overflow-hidden aspect-[16/10] lg:aspect-auto lg:h-full">
                 <Image
                   src="/about/hero-03.png"
@@ -293,7 +318,7 @@ export default function AboutPage() {
                 />
               </div>
             </FadeIn>
-            <FadeIn delay={0.2} className="lg:order-2">
+            <FadeIn delay={0.2} className="lg:order-1">
               <div className="space-y-6">
                 <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
                   Arden was created with a clear and ambitious objective: to develop exceptional architectural destinations for discerning customers in the most prestigious locations of Dhaka and its emerging premium neighborhoods. The philosophy is simple but uncompromising&mdash;select the right location, envision the extraordinary, execute with discipline and deliver a standard of living worthy of those who aspire to the very best.

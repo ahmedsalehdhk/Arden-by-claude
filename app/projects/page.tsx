@@ -11,9 +11,10 @@ import { useIsLoaded } from "../context/LoadContext";
 
 // Project data
 const PROJECTS = [
-  { name: "Amanat", address: "House 64, Road 1, Block I, Banani, Dhaka", location: "Banani", status: "Ongoing", type: "Residential", image: "/projectimages/amanat/feature.png" },
-  { name: "Rahma", address: "Plot 16, Road 410, Sector 11, Jolshiri", location: "Jolshiri", status: "Ongoing", type: "Residential", image: "/projectimages/rahma/feature.png" },
-  { name: "Mumin", address: "Plot 43, Road 512, Sector 11, Jolshiri", location: "Jolshiri", status: "Completed", type: "Residential", image: "/projectimages/mumin/view-03.jpg" },
+  { name: "Amanat", address: "House 64, Road 1, Block I, Banani, Dhaka", location: "Banani", status: "Ongoing", type: "Residential", image: "/projectimages/amanat/feature.png", byAllianceArden: true },
+  { name: "Rahma", address: "Plot 16, Road 410, Sector 11, Jolshiri", location: "Jolshiri", status: "Ongoing", type: "Residential", image: "/projectimages/rahma/feature.png", byAllianceArden: true },
+  { name: "Tranquil Park", address: "Plot 23, Road 503, Sector 13, Jolshiri", location: "Jolshiri", status: "Completed", type: "Residential", image: "/projectimages/mumin/mumin-feature.png" },
+  { name: "Bayt Al-Mumin", address: "Plot 43, Road 512, Sector 11, Jolshiri", location: "Jolshiri", status: "Completed", type: "Residential", image: "/projectimages/mumin/mumin-feature.png" },
 ];
 
 
@@ -132,7 +133,7 @@ export default function ProjectsPage() {
                 className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
               >
                 {filtered.map((project, i) => (
-                  <FadeIn key={project.name} delay={i * 0.04}>
+                  <FadeIn key={`${project.name}-${i}`} delay={i * 0.04}>
                     <ProjectCard project={project} />
                   </FadeIn>
                 ))}

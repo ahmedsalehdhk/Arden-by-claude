@@ -11,9 +11,14 @@ export interface ProjectFeature {
   label: string;
 }
 
+export interface NeighborhoodSection {
+  title: string; // short heading shown above the paragraph, e.g. "The District"
+  body: string;
+}
+
 export interface Neighborhood {
-  image: string;
-  paragraphs: string[]; // typically two short paragraphs about what the area offers
+  images: string[]; // 3 photos for the asymmetric mosaic: [large, top-right, bottom-right]
+  sections: NeighborhoodSection[]; // typically two short titled paragraphs about the area
 }
 
 export interface Architect {
@@ -45,8 +50,8 @@ export interface ProjectDetail {
   location: string;
   heroImage: string;
   buildingImage: string;
-  specsLeft: ProjectSpec[];
-  specsRight: ProjectSpec[];
+  byAllianceArden?: boolean; // true → show "by Alliance-Arden Consortium" + dual-logo lockup on detail hero and card
+  specs: ProjectSpec[];
   features: ProjectFeature[];
   gallery: string[];
   mapEmbedSrc?: string;
@@ -66,17 +71,15 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
     location: "Banani",
     heroImage: "/projectimages/amanat/front-side-view-01.jpg",
     buildingImage: "/projectimages/amanat/hero-night.jpg",
-    // Standard 9-field At-a-Glance template — split 5/4 for the two-column layout.
-    // Set any field to TBC if not yet confirmed.
-    specsLeft: [
+    byAllianceArden: true,
+    // Standard At-a-Glance template — comment out any field that doesn't apply.
+    specs: [
       { label: "Land Area", value: "7.118 Katha" },
+      { label: "Number of Floors", value: "G + 9" },
+      { label: "Number of Apartments", value: "9" },
       { label: "Size of Apartments", value: "3,200 sft (approx.)" },
       { label: "Facing of Land", value: "West" },
       { label: "Front Road Width", value: "30 ft" },
-      { label: "Number of Floors", value: "G + 9" },
-    ],
-    specsRight: [
-      { label: "Number of Apartments", value: "9" },
       { label: "Number of Basements", value: "1" },
       { label: "Number of Parking", value: "18" },
       { label: "Specialty of Land", value: "Lake Facing" },
@@ -111,19 +114,29 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
       "/projectimages/amanat/lobby-view-01.jpg",
     ],
     neighborhood: {
-      image: "/neighborhoods/banani.jpg",
-      paragraphs: [
-        "Situated in one of Dhaka’s most coveted diplomatic and commercial enclaves, Banani combines urban sophistication with structured residential tranquility. Wide, tree-lined avenues, quiet residential blocks, and modern architectural landmarks define its landscape, establishing the neighborhood as a core center for high-end living and corporate enterprise.",
-        "At the heart of this district lies Banani Road 11, a premier lifestyle and commercial corridor. Famed for its high-end boutiques, multinational corporate hubs, and vibrant culinary scene, Road 11 balances fast-paced urban energy with exclusive convenience—placing world-class amenities right at your doorstep.",
+      images: [
+        "/neighborhoods/banani/banani-road.jpg",
+        "/neighborhoods/banani/banani-field.jpg",
+        "/neighborhoods/banani/banani-park.jpg",
+      ],
+      sections: [
+        {
+          title: "The District",
+          body: "Situated in one of Dhaka’s most coveted diplomatic and commercial enclaves, Banani combines urban sophistication with structured residential tranquility. Wide, tree-lined avenues, quiet residential blocks, and modern architectural landmarks define its landscape, establishing the neighborhood as a core center for high-end living and corporate enterprise.",
+        },
+        {
+          title: "Road 11",
+          body: "At the heart of this district lies Banani Road 11, a premier lifestyle and commercial corridor. Famed for its high-end boutiques, multinational corporate hubs, and vibrant culinary scene, Road 11 balances fast-paced urban energy with exclusive convenience—placing world-class amenities right at your doorstep.",
+        },
       ],
     },
     // Bottom-to-top order; component reverses for display.
     // Amanat has a basement + ground floor + typical residential floors + roof (no mezzanine).
     floorPlans: [
-      { kind: "basement", label: "B1",   fullLabel: "Basement Parking",   image: "/floorplans/typical.jpg" },
-      { kind: "ground",   label: "GF",   fullLabel: "Ground Floor",       image: "/floorplans/typical.jpg" },
-      { kind: "typical",  label: "Typ",  fullLabel: "Typical Floor (1F–9F)", image: "/floorplans/typical.jpg" },
-      { kind: "roof",     label: "Roof", fullLabel: "Rooftop",            image: "/floorplans/typical.jpg" },
+      // { kind: "basement", label: "B1",   fullLabel: "Basement Parking",   image: "/floorplans/amanat/amanat-ground.jpg" },
+      { kind: "ground",   label: "GF",   fullLabel: "Ground Floor",       image: "/floorplans/amanat/amanat-ground.jpg" },
+      { kind: "typical",  label: "Typ",  fullLabel: "Typical Floor (1F–9F)", image: "/floorplans/amanat/amanat-floor-01.jpg" },
+      { kind: "roof",     label: "Roof", fullLabel: "Rooftop",            image: "/floorplans/amanat/amanat-roof.jpg" },
     ],
     architect: {
       name: "Syeda Nitee Mahbub",
@@ -143,14 +156,13 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
     location: "Jolshiri",
     heroImage: "/projectimages/rahma/view-02.jpg",
     buildingImage: "/projectimages/rahma/view-01.jpg",
-    specsLeft: [
+    byAllianceArden: true,
+    specs: [
       { label: "Land Area", value: "5 Katha" },
       { label: "Size of Apartments", value: "2850 sft (approx.)" },
       { label: "Facing of Land", value: "South" },
       { label: "Front Road Width", value: "20 ft" },
       { label: "Number of Floors", value: "G + M + 8" },
-    ],
-    specsRight: [
       { label: "Number of Apartments", value: "8" },
       // { label: "Number of Basements", value: "0" },
       { label: "Number of Parking", value: "8" },
@@ -187,19 +199,28 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
       "/projectimages/rahma/construction-jan-2026.jpg",
     ],
     neighborhood: {
-      image: "/neighborhoods/jolshiri.jpeg",
-      paragraphs: [
-        "Located along the eastern corridor of Greater Dhaka, Jolshiri Abashon is a master-planned township designed around green spaces, wide avenues, and clean urban organization. Spanning lush, landscaped parks and an extensive network of intertwined lakes and natural water bodies, the enclave seamlessly blends outdoor activity with residential serenity. At its recreational heart lies the Jolshiri Golf Club, alongside dedicated sports facilities, walking tracks, and open fields, offering an active lifestyle unmatched by central urban hubs.",
-        "Directly connected via the 300 Feet Purbachal Expressway, Jolshiri balances quiet living with swift access to central districts like Gulshan and Baridhara. Designed as a fully self-contained ecosystem, the township integrates dedicated educational zones housing reputed schools and universities, neighborhood mosques, secure frameworks, and modern civic utilities—setting a rising benchmark for organized, community-focused living.",
+      images: [
+        "/neighborhoods/jolshiri/jolshiri-park.jpeg",
+        "/neighborhoods/jolshiri/jolshiri-maze.jpeg",
+        "/neighborhoods/jolshiri/jolshiri-golf.jpg",
+      ],
+      sections: [
+        {
+          title: "The Township",
+          body: "Located along the eastern corridor of Greater Dhaka, Jolshiri Abashon is a master-planned township designed around green spaces, wide avenues, and clean urban organization. Spanning lush, landscaped parks and an extensive network of intertwined lakes and natural water bodies, the enclave seamlessly blends outdoor activity with residential serenity. At its recreational heart lies the Jolshiri Golf Club, alongside dedicated sports facilities, walking tracks, and open fields, offering an active lifestyle unmatched by central urban hubs.",
+        },
+        {
+          title: "Connectivity",
+          body: "Directly connected via the 300 Feet Purbachal Expressway, Jolshiri balances quiet living with swift access to central districts like Gulshan and Baridhara. Designed as a fully self-contained ecosystem, the township integrates dedicated educational zones housing reputed schools and universities, neighborhood mosques, secure frameworks, and modern civic utilities—setting a rising benchmark for organized, community-focused living.",
+        },
       ],
     },
     // Bottom-to-top order; component reverses for display.
     // Rahma has a ground floor + mezzanine + typical residential floors + roof (no basement).
     floorPlans: [
-      { kind: "ground",    label: "GF",   fullLabel: "Ground Floor",        image: "/floorplans/typical.jpg" },
-      { kind: "mezzanine", label: "M",    fullLabel: "Mezzanine",           image: "/floorplans/typical.jpg" },
-      { kind: "typical",   label: "Typ",  fullLabel: "Typical Floor (1F–8F)", image: "/floorplans/typical.jpg" },
-      { kind: "roof",      label: "Roof", fullLabel: "Rooftop",             image: "/floorplans/typical.jpg" },
+      { kind: "ground",    label: "GF",   fullLabel: "Ground Floor",        image: "/floorplans/rahma/rahma-ground.jpg" },
+      { kind: "mezzanine", label: "M",    fullLabel: "Mezzanine",           image: "/floorplans/rahma/rahma-mezzanine.jpg" },
+      { kind: "typical",   label: "Typ",  fullLabel: "Typical Floor (1F–8F)", image: "/floorplans/rahma/rahma-floor.jpg" }
     ],
     architect: {
       name: "Syeda Nitee Mahbub",
@@ -209,9 +230,9 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
         "In Jolshiri, the site does half the design work. Rahma opens toward the lake and quietly turns its back to the road — calm inside, alive outside.",
     },
   },
-    {
-    slug: "mumin",
-    name: "Mumin",
+  {
+    slug: "bayt-al-mumin",
+    name: "Bayt Al-Mumin",
     tagline: "Built on truth",
     type: "Residential",
     status: "Completed",
@@ -219,16 +240,13 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
     location: "Jolshiri",
     heroImage: "/projectimages/mumin/view-03.jpg",
     buildingImage: "/projectimages/mumin/view-01.jpg",
-    // Standard 9-field At-a-Glance template — split 5/4 for the two-column layout.
-    // Set any field to TBC if not yet confirmed.
-    specsLeft: [
+    // Standard At-a-Glance template — comment out any field that doesn't apply.
+    specs: [
       { label: "Land Area", value: "5 Katha" },
       { label: "Size of Apartments", value: "3,200 sft (approx.)" },
       { label: "Facing of Land", value: "West" },
       { label: "Front Road Width", value: "20 ft" },
       { label: "Number of Floors", value: "G + 8" },
-    ],
-    specsRight: [
       { label: "Number of Apartments", value: "8" },
       // { label: "Number of Basements", value: "0" },
       { label: "Number of Parking", value: "8" },
@@ -259,19 +277,29 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
       "/projectimages/mumin/view-03.jpg",
     ],
     neighborhood: {
-      image: "/neighborhoods/jolshiri.jpeg",
-      paragraphs: [
-        "Located along the eastern corridor of Greater Dhaka, Jolshiri Abashon is a master-planned township designed around green spaces, wide avenues, and clean urban organization. Spanning lush, landscaped parks and an extensive network of intertwined lakes and natural water bodies, the enclave seamlessly blends outdoor activity with residential serenity. At its recreational heart lies the Jolshiri Golf Club, alongside dedicated sports facilities, walking tracks, and open fields, offering an active lifestyle unmatched by central urban hubs.",
-        "Directly connected via the 300 Feet Purbachal Expressway, Jolshiri balances quiet living with swift access to central districts like Gulshan and Baridhara. Designed as a fully self-contained ecosystem, the township integrates dedicated educational zones housing reputed schools and universities, neighborhood mosques, secure frameworks, and modern civic utilities—setting a rising benchmark for organized, community-focused living.",
+      images: [
+        "/neighborhoods/jolshiri/jolshiri-golf.jpg",
+        "/neighborhoods/jolshiri/jolshiri-maze.jpeg",
+        "/neighborhoods/jolshiri/jolshiri-park.jpeg",
+      ],
+      sections: [
+        {
+          title: "The Township",
+          body: "Located along the eastern corridor of Greater Dhaka, Jolshiri Abashon is a master-planned township designed around green spaces, wide avenues, and clean urban organization. Spanning lush, landscaped parks and an extensive network of intertwined lakes and natural water bodies, the enclave seamlessly blends outdoor activity with residential serenity. At its recreational heart lies the Jolshiri Golf Club, alongside dedicated sports facilities, walking tracks, and open fields, offering an active lifestyle unmatched by central urban hubs.",
+        },
+        {
+          title: "Connectivity",
+          body: "Directly connected via the 300 Feet Purbachal Expressway, Jolshiri balances quiet living with swift access to central districts like Gulshan and Baridhara. Designed as a fully self-contained ecosystem, the township integrates dedicated educational zones housing reputed schools and universities, neighborhood mosques, secure frameworks, and modern civic utilities—setting a rising benchmark for organized, community-focused living.",
+        },
       ],
     },
     // Bottom-to-top order; component reverses for display.
     // Amanat has a basement + ground floor + typical residential floors + roof (no mezzanine).
     floorPlans: [
       // { kind: "basement", label: "B1",   fullLabel: "Basement Parking",   image: "/floorplans/typical.jpg" },
-      { kind: "ground",   label: "GF",   fullLabel: "Ground Floor",       image: "/floorplans/mumin/ground.jpg" },
-      { kind: "typical",  label: "Typ",  fullLabel: "Typical Floor", image: "/floorplans/mumin/floor.jpg" },
-      { kind: "roof",     label: "Roof", fullLabel: "Rooftop",            image: "/floorplans/mumin/roof.jpg" },
+      { kind: "ground",   label: "GF",   fullLabel: "Ground Floor",       image: "/floorplans/mumin/mumin-ground.jpg" },
+      { kind: "typical",  label: "Typ",  fullLabel: "Typical Floor", image: "/floorplans/mumin/mumin-floor.jpg" },
+      { kind: "roof",     label: "Roof", fullLabel: "Rooftop",            image: "/floorplans/mumin/mumin-roof.jpg" },
     ],
     architect: {
       name: "REDACTED",

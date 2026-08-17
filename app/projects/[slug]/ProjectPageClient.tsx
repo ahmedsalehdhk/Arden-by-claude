@@ -183,6 +183,7 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
           {project.tagline}
         </motion.p>
 
+        {project.byAllianceArden && (
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -221,6 +222,7 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
             />
           </div>
         </motion.div>
+        )}
       </div>
     </section>
   );
@@ -231,7 +233,6 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
 // ─────────────────────────────────────────────
 
 function AtAGlance({ project }: { project: ProjectDetail }) {
-  const allSpecs = [...project.specsLeft, ...project.specsRight];
 
   return (
     <section className="bg-cream py-20 sm:py-28 lg:py-36">
@@ -268,7 +269,7 @@ function AtAGlance({ project }: { project: ProjectDetail }) {
 
           {/* Right — specs grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-9">
-            {allSpecs.map((spec, i) => (
+            {project.specs.map((spec, i) => (
               <FadeIn key={spec.label} delay={0.05 + i * 0.04}>
                 <div className="pb-6 border-b border-[#1a1a1a]/15">
                   <p
@@ -352,7 +353,7 @@ function FeaturesSection({ project }: { project: ProjectDetail }) {
 
 function ArchitectSection({ project }: { project: ProjectDetail }) {
   const a = project.architect;
-  if (!a) return null;
+  if (!a || !a.name.trim() || a.name.trim().toUpperCase() === "REDACTED") return null;
 
   return (
     <section
@@ -418,36 +419,62 @@ function NeighborhoodSection({ project }: { project: ProjectDetail }) {
         />
       </FadeIn>
 
-      {/* Row 1 — paragraph 1 left, image right */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 lg:items-stretch items-start mb-10 sm:mb-14">
-        <FadeIn delay={0.05}>
-          <p className="font-sans font-medium text-body-lg text-ink !leading-[1.6] sm:text-justify">
-            {n.paragraphs[0]}
-          </p>
-        </FadeIn>
-
-        <FadeIn delay={0.15} className="lg:h-full">
-          <div className="relative overflow-hidden w-full bg-ink/5 aspect-[4/3] lg:aspect-auto lg:h-full">
+      {/* Asymmetric 3-photo mosaic: one large left, two stacked right */}
+      <FadeIn delay={0.05}>
+        <div className="grid grid-cols-1 sm:grid-cols-3 sm:grid-rows-2 gap-3 sm:gap-4 mb-10 sm:mb-14 sm:h-[520px] lg:h-[620px]">
+          <div className="relative overflow-hidden bg-ink/5 sm:col-span-2 sm:row-span-2 aspect-[4/3] sm:aspect-auto">
             <Image
-              src={n.image}
+              src={n.images[0]}
               alt={`${project.location} neighborhood`}
               fill
               className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 50vw"
+              sizes="(max-width: 640px) 100vw, 66vw"
               loading="lazy"
             />
           </div>
-        </FadeIn>
-      </div>
+          {n.images[1] && (
+            <div className="relative overflow-hidden bg-ink/5 aspect-[4/3] sm:aspect-auto">
+              <Image
+                src={n.images[1]}
+                alt={`${project.location} neighborhood`}
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 100vw, 33vw"
+                loading="lazy"
+              />
+            </div>
+          )}
+          {n.images[2] && (
+            <div className="relative overflow-hidden bg-ink/5 aspect-[4/3] sm:aspect-auto">
+              <Image
+                src={n.images[2]}
+                alt={`${project.location} neighborhood`}
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 100vw, 33vw"
+                loading="lazy"
+              />
+            </div>
+          )}
+        </div>
+      </FadeIn>
 
-      {/* Row 2 — paragraph 2 full width */}
-      {n.paragraphs[1] && (
-        <FadeIn delay={0.1}>
-          <p className="font-sans font-medium text-body-lg text-ink !leading-[1.6] sm:text-justify">
-            {n.paragraphs[1]}
-          </p>
-        </FadeIn>
-      )}
+      {/* Titled paragraphs */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
+        {n.sections.map((s, i) => (
+          <FadeIn key={s.title} delay={0.1 + i * 0.05}>
+            <h3
+              className="font-serif text-ink mb-4"
+              style={{ fontSize: "clamp(1.25rem, 1.6vw, 1.6rem)", fontWeight: 500 }}
+            >
+              {s.title}
+            </h3>
+            <p className="font-sans font-medium text-body-lg text-ink !leading-[1.6] sm:text-justify">
+              {s.body}
+            </p>
+          </FadeIn>
+        ))}
+      </div>
     </Section>
   );
 }
