@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronRight } from "lucide-react";
+import { Menu, X, ChevronRight, ChevronDown } from "lucide-react";
 
 // Inline social glyphs — the installed lucide-react is old and does not ship brand icons.
 type IconProps = { size?: number; className?: string };
@@ -37,11 +37,20 @@ const SOCIALS = [
 ];
 import { useIsLoaded } from "../context/LoadContext";
 
-const NAV_LINKS = [
+type NavChild = { label: string; href: string };
+type NavItem = { label: string; href?: string; children?: NavChild[] };
+
+const NAV_LINKS: NavItem[] = [
   { label: "Home", href: "/" },
   { label: "About Arden", href: "/about" },
   { label: "Projects", href: "/projects" },
-  { label: "Alliance-Arden Consortium", href: "/consortium" },
+  {
+    label: "Consortium",
+    children: [
+      { label: "Alliance-Arden Consortium", href: "/consortium/alliance-arden" },
+      { label: "Trilliant-Arden Consortium", href: "/consortium/trilliant-arden" },
+    ],
+  },
   { label: "News & Events", href: "/news" },
   { label: "Careers", href: "/careers" },
   { label: "Contact", href: "/contact" },
@@ -52,8 +61,17 @@ export default function Nav({ transparent = false }: { transparent?: boolean } =
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [expanded, setExpanded] = useState<string | null>(null);
   const pathname = usePathname();
   const isLoaded = useIsLoaded();
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const activeParent = NAV_LINKS.find(
+      (l) => l.children && l.children.some((c) => pathname.startsWith(c.href))
+    );
+    if (activeParent) setExpanded(activeParent.label);
+  }, [menuOpen, pathname]);
 
   // Appear only after the global load gate opens
   useEffect(() => {
@@ -99,7 +117,7 @@ export default function Nav({ transparent = false }: { transparent?: boolean } =
         initial={{ y: "-100%", opacity: 0 }}
         animate={visible ? { y: hidden && !menuOpen ? "-100%" : 0, opacity: 1 } : {}}
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-[28px] left-0 right-0 z-50 transition-all duration-300 ${
           isTransparent
             ? "bg-transparent"
             : scrolled
@@ -183,7 +201,10 @@ export default function Nav({ transparent = false }: { transparent?: boolean } =
               <nav className="flex-1 flex flex-col justify-center px-8 sm:px-10">
                 <ul>
                   {NAV_LINKS.map((link, i) => {
-                    const active = pathname === link.href;
+                    const isGroup = !!link.children;
+                    const active = !isGroup && pathname === link.href;
+                    const groupActive = isGroup && link.children!.some((c) => pathname.startsWith(c.href));
+                    const isExpanded = expanded === link.label;
                     return (
                       <motion.li
                         key={link.label}
@@ -191,25 +212,90 @@ export default function Nav({ transparent = false }: { transparent?: boolean } =
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.08 + i * 0.05, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                       >
-                        <Link
-                          href={link.href}
-                          onClick={() => setMenuOpen(false)}
-                          className={`group flex items-center justify-between py-4 border-b border-white/10 transition-colors ${
-                            active ? "text-[#c9a54a]" : "text-white hover:text-[#c9a54a]"
-                          }`}
-                        >
-                          <span
-                            className="font-sans"
-                            style={{ fontSize: "clamp(1.2rem, 1.9vw, 1.55rem)", fontWeight: 500, letterSpacing: "0.01em" }}
+                        {isGroup ? (
+                          <>
+                            <button
+                              type="button"
+                              onClick={() => setExpanded(isExpanded ? null : link.label)}
+                              aria-expanded={isExpanded}
+                              className={`group w-full flex items-center justify-between py-4 border-b border-white/10 transition-colors ${
+                                groupActive ? "text-[#c9a54a]" : "text-white hover:text-[#c9a54a]"
+                              }`}
+                            >
+                              <span
+                                className="font-sans text-left"
+                                style={{ fontSize: "clamp(1.2rem, 1.9vw, 1.55rem)", fontWeight: 500, letterSpacing: "0.01em" }}
+                              >
+                                {link.label}
+                              </span>
+                              <ChevronDown
+                                size={20}
+                                strokeWidth={1.5}
+                                className={`text-white/30 group-hover:text-[#c9a54a] transition-all duration-300 ${
+                                  isExpanded ? "rotate-180 text-[#c9a54a]" : ""
+                                }`}
+                              />
+                            </button>
+                            <AnimatePresence initial={false}>
+                              {isExpanded && (
+                                <motion.ul
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: "auto", opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                                  className="overflow-hidden"
+                                >
+                                  {link.children!.map((child) => {
+                                    const childActive = pathname === child.href;
+                                    return (
+                                      <li key={child.href}>
+                                        <Link
+                                          href={child.href}
+                                          onClick={() => setMenuOpen(false)}
+                                          className={`group flex items-center justify-between py-3 pl-4 border-b border-white/5 transition-colors ${
+                                            childActive ? "text-[#c9a54a]" : "text-white/75 hover:text-[#c9a54a]"
+                                          }`}
+                                        >
+                                          <span
+                                            className="font-sans"
+                                            style={{ fontSize: "clamp(0.95rem, 1.4vw, 1.15rem)", fontWeight: 400, letterSpacing: "0.01em" }}
+                                          >
+                                            {child.label}
+                                          </span>
+                                          <ChevronRight
+                                            size={16}
+                                            strokeWidth={1.5}
+                                            className="text-white/25 group-hover:text-[#c9a54a] group-hover:translate-x-1 transition-all duration-300"
+                                          />
+                                        </Link>
+                                      </li>
+                                    );
+                                  })}
+                                </motion.ul>
+                              )}
+                            </AnimatePresence>
+                          </>
+                        ) : (
+                          <Link
+                            href={link.href!}
+                            onClick={() => setMenuOpen(false)}
+                            className={`group flex items-center justify-between py-4 border-b border-white/10 transition-colors ${
+                              active ? "text-[#c9a54a]" : "text-white hover:text-[#c9a54a]"
+                            }`}
                           >
-                            {link.label}
-                          </span>
-                          <ChevronRight
-                            size={20}
-                            strokeWidth={1.5}
-                            className="text-white/30 group-hover:text-[#c9a54a] group-hover:translate-x-1 transition-all duration-300"
-                          />
-                        </Link>
+                            <span
+                              className="font-sans"
+                              style={{ fontSize: "clamp(1.2rem, 1.9vw, 1.55rem)", fontWeight: 500, letterSpacing: "0.01em" }}
+                            >
+                              {link.label}
+                            </span>
+                            <ChevronRight
+                              size={20}
+                              strokeWidth={1.5}
+                              className="text-white/30 group-hover:text-[#c9a54a] group-hover:translate-x-1 transition-all duration-300"
+                            />
+                          </Link>
+                        )}
                       </motion.li>
                     );
                   })}

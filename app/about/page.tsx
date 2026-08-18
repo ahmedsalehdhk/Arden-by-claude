@@ -1,8 +1,8 @@
 ﻿"use client";
 
-import { useEffect, useRef } from "react";
-import { motion, useInView, useScroll, useTransform, cubicBezier } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence, useInView, useScroll, useTransform, cubicBezier } from "framer-motion";
+import { ArrowUpRight, X } from "lucide-react";
 import Image from "next/image";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
@@ -15,44 +15,45 @@ const TEAM = [
     role: "Founder & Managing Director",
     quote: "We measure a building the way people measure a home — by how it lives, not how it looks on day one.",
     image: "/team/mazharul.png",
+    bio: [
+      "Mazharul Haque Chowdhury founded Arden Holdings with a singular ambition: to raise the standard of what a residential address in Dhaka can mean. His professional journey began in 1997 and now spans nearly three decades across media, communications, marketing and enterprise leadership.",
+      "He played a pivotal role in establishing Havas Group Bangladesh in partnership with the Impress Group (Channel i), building one of the most influential communications platforms in the country and shaping the careers of a generation of marketers and creative leaders along the way.",
+      "At Arden, he leads with the conviction that architecture is a long conversation with a city. Every project the company undertakes reflects his insistence on the right location, the right partners and the discipline to deliver a home that will still feel considered thirty years from now.",
+    ],
   },
   {
     name: "Yaminul Haq",
     role: "Managing Director, Alliance-Arden Consortium",
-    quote: "Setting a new standard in property development through high-level strategies, uncompromised execution and honesty.",
+    quote: "Every space we shape is built to be a legacy your family can hold onto for generations.",
     image: "/team/yaminul.png",
+    bio: [
+      "Yaminul Haq leads the Alliance-Arden Consortium, the joint venture platform through which some of Arden's most ambitious mixed-use and residential projects are being delivered. His work sits at the intersection of capital, design and long-horizon planning.",
+      "Trained across sales, marketing and real estate development, he has spent his career structuring partnerships that let architecturally significant buildings become financially sustainable ones. He is a firm believer that the best projects are the ones that make sense on the balance sheet a decade after handover, not just on opening day.",
+      "Within the consortium, he oversees strategy, investor relations and execution governance, ensuring that every square foot Arden builds carries the same standard of craftsmanship and accountability from concept through completion.",
+    ],
   },
   {
     name: "Mohiuddin Ahmed",
     role: "Director",
-    quote: "The best projects begin with saying no to the wrong ones. Discipline is the quiet part of luxury.",
-    image: "/team/mohiuddin.jpg",
+    quote: "We don’t just sketch beautiful ideas; we bring them to life down to the very last detail.",
+    image: "/team/mohiuddin.png",
+    bio: [
+      "Mohiuddin Ahmed serves as Director at Arden Holdings, where he oversees project execution, design coordination and the operational rigor that turns architectural intent into a finished home. He is known internally as the person who reads every drawing twice.",
+      "His background bridges construction management and design review, giving him a rare fluency in both the language of the studio and the reality of the site. He has spent years refining Arden's internal standards for material selection, tolerance and finish quality.",
+      "For Mohiuddin, luxury is not ornament — it is the confidence that comes from a door that closes the same way for the next fifty years. That standard sets the tempo for how Arden's project teams work every day.",
+    ],
   },
   {
-    name: "Ahsan",
-    role: "Team Lead",
-    quote: "The best projects begin with saying no to the wrong ones. Discipline is the quiet part of luxury.",
-    image: "/team/mohiuddin.jpg",
+    name: "Sanjib Kumar Mitra",
+    role: "Chief Financial Officer",
+    quote: "Protecting your investment with the same care and discipline as if it were our own.",
+    image: "/team/sanjib.png",
+    bio: [
+      "Sanjib Kumar Mitra leads finance at Arden Holdings, bringing a career's worth of experience across corporate finance, treasury and real estate capital structuring to the company's growth. He is the quiet architect of Arden's fiscal discipline.",
+      "Before joining Arden, he held senior finance roles across industries where trust in the numbers was non-negotiable, working closely with auditors, lenders and institutional partners to build reporting practices that stood up to scrutiny.",
+      "At Arden, he is responsible for ensuring that every project is capitalized responsibly, every customer's investment is protected, and every commitment the company makes on paper is one it can honor in full. His work is what allows the design and construction teams to build with confidence.",
+    ],
   },
-  {
-    name: "Sanjeeb",
-    role: "Team Lead",
-    quote: "The best projects begin with saying no to the wrong ones. Discipline is the quiet part of luxury.",
-    image: "/team/mohiuddin.jpg",
-  },
-  {
-    name: "Rafi",
-    role: "Team Lead",
-    quote: "The best projects begin with saying no to the wrong ones. Discipline is the quiet part of luxury.",
-    image: "/team/mohiuddin.jpg",
-  },
-  {
-    name: "Zahir",
-    role: "Team Lead",
-    quote: "The best projects begin with saying no to the wrong ones. Discipline is the quiet part of luxury.",
-    image: "/team/mohiuddin.jpg",
-  },
-  
 ];
 
 const VALUES = [
@@ -98,6 +99,33 @@ function FadeIn({ children, delay = 0, className = "" }: { children: React.React
 export default function AboutPage() {
   const isLoaded = useIsLoaded();
   const imageRef = useRef<HTMLDivElement>(null);
+  const [activeMember, setActiveMember] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (activeMember === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActiveMember(null);
+    };
+    document.addEventListener("keydown", onKey);
+
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    const prevBodyOverflow = document.body.style.overflow;
+    const prevHtmlOverflow = document.documentElement.style.overflow;
+    const prevBodyPadRight = document.body.style.paddingRight;
+    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    }
+
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevBodyOverflow;
+      document.documentElement.style.overflow = prevHtmlOverflow;
+      document.body.style.paddingRight = prevBodyPadRight;
+    };
+  }, [activeMember]);
+
   const { scrollY } = useScroll();
   const clipPercent = useTransform(scrollY, [0, 600], [7.5, 0], {
     ease: cubicBezier(0.22, 1, 0.36, 1),
@@ -344,16 +372,27 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 mb-20 sm:mb-28">
             {TEAM.map((member, i) => (
               <FadeIn key={member.name} delay={i * 0.06}>
-                <article className="flex flex-col">
+                <button
+                  type="button"
+                  onClick={() => setActiveMember(i)}
+                  className="group flex flex-col text-left w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c9a54a]/60"
+                  aria-label={`Read bio for ${member.name}`}
+                >
                   <div className="relative overflow-hidden bg-[#1a1a1a]/5 mb-6" style={{ aspectRatio: "3/4" }}>
                     <Image
                       src={member.image}
                       alt={member.name}
                       fill
-                      className="object-cover"
+                      className="object-cover transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]"
                       sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 22vw"
                       loading="lazy"
                     />
+                    <span
+                      className="absolute bottom-4 right-4 inline-flex items-center gap-1.5 bg-[#1a1a1a]/80 text-white px-3 py-1.5 transition-colors duration-300 group-hover:bg-[#1a1a1a]"
+                      style={{ fontSize: "10px", letterSpacing: "0.22em", textTransform: "uppercase" }}
+                    >
+                      Read bio <ArrowUpRight size={12} />
+                    </span>
                   </div>
                   <h3
                     className="font-serif text-[#1a1a1a] mb-1"
@@ -370,7 +409,7 @@ export default function AboutPage() {
                   >
                     &ldquo;{member.quote}&rdquo;
                   </blockquote>
-                </article>
+                </button>
               </FadeIn>
             ))}
           </div>
@@ -417,6 +456,85 @@ export default function AboutPage() {
       </section>
 
       <Footer />
+
+      {/* ── TEAM MEMBER MODAL ── */}
+      <AnimatePresence>
+        {activeMember !== null && (
+          <motion.div
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={() => setActiveMember(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="team-modal-name"
+          >
+            <div className="absolute inset-0 bg-[#0a0a0a]/70 backdrop-blur-sm" />
+            <motion.div
+              className="relative bg-[#faf9f6] w-full max-w-5xl max-h-[90vh] overflow-hidden grid grid-cols-1 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] shadow-2xl"
+              initial={{ opacity: 0, y: 30, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.98 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                type="button"
+                onClick={() => setActiveMember(null)}
+                aria-label="Close bio"
+                className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center bg-[#faf9f6]/90 hover:bg-white text-[#1a1a1a] transition-colors"
+              >
+                <X size={18} />
+              </button>
+
+              <div className="relative bg-[#1a1a1a]/5 aspect-[3/4] md:aspect-auto md:h-full">
+                <Image
+                  src={TEAM[activeMember].image}
+                  alt={TEAM[activeMember].name}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 40vw"
+                />
+              </div>
+
+              <div className="p-8 sm:p-10 lg:p-12 overflow-y-auto">
+                <h3
+                  id="team-modal-name"
+                  className="font-serif text-[#1a1a1a] mb-2"
+                  style={{ fontSize: "clamp(1.75rem, 2.6vw, 2.25rem)", fontWeight: 400, lineHeight: 1.2 }}
+                >
+                  {TEAM[activeMember].name}
+                </h3>
+                <p
+                  className="font-sans text-[#1a1a1a]/60 mb-6"
+                  style={{ fontSize: "15px", lineHeight: 1.5 }}
+                >
+                  {TEAM[activeMember].role}
+                </p>
+                <blockquote
+                  className="font-serif text-[#1a1a1a]/70 italic border-l-2 border-[#c9a54a]/40 pl-4 mb-8"
+                  style={{ fontSize: "16px", lineHeight: 1.7 }}
+                >
+                  &ldquo;{TEAM[activeMember].quote}&rdquo;
+                </blockquote>
+                <div className="space-y-4">
+                  {TEAM[activeMember].bio.map((para, idx) => (
+                    <p
+                      key={idx}
+                      className="font-sans font-medium text-[#1a1a1a] !leading-[1.7]"
+                      style={{ fontSize: "15px" }}
+                    >
+                      {para}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }

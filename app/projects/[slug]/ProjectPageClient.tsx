@@ -206,12 +206,11 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
               priority={false}
             />
             <span
-              className="font-sans text-white/50 leading-none flex-shrink-0 flex items-center"
-              style={{ fontSize: "24px", fontWeight: 300 }}
+              className="flex-shrink-0 bg-white/50"
+              style={{ width: "1px", height: "clamp(28px, 3vw, 40px)" }}
               aria-hidden="true"
-            >
-              ×
-            </span>
+            />
+
             <Image
               src="/logo-lockup.png"
               alt="Arden Holdings"
@@ -423,19 +422,22 @@ function NeighborhoodSection({ project }: { project: ProjectDetail }) {
       <FadeIn delay={0.05}>
         <div className="grid grid-cols-1 sm:grid-cols-3 sm:grid-rows-2 gap-3 sm:gap-4 mb-10 sm:mb-14 sm:h-[520px] lg:h-[620px]">
           <div className="relative overflow-hidden bg-ink/5 sm:col-span-2 sm:row-span-2 aspect-[4/3] sm:aspect-auto">
-            <Image
-              src={n.images[0]}
-              alt={`${project.location} neighborhood`}
-              fill
-              className="object-cover"
-              sizes="(max-width: 640px) 100vw, 66vw"
+            <iframe
+              src={
+                project.mapEmbedSrc ??
+                `https://www.google.com/maps?q=${encodeURIComponent(project.address)}&output=embed`
+              }
+              className="absolute inset-0 w-full h-full border-0"
+              allowFullScreen
               loading="lazy"
+              referrerPolicy="strict-origin-when-cross-origin"
+              title={`${project.name} — ${project.address}`}
             />
           </div>
-          {n.images[1] && (
+          {n.images[0] && (
             <div className="relative overflow-hidden bg-ink/5 aspect-[4/3] sm:aspect-auto">
               <Image
-                src={n.images[1]}
+                src={n.images[0]}
                 alt={`${project.location} neighborhood`}
                 fill
                 className="object-cover"
@@ -444,10 +446,10 @@ function NeighborhoodSection({ project }: { project: ProjectDetail }) {
               />
             </div>
           )}
-          {n.images[2] && (
+          {n.images[1] && (
             <div className="relative overflow-hidden bg-ink/5 aspect-[4/3] sm:aspect-auto">
               <Image
-                src={n.images[2]}
+                src={n.images[1]}
                 alt={`${project.location} neighborhood`}
                 fill
                 className="object-cover"
@@ -476,47 +478,6 @@ function NeighborhoodSection({ project }: { project: ProjectDetail }) {
         ))}
       </div>
     </Section>
-  );
-}
-
-// ─────────────────────────────────────────────
-// LOCATION SECTION
-// ─────────────────────────────────────────────
-
-function ProjectLocation({ project }: { project: ProjectDetail }) {
-  const embedSrc =
-    project.mapEmbedSrc ??
-    `https://www.google.com/maps?q=${encodeURIComponent(project.address)}&output=embed`;
-
-  return (
-    <section className="w-full py-20 sm:py-28 lg:py-32" style={{ backgroundColor: "#faf9f6" }}>
-      <div className="px-[7.5%]">
-        <FadeIn className="mb-8 sm:mb-12">
-          <AnimatedHeading
-            as="h2"
-            text={`Find ${project.name} in ${project.location}`}
-            trigger="view"
-            className="font-serif text-[#1a1a1a] mb-4"
-            style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
-          />
-          <p className="font-sans text-body text-[#1a1a1a]/60">
-            {project.address}
-          </p>
-        </FadeIn>
-        <FadeIn delay={0.1}>
-          <div className="w-full" style={{ height: "clamp(280px, 40vw, 520px)" }}>
-            <iframe
-              src={embedSrc}
-              className="w-full h-full border-0"
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="strict-origin-when-cross-origin"
-              title={`${project.name} — ${project.address}`}
-            />
-          </div>
-        </FadeIn>
-      </div>
-    </section>
   );
 }
 
@@ -581,7 +542,6 @@ export default function ProjectDetailPage() {
       <FeaturesSection project={project} />
       <ArchitectSection project={project} />
       <NeighborhoodSection project={project} />
-      <ProjectLocation project={project} />
       <ProjectCTA />
       <Footer />
     </main>

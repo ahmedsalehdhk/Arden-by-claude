@@ -17,7 +17,7 @@ export interface NeighborhoodSection {
 }
 
 export interface Neighborhood {
-  images: string[]; // 3 photos for the asymmetric mosaic: [large, top-right, bottom-right]
+  images: string[]; // 2 photos for the mosaic: [top-right, bottom-right] (large left slot is the map)
   sections: NeighborhoodSection[]; // typically two short titled paragraphs about the area
 }
 
@@ -115,9 +115,8 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
     ],
     neighborhood: {
       images: [
-        "/neighborhoods/banani/banani-road.jpg",
-        "/neighborhoods/banani/banani-field.jpg",
-        "/neighborhoods/banani/banani-park.jpg",
+        "/neighborhoods/amanat/banani-club.jpg",
+        "/neighborhoods/amanat/banani-field.jpg",
       ],
       sections: [
         {
@@ -200,9 +199,8 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
     ],
     neighborhood: {
       images: [
-        "/neighborhoods/jolshiri/jolshiri-park.jpeg",
-        "/neighborhoods/jolshiri/jolshiri-maze.jpeg",
-        "/neighborhoods/jolshiri/jolshiri-golf.jpg",
+        "/neighborhoods/rahma/jolshiri-maze.jpeg",
+        "/neighborhoods/rahma/jolshiri-golf.jpg",
       ],
       sections: [
         {
@@ -280,7 +278,6 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
       images: [
         "/neighborhoods/jolshiri/jolshiri-golf.jpg",
         "/neighborhoods/jolshiri/jolshiri-maze.jpeg",
-        "/neighborhoods/jolshiri/jolshiri-park.jpeg",
       ],
       sections: [
         {

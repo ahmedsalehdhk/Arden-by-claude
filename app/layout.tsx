@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
+import ConstructionBanner from "./components/ConstructionBanner";
 
 const openSans = Open_Sans({
   subsets: ["latin"],
@@ -64,6 +65,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${openSans.className} ${openSans.variable} antialiased`}>
+        <ConstructionBanner />
         <Providers>{children}</Providers>
       </body>
     </html>
