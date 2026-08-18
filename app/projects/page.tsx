@@ -13,9 +13,10 @@ import { useIsLoaded } from "../context/LoadContext";
 const PROJECTS = [
   { name: "Amanat", address: "House 64, Road 1, Block I, Banani, Dhaka", location: "Banani", status: "Ongoing", type: "Residential", image: "/projectimages/amanat/feature.png", byAllianceArden: true },
   { name: "Rahma", address: "Plot 16, Road 410, Sector 11, Jolshiri", location: "Jolshiri", status: "Ongoing", type: "Residential", image: "/projectimages/rahma/feature.png", byAllianceArden: true },
-  // Temporarily hidden — restore when ready:
-  // { name: "Tranquil Park", address: "Plot 23, Road 503, Sector 13, Jolshiri", location: "Jolshiri", status: "Completed", type: "Residential", image: "/projectimages/mumin/mumin-feature.png" },
-  // { name: "Bayt Al-Mumin", address: "Plot 43, Road 512, Sector 11, Jolshiri", location: "Jolshiri", status: "Completed", type: "Residential", image: "/projectimages/mumin/mumin-feature.png" },
+  { name: "Tranquil Park", address: "Plot 23, Road 503, Sector 13, Jolshiri", location: "Jolshiri", status: "Completed", type: "Residential", image: "/projectimages/tranquil-park/tranquil-park-01.jpg", byTrilliantArden: true },
+  { name: "Bayt Al-Mumin", address: "Plot 43, Road 512, Sector 11, Jolshiri", location: "Jolshiri", status: "Completed", type: "Residential", image: "/projectimages/mumin/mumin-feature.png", byTrilliantArden: true },
+  { name: "Crystal Lake", address: "Plot 25, Road 406, Sector 14, Jolshiri", location: "Jolshiri", status: "Completed", type: "Residential", image: "/projectimages/crystal-lake/crystal-lake-01.jpg", byTrilliantArden: true },
+  { name: "Elysium", address: "Plot 40, Road 407, Sector 14, Jolshiri", location: "Jolshiri", status: "Completed", type: "Residential", image: "/projectimages/elysium/elysium-01.jpg", byTrilliantArden: true },
 ];
 
 

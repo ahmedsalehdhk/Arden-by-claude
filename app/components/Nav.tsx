@@ -66,12 +66,8 @@ export default function Nav({ transparent = false }: { transparent?: boolean } =
   const isLoaded = useIsLoaded();
 
   useEffect(() => {
-    if (!menuOpen) return;
-    const activeParent = NAV_LINKS.find(
-      (l) => l.children && l.children.some((c) => pathname.startsWith(c.href))
-    );
-    if (activeParent) setExpanded(activeParent.label);
-  }, [menuOpen, pathname]);
+    if (!menuOpen) setExpanded(null);
+  }, [menuOpen]);
 
   // Appear only after the global load gate opens
   useEffect(() => {

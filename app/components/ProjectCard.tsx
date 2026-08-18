@@ -11,6 +11,7 @@ export interface ProjectCardData {
   image?: string;
   color?: string;
   byAllianceArden?: boolean;
+  byTrilliantArden?: boolean;
 }
 
 export default function ProjectCard({ project }: { project: ProjectCardData }) {
@@ -58,7 +59,9 @@ export default function ProjectCard({ project }: { project: ProjectCardData }) {
             className="font-serif text-[#1a1a1a] uppercase group-hover:text-[#c9a54a] transition-colors duration-300 mb-1.5"
             style={{ fontSize: "clamp(1.1rem, 1.8vw, 1.4rem)", fontWeight: 500, letterSpacing: "0.12em" }}
           >
-            {project.name}{project.byAllianceArden ? " by Alliance-Arden" : ""}
+            {project.name}
+            {project.byAllianceArden ? " by Alliance-Arden" : ""}
+            {project.byTrilliantArden ? " by Trilliant-Arden" : ""}
           </h3>
           <p className="font-sans text-body text-[#1a1a1a]/65">
             {project.location}

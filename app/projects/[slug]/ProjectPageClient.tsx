@@ -183,7 +183,7 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
           {project.tagline}
         </motion.p>
 
-        {project.byAllianceArden && (
+        {(project.byAllianceArden || project.byTrilliantArden) && (
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -194,12 +194,12 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
             className="font-sans text-white/75 uppercase"
             style={{ fontSize: "clamp(13px, 1.1vw, 15px)", letterSpacing: "0.3em", lineHeight: 1 }}
           >
-            by Alliance-Arden Consortium
+            {project.byTrilliantArden ? "by Trilliant-Arden Consortium" : "by Alliance-Arden Consortium"}
           </span>
           <div className="flex items-center justify-center gap-6 sm:gap-8">
             <Image
-              src="/logos/apl-lockup.png"
-              alt="Alliance Properties"
+              src={project.byTrilliantArden ? "/logos/trilliant-lockup.png" : "/logos/apl-lockup.png"}
+              alt={project.byTrilliantArden ? "Trilliant Holdings" : "Alliance Properties"}
               width={280}
               height={164}
               className="h-11 sm:h-14 w-auto brightness-0 invert opacity-90 shrink-0"

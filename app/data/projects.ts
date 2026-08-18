@@ -50,7 +50,8 @@ export interface ProjectDetail {
   location: string;
   heroImage: string;
   buildingImage: string;
-  byAllianceArden?: boolean; // true → show "by Alliance-Arden Consortium" + dual-logo lockup on detail hero and card
+  byAllianceArden?: boolean;  // true → show "by Alliance-Arden Consortium" + dual-logo lockup on detail hero and card
+  byTrilliantArden?: boolean; // true → show "by Trilliant-Arden Consortium" + dual-logo lockup on detail hero and card
   specs: ProjectSpec[];
   features: ProjectFeature[];
   gallery: string[];
@@ -61,6 +62,7 @@ export interface ProjectDetail {
 }
 
 export const PROJECT_DETAILS: ProjectDetail[] = [
+  // AMANAT
   {
     slug: "amanat",
     name: "Amanat",
@@ -145,6 +147,7 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
         "Amanat is a house that listens — the way morning light finds the kitchen, the pause between the entry and the family room. Every corner had to earn its place.",
     },
   },
+  // RAHMA
   {
     slug: "rahma",
     name: "Rahma",
@@ -228,23 +231,25 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
         "In Jolshiri, the site does half the design work. Rahma opens toward the lake and quietly turns its back to the road — calm inside, alive outside.",
     },
   },
+  // MUMIN
   {
     slug: "bayt-al-mumin",
     name: "Bayt Al-Mumin",
-    tagline: "Built on truth",
+    tagline: "A statement in sophistication",
     type: "Residential",
     status: "Completed",
     address: "Plot 43, Road 512, Sector 11, Jolshiri",
     location: "Jolshiri",
     heroImage: "/projectimages/mumin/view-03.jpg",
     buildingImage: "/projectimages/mumin/view-01.jpg",
+    byTrilliantArden: true,
     // Standard At-a-Glance template — comment out any field that doesn't apply.
     specs: [
       { label: "Land Area", value: "5 Katha" },
-      { label: "Size of Apartments", value: "3,200 sft (approx.)" },
+      { label: "Size of Apartments", value: "2,850 sft (approx.)" },
       { label: "Facing of Land", value: "West" },
       { label: "Front Road Width", value: "20 ft" },
-      { label: "Number of Floors", value: "G + 8" },
+      { label: "Number of Floors", value: "G+M+8" },
       { label: "Number of Apartments", value: "8" },
       // { label: "Number of Basements", value: "0" },
       { label: "Number of Parking", value: "8" },
@@ -276,8 +281,8 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
     ],
     neighborhood: {
       images: [
-        "/neighborhoods/jolshiri/jolshiri-golf.jpg",
-        "/neighborhoods/jolshiri/jolshiri-maze.jpeg",
+        "/neighborhoods/mumin/image-01.jpg",
+        "/neighborhoods/mumin/image-02.jpeg",
       ],
       sections: [
         {
@@ -304,6 +309,201 @@ export const PROJECT_DETAILS: ProjectDetail[] = [
       image: "/architects/.jpg",
       quote:
         "Redacted",
+    },
+  },
+  // TRANQUIL PARK
+  {
+    slug: "tranquil-park",
+    name: "Tranquil Park",
+    tagline: "Where elegance resides",
+    type: "Residential",
+    status: "Completed",
+    address: "Plot 23, Road 503, Sector 13, Jolshiri",
+    location: "Jolshiri",
+    heroImage: "/projectimages/tranquil-park/tranquil-park-01.jpg",
+    buildingImage: "/projectimages/mumin/view-01.jpg",
+    byTrilliantArden: true,
+    specs: [
+      { label: "Land Area", value: "5 Katha" },
+      { label: "Size of Apartments", value: "2,850 sft (approx.)" },
+      { label: "Facing of Land", value: "East" },
+      { label: "Front Road Width", value: "20 ft" },
+      { label: "Number of Floors", value: "G+M+8" },
+      { label: "Number of Apartments", value: "8" },
+      { label: "Number of Parking", value: "8" },
+      // { label: "Specialty of Land", value: "Park Facing" },
+    ],
+    features: [
+      { icon: "ArrowUpDown", label: "High Speed Elevators" },
+      { icon: "TreePine",    label: "Landscaped Gardens" },
+      { icon: "Flame",       label: "Firefighting System" },
+      { icon: "ShieldCheck", label: "Earthquake Proof Structure" },
+      { icon: "Car",         label: "Chauffeurs' Waiting Room" },
+      { icon: "Sofa",        label: "Elegant Reception & Waiting Room" },
+      { icon: "Video",       label: "24-Hour CCTV Surveillance" },
+      { icon: "Sparkles",    label: "Artistic Lighting & Water Features" },
+    ],
+    gallery: [
+      "/projectimages/tranquil-park/tranquil-park-01.jpg",
+      "/projectimages/tranquil-park/tranquil-park-02.jpg",
+      "/projectimages/tranquil-park/tranquil-park-03.jpg",
+      "/projectimages/tranquil-park/tranquil-park-04.jpg",
+      "/projectimages/tranquil-park/tranquil-park-05.jpg",
+    ],
+    floorPlans: [
+      { kind: "ground",   label: "GF",   fullLabel: "Ground Floor",       image: "/floorplans/tranquil-park/tranquil-park-ground.jpg" },
+      { kind: "mezzanine",   label: "M",   fullLabel: "Mezzanine Floor",       image: "/floorplans/tranquil-park/tranquil-park-mezzanine.jpg" },
+      { kind: "typical",  label: "Typ",  fullLabel: "Typical Floor", image: "/floorplans/tranquil-park/tranquil-park-floor-01.jpg" },
+      { kind: "typical",  label: "2F",  fullLabel: "Second Floor (Duplex lower)", image: "/floorplans/tranquil-park/tranquil-park-floor-02.jpg" },
+      { kind: "typical",  label: "3F",  fullLabel: "Third Floor (Duplex upper", image: "/floorplans/tranquil-park/tranquil-park-floor-03.jpg" },
+      { kind: "roof",     label: "Roof", fullLabel: "Rooftop",            image: "/floorplans/tranquil-park/tranquil-park-roof.jpg" },
+    ],
+    neighborhood: {
+      images: [
+        "/neighborhoods/rahma/jolshiri-maze.jpeg",
+        "/neighborhoods/rahma/jolshiri-golf.jpg",
+      ],
+      sections: [
+        {
+          title: "The Township",
+          body: "Located along the eastern corridor of Greater Dhaka, Jolshiri Abashon is a master-planned township designed around green spaces, wide avenues, and clean urban organization. Spanning lush, landscaped parks and an extensive network of intertwined lakes and natural water bodies, the enclave seamlessly blends outdoor activity with residential serenity.",
+        },
+        {
+          title: "Connectivity",
+          body: "Directly connected via the 300 Feet Purbachal Expressway, Jolshiri balances quiet living with swift access to central districts like Gulshan and Baridhara. Designed as a fully self-contained ecosystem, the township integrates dedicated educational zones, neighborhood mosques, secure frameworks, and modern civic utilities.",
+        },
+      ],
+    },
+  },
+  // CRYSTAL LAKE
+  {
+    slug: "crystal-lake",
+    name: "Crystal Lake",
+    tagline: "A timeless expression",
+    type: "Residential",
+    status: "Completed",
+    address: "Plot 25, Road 406, Sector 14, Jolshiri",
+    location: "Jolshiri",
+    heroImage: "/projectimages/crystal-lake/crystal-lake-02.jpg",
+    buildingImage: "/projectimages/crystal-lake/crystal-lake-01.jpg",
+    byTrilliantArden: true,
+    specs: [
+      { label: "Land Area", value: "6 Katha" },
+      { label: "Size of Apartments", value: "2,850 sft (approx.)" },
+      { label: "Facing of Land", value: "South" },
+      { label: "Front Road Width", value: "25 ft" },
+      { label: "Number of Floors", value: "G+M+8" },
+      { label: "Number of Apartments", value: "8" },
+      { label: "Number of Parking", value: "8" },
+      // { label: "Specialty of Land", value: "Lake Facing" },
+    ],
+    features: [
+      { icon: "Zap",         label: "Full Load Power Backup Generator" },
+      { icon: "ArrowUpDown", label: "High Speed Elevators" },
+      { icon: "TreePine",    label: "Landscaped Gardens" },
+      { icon: "Waves",       label: "Swimming Pool" },
+      { icon: "Dumbbell",    label: "Loaded Fitness Centre" },
+      { icon: "Flame",       label: "Firefighting System" },
+      { icon: "ShieldCheck", label: "Earthquake Proof Structure" },
+      { icon: "Car",         label: "Chauffeurs' Waiting Room" },
+      { icon: "Sofa",        label: "Elegant Reception & Waiting Room" },
+      { icon: "Video",       label: "24-Hour CCTV Surveillance" },
+      { icon: "Sparkles",    label: "Artistic Lighting & Water Features" },
+    ],
+    gallery: [
+      "/projectimages/crystal-lake/crystal-lake-01.jpg",
+      "/projectimages/crystal-lake/crystal-lake-02.jpg",
+      "/projectimages/crystal-lake/crystal-lake-03.jpg",
+      "/projectimages/crystal-lake/crystal-lake-04.jpg",
+      "/projectimages/crystal-lake/crystal-lake-05.jpg",
+      "/projectimages/crystal-lake/crystal-lake-06.jpg",
+      "/projectimages/crystal-lake/crystal-lake-07.jpg",
+      "/projectimages/crystal-lake/crystal-lake-08.jpg",
+      "/projectimages/crystal-lake/crystal-lake-09.jpg",
+      "/projectimages/crystal-lake/crystal-lake-10.jpg",
+      "/projectimages/crystal-lake/crystal-lake-11.jpg",
+      "/projectimages/crystal-lake/crystal-lake-12.jpg",
+      "/projectimages/crystal-lake/crystal-lake-13.jpg"
+    ],
+    neighborhood: {
+      images: [
+        "/neighborhoods/rahma/jolshiri-maze.jpeg",
+        "/neighborhoods/rahma/jolshiri-golf.jpg",
+      ],
+      sections: [
+        {
+          title: "The Township",
+          body: "Located along the eastern corridor of Greater Dhaka, Jolshiri Abashon is a master-planned township designed around green spaces, wide avenues, and clean urban organization. Its extensive network of intertwined lakes and natural water bodies make it one of the most tranquil residential enclaves in the region.",
+        },
+        {
+          title: "Connectivity",
+          body: "Directly connected via the 300 Feet Purbachal Expressway, Jolshiri balances quiet living with swift access to central districts like Gulshan and Baridhara. The township integrates dedicated educational zones, neighborhood mosques, secure frameworks, and modern civic utilities.",
+        },
+      ],
+    },
+  },
+  // ELYSIUM
+  {
+    slug: "elysium",
+    name: "Elysium",
+    tagline: "Defined by distinction",
+    type: "Residential",
+    status: "Upcoming",
+    address: "House 22, Road 11, Baridhara, Dhaka",
+    location: "Baridhara",
+    heroImage: "/projectimages/elysium/elysium-01.jpg",
+    buildingImage: "/projectimages/elysium/elysium-01.jpg",
+    byTrilliantArden: true,
+    specs: [
+      { label: "Land Area", value: "5 Katha" },
+      { label: "Size of Apartments", value: "2,850 sft (approx.)" },
+      { label: "Facing of Land", value: "North" },
+      { label: "Front Road Width", value: "40 ft" },
+      { label: "Number of Floors", value: "G+M+8" },
+      { label: "Number of Apartments", value: "8" },
+      { label: "Number of Parking", value: "8" },
+    ],
+    features: [
+      { icon: "Zap",         label: "Full Load Power Backup Generator" },
+      { icon: "ArrowUpDown", label: "High Speed Elevators" },
+      { icon: "TreePine",    label: "Landscaped Gardens" },
+      { icon: "Waves",       label: "Swimming Pool" },
+      { icon: "Dumbbell",    label: "Loaded Fitness Centre" },
+      { icon: "Droplets",    label: "Central Water Treatment Plant" },
+      { icon: "Flame",       label: "Firefighting System" },
+      { icon: "ShieldCheck", label: "Earthquake Proof Structure" },
+      { icon: "Car",         label: "Chauffeurs' Waiting Room" },
+      { icon: "Sofa",        label: "Elegant Reception & Waiting Room" },
+      { icon: "DoorOpen",    label: "Grand Double-Height Entrance" },
+      { icon: "Video",       label: "24-Hour CCTV Surveillance" },
+      { icon: "Sparkles",    label: "Artistic Lighting & Water Features" },
+    ],
+    gallery: [
+      "/projectimages/elysium/elysium-01.jpg",
+    ],
+    floorPlans: [
+      { kind: "ground", label: "GF", fullLabel: "Ground Floor", image: "/floorplans/elysium/elysium-ground.jpg" },
+      { kind: "mezzanine", label: "M", fullLabel: "Mezzanine Floor", image: "/floorplans/elysium/elysium-mezzanine.jpg" },
+      { kind: "typical", label: "1F", fullLabel: "1st Floor", image: "/floorplans/elysium/elysium-floor-01.jpg" },
+      { kind: "typical", label: "Even Floors", fullLabel: "2nd,4th,6th,8th Floors", image: "/floorplans/elysium/elysium-floor-even.jpg" },
+      { kind: "typical", label: "Odd Floors", fullLabel: "3rd, 5th, 7th Floors", image: "/floorplans/elysium/elysium-floor-odd.jpg" },
+      { kind: "roof", label: "Roof", fullLabel: "Rooftop Plan", image: "/floorplans/elysium/elysium-roof.jpg" }
+    ],
+    neighborhood: {
+      images: [
+        "/neighborhoods/rahma/jolshiri-maze.jpeg",
+        "/neighborhoods/rahma/jolshiri-golf.jpg",
+      ],
+      sections: [
+        {
+          title: "The Township",
+          body: "Located along the eastern corridor of Greater Dhaka, Jolshiri Abashon is a master-planned township designed around green spaces, wide avenues, and clean urban organization. Spanning lush, landscaped parks and an extensive network of intertwined lakes and natural water bodies, the enclave seamlessly blends outdoor activity with residential serenity.",
+        },
+        {
+          title: "Connectivity",
+          body: "Directly connected via the 300 Feet Purbachal Expressway, Jolshiri balances quiet living with swift access to central districts like Gulshan and Baridhara. Designed as a fully self-contained ecosystem, the township integrates dedicated educational zones, neighborhood mosques, secure frameworks, and modern civic utilities.",
+        },
+      ],
     },
   },
 ];
