@@ -62,6 +62,58 @@ export interface ProjectDetail {
 }
 
 export const PROJECT_DETAILS: ProjectDetail[] = [
+  // HASIB
+  {
+    slug: "hasib",
+    name: "Hasib",
+    tagline: "Designed to inspire",
+    type: "Residential",
+    status: "Ongoing",
+    address: "Plot 34, Western Road, Banani DOHS",
+    location: "Banani DOHS",
+    heroImage: "/projectimages/hasib/hasib-01.jpeg",
+    buildingImage: "/projectimages/hasib/hasib-01.jpeg",
+    byAllianceArden: true,
+    specs: [
+      { label: "Land Area", value: "12.5 Katha" },
+      { label: "Size of Apartments", value: "4,025 - 4,075 sft (approx.)" },
+      { label: "Facing of Land", value: "East" },
+      { label: "Front Road Width", value: "25 ft" },
+      { label: "Number of Floors", value: "B+G+7" },
+      { label: "Number of Apartments", value: "14" },
+      { label: "Number of Parking", value: "28" },
+    ],
+    features: [
+      { icon: "ArrowUpDown", label: "High Speed Elevators" },
+      { icon: "TreePine",    label: "Landscaped Gardens" },
+      { icon: "Flame",       label: "Firefighting System" },
+      { icon: "ShieldCheck", label: "Earthquake Proof Structure" },
+      { icon: "Car",         label: "Chauffeurs' Waiting Room" },
+      { icon: "Sofa",        label: "Elegant Reception & Waiting Room" },
+      { icon: "Video",       label: "24-Hour CCTV Surveillance" },
+      { icon: "Sparkles",    label: "Artistic Lighting & Water Features" },
+    ],
+    gallery: [
+      "/projectimages/hasib/hasib-01.jpeg",
+      "/projectimages/hasib/hasib-02.jpeg",
+    ],
+    neighborhood: {
+      images: [
+        "/neighborhoods/hasib/image-01.jpg",
+        "/neighborhoods/hasib/image-02.jpg",
+      ],
+      sections: [
+        {
+          title: "A Sanctuary of Quiet Order",
+          body: "Tucked away from the surrounding city rush, Banani DOHS offers an exceptional residential atmosphere defined by order, safety, and quiet sophistication. Controlled access points, wide, tree-lined streets, and a tight-knit community structure create a calm and secure environment. Designed specifically for peaceful urban living, the neighborhood pairs clean architectural lines with minimal traffic noise, making it one of Dhaka’s most tranquil and exclusive enclaves.",
+        },
+        {
+          title: "The Heart of Community & Living",
+          body: "At the social and physical heart of the community lies its expansive central field, serving as an open green sanctuary for residents. Flanked by well-maintained walking tracks, sports facilities, a neighborhood mosque, and convenient local amenities, the central grounds naturally bring people together. Whether for morning walks, youth sports, or casual evening gatherings, this central hub gives Banani DOHS a rare, self-contained lifestyle centered on health and active living.",
+        },
+      ],
+    },
+  },
   // AMANAT
   {
     slug: "amanat",

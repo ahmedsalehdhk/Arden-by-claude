@@ -27,9 +27,9 @@ const TEAM = [
     quote: "Every space we shape is built to be a legacy your family can hold onto for generations.",
     image: "/team/yaminul.png",
     bio: [
-      "Yaminul Haq leads the Alliance-Arden Consortium, the joint venture platform through which some of Arden's most ambitious mixed-use and residential projects are being delivered. His work sits at the intersection of capital, design and long-horizon planning.",
-      "Trained across sales, marketing and real estate development, he has spent his career structuring partnerships that let architecturally significant buildings become financially sustainable ones. He is a firm believer that the best projects are the ones that make sense on the balance sheet a decade after handover, not just on opening day.",
-      "Within the consortium, he oversees strategy, investor relations and execution governance, ensuring that every square foot Arden builds carries the same standard of craftsmanship and accountability from concept through completion.",
+      "Yaminul Haq, a recognized real estate icon in Bangladesh with over 20 years of experience, leads the Alliance-Arden Consortium, the joint venture platform through which some of Arden's most ambitious projects are delivered. His work sits at the intersection of capital, design, and long-horizon planning.",
+      "After completing his Masters degree, Yaminul has founded and built multiple thriving enterprises across various sectors including but not limited to real estate, automotive, agro-business, tourism and hospitality and many more.",
+      "Within the consortium, he oversees strategy, investor relations, and execution governance, ensuring that every square feet built carries the same standard of craftsmanship and accountability from concept through completion.",
     ],
   },
   {

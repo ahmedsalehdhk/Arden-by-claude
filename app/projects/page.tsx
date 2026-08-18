@@ -11,7 +11,8 @@ import { useIsLoaded } from "../context/LoadContext";
 
 // Project data
 const PROJECTS = [
-  { name: "Amanat", address: "House 64, Road 1, Block I, Banani, Dhaka", location: "Banani", status: "Ongoing", type: "Residential", image: "/projectimages/amanat/feature.png", byAllianceArden: true },
+  { name: "Hasib", address: "House 34, Western Road, Banani DOHS", location: "Banani DOHS", status: "Ongoing", type: "Residential", image: "/projectimages/hasib/hasib-01.jpeg", byAllianceArden: true },
+  { name: "Amanat", address: "House 64, Road 1, Block I, Banani", location: "Banani", status: "Ongoing", type: "Residential", image: "/projectimages/amanat/feature.png", byAllianceArden: true },
   { name: "Rahma", address: "Plot 16, Road 410, Sector 11, Jolshiri", location: "Jolshiri", status: "Ongoing", type: "Residential", image: "/projectimages/rahma/feature.png", byAllianceArden: true },
   { name: "Tranquil Park", address: "Plot 23, Road 503, Sector 13, Jolshiri", location: "Jolshiri", status: "Completed", type: "Residential", image: "/projectimages/tranquil-park/tranquil-park-01.jpg", byTrilliantArden: true },
   { name: "Bayt Al-Mumin", address: "Plot 43, Road 512, Sector 11, Jolshiri", location: "Jolshiri", status: "Completed", type: "Residential", image: "/projectimages/mumin/mumin-feature.png", byTrilliantArden: true },
