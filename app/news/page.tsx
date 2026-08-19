@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -9,7 +9,9 @@ import Footer from "../components/Footer";
 import AnimatedHeading from "../components/AnimatedHeading";
 import { FadeIn, Section, Tag, FilterChip } from "../components/ui";
 import { useIsLoaded } from "../context/LoadContext";
-import { NEWS, NewsCategory, NewsItem } from "../data/news";
+
+type NewsCategory = "News" | "Event";
+interface NewsItem { slug: string; title: string; excerpt: string; category: NewsCategory; date: string; image: string; }
 
 const FILTERS: ("All" | NewsCategory)[] = ["All", "News", "Event"];
 
@@ -63,10 +65,22 @@ function NewsCard({ item }: { item: NewsItem }) {
 export default function NewsPage() {
   const [filter, setFilter] = useState<"All" | NewsCategory>("All");
   const isLoaded = useIsLoaded();
+  const [NEWS, setNews] = useState<NewsItem[]>([]);
+  useEffect(() => {
+    fetch("/api/news")
+      .then((r) => (r.ok ? r.json() : []))
+      .then((rows: any[]) => setNews(rows.map((n) => ({
+        slug: n.slug, title: n.title, excerpt: n.excerpt,
+        category: (n.category === "event" ? "Event" : "News") as NewsCategory,
+        date: n.published_at ?? new Date().toISOString(),
+        image: n.cover_image ?? "",
+      }))))
+      .catch(() => {});
+  }, []);
 
   const filtered = useMemo(
     () => (filter === "All" ? NEWS : NEWS.filter((n) => n.category === filter)),
-    [filter]
+    [filter, NEWS]
   );
 
   return (

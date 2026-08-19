@@ -31,26 +31,15 @@ const HERO_IMAGES = [
 
 const KEN_BURNS_DURATION_S = 6;
 
-const FEATURED_PROJECTS = [
-  {
-    category: "Featured Projects",
-    tag: "Residential",
-    name: "Amanat",
-    slug: "amanat",
-    location: "Plot 64, Road 1, Banani",
-    image: "/projectimages/amanat/front-side-view-01.jpg",
-    buildingImage: "/projectimages/amanat/hero-night.jpg",
-  },
-  {
-    category: "Featured Projects",
-    tag: "Residential",
-    name: "Rahma",
-    slug: "rahma",
-    location: "Plot 16, Road 410, Sector 11, Jolshiri",
-    image: "/projectimages/rahma/view-02.jpg",
-    buildingImage: "/projectimages/rahma/view-01.jpg",
-  },
-];
+type FeaturedProject = {
+  category: string;
+  tag: string;
+  name: string;
+  slug: string;
+  location: string;
+  image: string;
+  buildingImage: string;
+};
 
 const STATS = [
   { value: 100, suffix: "%", label: "On-Time Handover" },
@@ -232,6 +221,29 @@ const FEATURED_AUTO_ADVANCE_MS = 7000;
 const FEATURED_SWIPE_DURATION_MS = 1600;
 
 function FeaturedProjectsSection() {
+  const [FEATURED_PROJECTS, setFeatured] = useState<FeaturedProject[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/projects?featured=true")
+      .then((r) => (r.ok ? r.json() : []))
+      .then((rows: any[]) => {
+        if (cancelled) return;
+        setFeatured(
+          rows.map((p) => ({
+            category: "Featured Projects",
+            tag: p.type,
+            name: p.name,
+            slug: p.slug,
+            location: p.location,
+            image: p.heroImage,
+            buildingImage: p.buildingImage || p.heroImage,
+          })),
+        );
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
+
   const [activeIndex, setActiveIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState<number | null>(null);
   const [fading, setFading] = useState(false);
@@ -266,6 +278,8 @@ function FeaturedProjectsSection() {
     }, FEATURED_AUTO_ADVANCE_MS);
     return () => clearTimeout(id);
   }, [activeIndex, total]);
+
+  if (total === 0) return null;
 
   const project = FEATURED_PROJECTS[activeIndex];
 

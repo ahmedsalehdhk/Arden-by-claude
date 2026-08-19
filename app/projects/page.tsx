@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, Search } from "lucide-react";
 import Nav from "../components/Nav";
@@ -9,16 +9,17 @@ import AnimatedHeading from "../components/AnimatedHeading";
 import ProjectCard from "../components/ProjectCard";
 import { useIsLoaded } from "../context/LoadContext";
 
-// Project data
-const PROJECTS = [
-  { name: "Hasib", address: "House 34, Western Road, Banani DOHS", location: "Banani DOHS", status: "Ongoing", type: "Residential", image: "/projectimages/hasib/hasib-01.jpeg", byAllianceArden: true },
-  { name: "Amanat", address: "House 64, Road 1, Block I, Banani", location: "Banani", status: "Ongoing", type: "Residential", image: "/projectimages/amanat/feature.png", byAllianceArden: true },
-  { name: "Rahma", address: "Plot 16, Road 410, Sector 11, Jolshiri", location: "Jolshiri", status: "Ongoing", type: "Residential", image: "/projectimages/rahma/feature.png", byAllianceArden: true },
-  { name: "Tranquil Park", address: "Plot 23, Road 503, Sector 13, Jolshiri", location: "Jolshiri", status: "Completed", type: "Residential", image: "/projectimages/tranquil-park/tranquil-park-01.jpg", byTrilliantArden: true },
-  { name: "Bayt Al-Mumin", address: "Plot 43, Road 512, Sector 11, Jolshiri", location: "Jolshiri", status: "Completed", type: "Residential", image: "/projectimages/mumin/mumin-feature.png", byTrilliantArden: true },
-  { name: "Crystal Lake", address: "Plot 25, Road 406, Sector 14, Jolshiri", location: "Jolshiri", status: "Completed", type: "Residential", image: "/projectimages/crystal-lake/crystal-lake-01.jpg", byTrilliantArden: true },
-  { name: "Elysium", address: "Plot 40, Road 407, Sector 14, Jolshiri", location: "Jolshiri", status: "Completed", type: "Residential", image: "/projectimages/elysium/elysium-01.jpg", byTrilliantArden: true },
-];
+type ProjectRow = {
+  name: string;
+  slug: string;
+  address: string;
+  location: string;
+  status: string;
+  type: string;
+  image: string;
+  byAllianceArden?: boolean;
+  byTrilliantArden?: boolean;
+};
 
 
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -40,6 +41,17 @@ function FadeIn({ children, delay = 0, className = "" }: { children: React.React
 export default function ProjectsPage() {
   const [query, setQuery] = useState("");
   const isLoaded = useIsLoaded();
+  const [PROJECTS, setProjects] = useState<ProjectRow[]>([]);
+  useEffect(() => {
+    fetch("/api/projects")
+      .then((r) => (r.ok ? r.json() : []))
+      .then((rows: any[]) => setProjects(rows.map((p) => ({
+        name: p.name, slug: p.slug, address: p.address, location: p.location,
+        status: p.status, type: p.type, image: p.heroImage,
+        byAllianceArden: p.byAllianceArden, byTrilliantArden: p.byTrilliantArden,
+      }))))
+      .catch(() => {});
+  }, []);
 
   const filtered = PROJECTS.filter((p) => {
     if (!query.trim()) return true;

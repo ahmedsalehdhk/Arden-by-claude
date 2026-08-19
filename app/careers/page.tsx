@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform, cubicBezier } from "framer-motion";
 import { ArrowUpRight, MapPin, Briefcase } from "lucide-react";
 import Image from "next/image";
@@ -11,18 +11,28 @@ import AnimatedHeading from "../components/AnimatedHeading";
 import { Section, FadeIn } from "../components/ui";
 import { useIsLoaded } from "../context/LoadContext";
 
-// Dummy openings — replace when the actual roles are confirmed.
-const OPENINGS: {
+type Opening = {
+  slug: string;
   title: string;
   location: string;
   type: string;
   department: string;
   summary: string;
-}[] = [];
+};
 
 export default function CareersPage() {
   const isLoaded = useIsLoaded();
   const imageRef = useRef<HTMLDivElement>(null);
+  const [OPENINGS, setOpenings] = useState<Opening[]>([]);
+  useEffect(() => {
+    fetch("/api/jobs")
+      .then((r) => (r.ok ? r.json() : []))
+      .then((rows: any[]) => setOpenings(rows.map((j) => ({
+        slug: j.slug, title: j.title, location: j.location, type: j.type,
+        department: j.department, summary: j.summary,
+      }))))
+      .catch(() => {});
+  }, []);
   const { scrollY } = useScroll();
   const clipPercent = useTransform(scrollY, [0, 600], [7.5, 0], {
     ease: cubicBezier(0.22, 1, 0.36, 1),

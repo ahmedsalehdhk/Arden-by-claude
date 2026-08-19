@@ -26,7 +26,7 @@ function FadeIn({ children, delay = 0, className = "" }: { children: React.React
   );
 }
 
-function InputField({ label, type = "text", textarea = false }: { label: string; type?: string; textarea?: boolean }) {
+function InputField({ label, name, type = "text", textarea = false, required = false }: { label: string; name: string; type?: string; textarea?: boolean; required?: boolean }) {
   return (
     <div className="group">
       <label className="block font-sans text-eyebrow-sm uppercase text-[#1a1a1a]/75 mb-2">
@@ -34,6 +34,8 @@ function InputField({ label, type = "text", textarea = false }: { label: string;
       </label>
       {textarea ? (
         <textarea
+          name={name}
+          required={required}
           rows={4}
           className="w-full bg-transparent border-b border-[#1a1a1a]/15 py-3 font-sans text-body text-[#1a1a1a] placeholder-[#1a1a1a]/20 focus:outline-none focus:border-[#c9a54a] transition-colors resize-none"
           placeholder={`Your ${label.toLowerCase()}`}
@@ -41,6 +43,8 @@ function InputField({ label, type = "text", textarea = false }: { label: string;
       ) : (
         <input
           type={type}
+          name={name}
+          required={required}
           className="w-full bg-transparent border-b border-[#1a1a1a]/15 py-3 font-sans text-body text-[#1a1a1a] placeholder-[#1a1a1a]/20 focus:outline-none focus:border-[#c9a54a] transition-colors"
           placeholder={`Your ${label.toLowerCase()}`}
         />
@@ -77,10 +81,34 @@ function ContactInner() {
     return () => { unsub(); };
   }, [clipPercent]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+    const fd = new FormData(e.currentTarget);
+    const first = String(fd.get("first_name") || "").trim();
+    const last = String(fd.get("last_name") || "").trim();
+    const payload = {
+      activeForm,
+      name: [first, last].filter(Boolean).join(" "),
+      email: String(fd.get("email") || ""),
+      phone: String(fd.get("phone") || ""),
+      message: String(fd.get("message") || ""),
+      extra: activeForm === "landowners" && fd.get("land_location")
+        ? { land_location: String(fd.get("land_location")) }
+        : undefined,
+    };
+    try {
+      const r = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!r.ok) throw new Error("Submission failed");
+      setSubmitted(true);
+      e.currentTarget.reset();
+      setTimeout(() => setSubmitted(false), 5000);
+    } catch {
+      alert("Sorry — something went wrong. Please try again or email us directly.");
+    }
   };
 
   return (
@@ -188,15 +216,15 @@ function ContactInner() {
             <FadeIn delay={0.15}>
               <form onSubmit={handleSubmit} className="space-y-7">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-7">
-                  <InputField label="First Name" />
-                  <InputField label="Last Name" />
+                  <InputField label="First Name" name="first_name" required />
+                  <InputField label="Last Name" name="last_name" />
                 </div>
-                <InputField label="Email" type="email" />
-                <InputField label="Phone" type="tel" />
+                <InputField label="Email" name="email" type="email" />
+                <InputField label="Phone" name="phone" type="tel" required />
                 {activeForm === "landowners" && (
-                  <InputField label="Land Location" />
+                  <InputField label="Land Location" name="land_location" />
                 )}
-                <InputField label="Message" textarea />
+                <InputField label="Message" name="message" textarea />
 
                 {submitted ? (
                   <div className="flex items-center gap-3 py-4">

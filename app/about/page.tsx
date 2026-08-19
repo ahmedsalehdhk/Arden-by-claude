@@ -9,52 +9,7 @@ import Footer from "../components/Footer";
 import AnimatedHeading from "../components/AnimatedHeading";
 import { useIsLoaded } from "../context/LoadContext";
 
-const TEAM = [
-  {
-    name: "Mazharul Haque",
-    role: "Founder & Managing Director",
-    quote: "We measure a building the way people measure a home — by how it lives, not how it looks on day one.",
-    image: "/team/mazharul.png",
-    bio: [
-      "Mazharul Haque Chowdhury founded Arden Holdings with a singular ambition: to raise the standard of what a residential address in Dhaka can mean. His professional journey began in 1997 and now spans nearly three decades across media, communications, marketing and enterprise leadership.",
-      "He played a pivotal role in establishing Havas Group Bangladesh in partnership with the Impress Group (Channel i), building one of the most influential communications platforms in the country and shaping the careers of a generation of marketers and creative leaders along the way.",
-      "At Arden, he leads with the conviction that architecture is a long conversation with a city. Every project the company undertakes reflects his insistence on the right location, the right partners and the discipline to deliver a home that will still feel considered thirty years from now.",
-    ],
-  },
-  {
-    name: "Yaminul Haq",
-    role: "Managing Director, Alliance-Arden Consortium",
-    quote: "Every space we shape is built to be a legacy your family can hold onto for generations.",
-    image: "/team/yaminul.png",
-    bio: [
-      "Yaminul Haq, a recognized real estate icon in Bangladesh with over 20 years of experience, leads the Alliance-Arden Consortium, the joint venture platform through which some of Arden's most ambitious projects are delivered. His work sits at the intersection of capital, design, and long-horizon planning.",
-      "After completing his Masters degree, Yaminul has founded and built multiple thriving enterprises across various sectors including but not limited to real estate, automotive, agro-business, tourism and hospitality and many more.",
-      "Within the consortium, he oversees strategy, investor relations, and execution governance, ensuring that every square feet built carries the same standard of craftsmanship and accountability from concept through completion.",
-    ],
-  },
-  {
-    name: "Mohiuddin Ahmed",
-    role: "Director",
-    quote: "We don’t just sketch beautiful ideas; we bring them to life down to the very last detail.",
-    image: "/team/mohiuddin.png",
-    bio: [
-      "Mohiuddin Ahmed serves as Director at Arden Holdings, where he oversees project execution, design coordination and the operational rigor that turns architectural intent into a finished home. He is known internally as the person who reads every drawing twice.",
-      "His background bridges construction management and design review, giving him a rare fluency in both the language of the studio and the reality of the site. He has spent years refining Arden's internal standards for material selection, tolerance and finish quality.",
-      "For Mohiuddin, luxury is not ornament — it is the confidence that comes from a door that closes the same way for the next fifty years. That standard sets the tempo for how Arden's project teams work every day.",
-    ],
-  },
-  {
-    name: "Sanjib Kumar Mitra",
-    role: "Chief Financial Officer",
-    quote: "Protecting your investment with the same care and discipline as if it were our own.",
-    image: "/team/sanjib.png",
-    bio: [
-      "Sanjib Kumar Mitra leads finance at Arden Holdings, bringing a career's worth of experience across corporate finance, treasury and real estate capital structuring to the company's growth. He is the quiet architect of Arden's fiscal discipline.",
-      "Before joining Arden, he held senior finance roles across industries where trust in the numbers was non-negotiable, working closely with auditors, lenders and institutional partners to build reporting practices that stood up to scrutiny.",
-      "At Arden, he is responsible for ensuring that every project is capitalized responsibly, every customer's investment is protected, and every commitment the company makes on paper is one it can honor in full. His work is what allows the design and construction teams to build with confidence.",
-    ],
-  },
-];
+type TeamMember = { name: string; role: string; quote: string; image: string; bio: string[] };
 
 const VALUES = [
   {
@@ -100,6 +55,16 @@ export default function AboutPage() {
   const isLoaded = useIsLoaded();
   const imageRef = useRef<HTMLDivElement>(null);
   const [activeMember, setActiveMember] = useState<number | null>(null);
+  const [TEAM, setTeam] = useState<TeamMember[]>([]);
+  useEffect(() => {
+    fetch("/api/team")
+      .then((r) => (r.ok ? r.json() : []))
+      .then((rows: any[]) => setTeam(rows.map((m) => ({
+        name: m.name, role: m.role, quote: m.quote, image: m.image || "",
+        bio: (m.bio_md || "").split(/\n\s*\n/).map((s: string) => s.trim()).filter(Boolean),
+      }))))
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (activeMember === null) return;

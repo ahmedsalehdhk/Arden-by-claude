@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef } from "react";
-import { useParams } from "next/navigation";
 import { motion, useInView } from "framer-motion";
 import {
   Zap,
@@ -31,8 +30,8 @@ import AnimatedHeading from "../../components/AnimatedHeading";
 import ProjectGallery from "../../components/ProjectGallery";
 import FloorPlansSection from "../../components/FloorPlansSection";
 import { Section } from "../../components/ui";
-import { getProjectBySlug } from "../../data/projects";
-import type { ProjectDetail } from "../../data/projects";
+import type { ProjectDetail } from "../../../lib/projects";
+import { marked } from "marked";
 
 // ─────────────────────────────────────────────
 // ICON MAP
@@ -461,22 +460,13 @@ function NeighborhoodSection({ project }: { project: ProjectDetail }) {
         </div>
       </FadeIn>
 
-      {/* Titled paragraphs */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
-        {n.sections.map((s, i) => (
-          <FadeIn key={s.title} delay={0.1 + i * 0.05}>
-            <h3
-              className="font-serif text-ink mb-4"
-              style={{ fontSize: "clamp(1.25rem, 1.6vw, 1.6rem)", fontWeight: 500 }}
-            >
-              {s.title}
-            </h3>
-            <p className="font-sans font-medium text-body-lg text-ink !leading-[1.6] sm:text-justify">
-              {s.body}
-            </p>
-          </FadeIn>
-        ))}
-      </div>
+      {/* Body paragraph(s) */}
+      <FadeIn delay={0.1}>
+        <div
+          className="font-sans font-medium text-body-lg text-ink !leading-[1.6] sm:text-justify prose prose-neutral max-w-none"
+          dangerouslySetInnerHTML={{ __html: marked.parse(n.body_md || "", { async: false }) as string }}
+        />
+      </FadeIn>
     </Section>
   );
 }
@@ -523,11 +513,7 @@ function ProjectCTA() {
 // MAIN PAGE COMPONENT
 // ─────────────────────────────────────────────
 
-export default function ProjectDetailPage() {
-  const params = useParams();
-  const slug = typeof params.slug === "string" ? params.slug : "";
-  const project = getProjectBySlug(slug);
-
+export default function ProjectDetailPage({ project }: { project: ProjectDetail }) {
   if (!project) {
     return <ProjectNotFound />;
   }
