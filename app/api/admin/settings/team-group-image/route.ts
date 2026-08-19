@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSetting, setSetting } from "../../../../../lib/settings";
 
+export const dynamic = "force-dynamic";
+
 const KEY = "team_group_image";
 
 export async function GET() {
