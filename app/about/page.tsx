@@ -7,9 +7,10 @@ import Image from "next/image";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import AnimatedHeading from "../components/AnimatedHeading";
+import MarkdownBody from "../components/MarkdownBody";
 import { useIsLoaded } from "../context/LoadContext";
 
-type TeamMember = { name: string; role: string; quote: string; image: string; bio: string[] };
+type TeamMember = { name: string; role: string; quote: string; image: string; bio: string };
 
 const VALUES = [
   {
@@ -68,7 +69,7 @@ export default function AboutPage() {
       .then((r) => (r.ok ? r.json() : []))
       .then((rows: any[]) => setTeam(rows.map((m) => ({
         name: m.name, role: m.role, quote: m.quote, image: m.image || "",
-        bio: (m.bio_md || "").split(/\n\s*\n/).map((s: string) => s.trim()).filter(Boolean),
+        bio: m.bio_md || "",
       }))))
       .catch(() => {});
   }, []);
@@ -491,17 +492,7 @@ export default function AboutPage() {
                 >
                   &ldquo;{TEAM[activeMember].quote}&rdquo;
                 </blockquote>
-                <div className="space-y-4">
-                  {TEAM[activeMember].bio.map((para, idx) => (
-                    <p
-                      key={idx}
-                      className="font-sans font-medium text-[#1a1a1a] !leading-[1.7]"
-                      style={{ fontSize: "15px" }}
-                    >
-                      {para}
-                    </p>
-                  ))}
-                </div>
+                <MarkdownBody source={TEAM[activeMember].bio} />
               </div>
             </motion.div>
           </motion.div>

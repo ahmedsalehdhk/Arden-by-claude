@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform, cubicBezier } from "framer-motion";
-import { ArrowUpRight, MapPin, Briefcase } from "lucide-react";
+import { ArrowUpRight, MapPin, Briefcase, Mail } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import Nav from "../components/Nav";
@@ -113,8 +113,12 @@ export default function CareersPage() {
             {OPENINGS.map((role, i) => (
               <FadeIn key={role.title} delay={i * 0.06}>
                 <li>
-                  <Link
-                    href={`/contact?role=${encodeURIComponent(role.title)}`}
+                  <a
+                    href={`mailto:info@ardenholdingsltd.com?subject=${encodeURIComponent(
+                      `Application — ${role.title}`
+                    )}&body=${encodeURIComponent(
+                      `Hello Arden Holdings,\n\nI'd like to apply for the ${role.title} role (${role.location}).\n\nMy CV is attached and a short note about myself is below.\n\n—\n`
+                    )}`}
                     className="group grid grid-cols-1 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1.6fr)_auto] items-start gap-4 md:gap-8 py-8 sm:py-10"
                   >
                     <div>
@@ -139,13 +143,14 @@ export default function CareersPage() {
                       {role.summary}
                     </p>
                     <span className="hidden md:inline-flex self-center items-center gap-2 font-sans text-eyebrow uppercase text-ink group-hover:text-gold transition-colors">
-                      Apply
+                      <Mail size={14} strokeWidth={1.5} />
+                      Email to apply
                       <ArrowUpRight
                         size={14}
                         className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
                       />
                     </span>
-                  </Link>
+                  </a>
                 </li>
               </FadeIn>
             ))}

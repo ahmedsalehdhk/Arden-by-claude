@@ -9,12 +9,13 @@ import AnimatedHeading from "./AnimatedHeading";
 interface ProjectGalleryProps {
   images: string[];
   projectName: string;
+  showHeading?: boolean;
 }
 
 const AUTOPLAY_MS = 5000;
 const SWIPE_THRESHOLD = 60;
 
-export default function ProjectGallery({ images, projectName }: ProjectGalleryProps) {
+export default function ProjectGallery({ images, projectName, showHeading = true }: ProjectGalleryProps) {
   const [index, setIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [hovering, setHovering] = useState(false);
@@ -94,16 +95,17 @@ export default function ProjectGallery({ images, projectName }: ProjectGalleryPr
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
     >
-      {/* Heading */}
-      <div className="text-center mb-12 sm:mb-16">
-        <AnimatedHeading
-          as="h2"
-          text="Gallery"
-          trigger="view"
-          className="font-serif text-[#1a1a1a]"
-          style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
-        />
-      </div>
+      {showHeading && (
+        <div className="text-center mb-12 sm:mb-16">
+          <AnimatedHeading
+            as="h2"
+            text="Gallery"
+            trigger="view"
+            className="font-serif text-[#1a1a1a]"
+            style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
+          />
+        </div>
+      )}
 
       {/* Carousel */}
       <div

@@ -29,9 +29,9 @@ import Footer from "../../components/Footer";
 import AnimatedHeading from "../../components/AnimatedHeading";
 import ProjectGallery from "../../components/ProjectGallery";
 import FloorPlansSection from "../../components/FloorPlansSection";
+import MarkdownBody from "../../components/MarkdownBody";
 import { Section } from "../../components/ui";
 import type { ProjectDetail } from "../../../lib/projects";
-import { marked } from "marked";
 
 // ─────────────────────────────────────────────
 // ICON MAP
@@ -462,10 +462,7 @@ function NeighborhoodSection({ project }: { project: ProjectDetail }) {
 
       {/* Body paragraph(s) */}
       <FadeIn delay={0.1}>
-        <div
-          className="font-sans font-medium text-body-lg text-ink !leading-[1.6] sm:text-justify prose prose-neutral max-w-none"
-          dangerouslySetInnerHTML={{ __html: marked.parse(n.body_md || "", { async: false }) as string }}
-        />
+        <MarkdownBody source={n.body_md || ""} justify />
       </FadeIn>
     </Section>
   );
