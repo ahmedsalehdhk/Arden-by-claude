@@ -47,7 +47,7 @@ export default function ProjectsPage() {
       .then((r) => (r.ok ? r.json() : []))
       .then((rows: any[]) => setProjects(rows.map((p) => ({
         name: p.name, slug: p.slug, address: p.address, location: p.location,
-        status: p.status, type: p.type, image: p.heroImage,
+        status: p.status, type: p.type, image: p.buildingImage || p.heroImage,
         byAllianceArden: p.byAllianceArden, byTrilliantArden: p.byTrilliantArden,
       }))))
       .catch(() => {});
