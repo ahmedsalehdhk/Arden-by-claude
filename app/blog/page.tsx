@@ -26,7 +26,7 @@ function formatDate(iso: string) {
 function NewsCard({ item }: { item: NewsItem }) {
   const { day, month, year } = formatDate(item.date);
   return (
-    <Link href={`/news/${item.slug}`} className="block group">
+    <Link href={`/blog/${item.slug}`} className="block group">
       <article className="cursor-pointer">
         <div className="relative overflow-hidden mb-6" style={{ aspectRatio: "4/3" }}>
           <Image

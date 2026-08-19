@@ -56,6 +56,13 @@ export default function AboutPage() {
   const imageRef = useRef<HTMLDivElement>(null);
   const [activeMember, setActiveMember] = useState<number | null>(null);
   const [TEAM, setTeam] = useState<TeamMember[]>([]);
+  const [groupImage, setGroupImage] = useState<string>("/team/group.jpg");
+  useEffect(() => {
+    fetch("/api/settings/team-group-image")
+      .then((r) => (r.ok ? r.json() : { url: null }))
+      .then((d: { url: string | null }) => { if (d?.url) setGroupImage(d.url); })
+      .catch(() => {});
+  }, []);
   useEffect(() => {
     fetch("/api/team")
       .then((r) => (r.ok ? r.json() : []))
@@ -383,7 +390,7 @@ export default function AboutPage() {
           <FadeIn delay={0.1}>
             <div className="relative overflow-hidden w-full mb-6" style={{ aspectRatio: "16/7" }}>
               <Image
-                src="/team/group.jpg"
+                src={groupImage}
                 alt="The Arden Holdings team"
                 fill
                 className="object-cover"

@@ -51,7 +51,7 @@ const NAV_LINKS: NavItem[] = [
       { label: "Trilliant-Arden Consortium", href: "/consortium/trilliant-arden" },
     ],
   },
-  { label: "News & Events", href: "/news" },
+  { label: "News & Events", href: "/blog" },
   { label: "Careers", href: "/careers" },
   { label: "Contact", href: "/contact" },
 ];

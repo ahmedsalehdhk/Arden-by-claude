@@ -4,6 +4,16 @@ import { useParams, useRouter } from "next/navigation";
 import { api } from "../../_components/api";
 import MarkdownEditor from "../../_components/MarkdownEditor";
 import PageHeader from "../../_components/PageHeader";
+import Toast from "../../_components/Toast";
+
+function slugify(s: string) {
+  return s
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
 type Job = {
   id: number; slug: string; title: string; department: string; location: string;
@@ -17,6 +27,7 @@ export default function EditJobPage() {
   const id = Number(params.id);
   const [j, setJ] = useState<Job | null>(null);
   const [saving, setSaving] = useState(false);
+  const [savedToast, setSavedToast] = useState(false);
 
   useEffect(() => { (async () => setJ(await api<Job>(`/api/admin/jobs/${id}`)))(); }, [id]);
   if (!j) return <div className="muted">Loading…</div>;
@@ -26,7 +37,9 @@ export default function EditJobPage() {
     try {
       const { id: _drop, ...body } = j!;
       await api(`/api/admin/jobs/${id}`, { method: "PATCH", body: JSON.stringify(body) });
-      alert("Saved");
+      setSavedToast(true);
+      setTimeout(() => router.push("/admin/jobs"), 900);
+      return;
     } catch (e: any) { alert(e.message); }
     finally { setSaving(false); }
   }
@@ -37,6 +50,7 @@ export default function EditJobPage() {
   }
   return (
     <div>
+      <Toast show={savedToast} />
       <PageHeader title={j.title || "Job posting"} right={
         <div style={{ display: "flex", gap: 8 }}>
           <button className="btn btn-danger" onClick={remove}>Delete</button>
@@ -45,12 +59,19 @@ export default function EditJobPage() {
       } />
       <div className="card">
         <div className="row">
-          <div><label>Title</label><input value={j.title} onChange={(e) => set("title", e.target.value)} /></div>
-          <div><label>Slug</label><input value={j.slug} onChange={(e) => set("slug", e.target.value)} /></div>
+          <div><label>Title</label><input value={j.title} onChange={(e) => setJ({ ...j, title: e.target.value, slug: slugify(e.target.value) })} /></div>
+          <div><label>Slug</label><input value={j.slug} readOnly /></div>
         </div>
         <div className="row" style={{ marginTop: 12 }}>
           <div><label>Department</label><input value={j.department} onChange={(e) => set("department", e.target.value)} /></div>
-          <div><label>Location</label><input value={j.location} onChange={(e) => set("location", e.target.value)} /></div>
+          <div><label>Location</label>
+            <select value={j.location} onChange={(e) => set("location", e.target.value)}>
+              <option value="">Select…</option>
+              <option value="Head office">Head office</option>
+              <option value="On-Site">On-Site</option>
+              <option value="Mixed">Mixed</option>
+            </select>
+          </div>
           <div><label>Type</label>
             <select value={j.type} onChange={(e) => set("type", e.target.value as Job["type"])}>
               <option value="full-time">Full-time</option>
@@ -70,7 +91,7 @@ export default function EditJobPage() {
         <div style={{ marginTop: 12 }}>
           <label style={{ display: "flex", alignItems: "center", gap: 6, textTransform: "none", letterSpacing: 0, fontWeight: 500 }}>
             <input type="checkbox" checked={j.is_open} onChange={(e) => set("is_open", e.target.checked)} />
-            Open for applications
+            Published
           </label>
         </div>
       </div>

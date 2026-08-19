@@ -5,6 +5,16 @@ import { api } from "../../_components/api";
 import ImageUploader from "../../_components/ImageUploader";
 import MarkdownEditor from "../../_components/MarkdownEditor";
 import PageHeader from "../../_components/PageHeader";
+import Toast from "../../_components/Toast";
+
+function slugify(s: string) {
+  return s
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
 type TeamRow = {
   id: number; slug: string; name: string; role: string; quote: string;
@@ -17,6 +27,7 @@ export default function EditTeamPage() {
   const id = Number(params.id);
   const [t, setT] = useState<TeamRow | null>(null);
   const [saving, setSaving] = useState(false);
+  const [savedToast, setSavedToast] = useState(false);
 
   useEffect(() => { (async () => setT(await api<TeamRow>(`/api/admin/team/${id}`)))(); }, [id]);
 
@@ -29,7 +40,9 @@ export default function EditTeamPage() {
     try {
       const { id: _drop, ...body } = t!;
       await api(`/api/admin/team/${id}`, { method: "PATCH", body: JSON.stringify(body) });
-      alert("Saved");
+      setSavedToast(true);
+      setTimeout(() => router.push("/admin/team"), 900);
+      return;
     } catch (e: any) { alert(e.message); }
     finally { setSaving(false); }
   }
@@ -41,6 +54,7 @@ export default function EditTeamPage() {
 
   return (
     <div>
+      <Toast show={savedToast} />
       <PageHeader title={t.name || "Team member"} right={
         <div style={{ display: "flex", gap: 8 }}>
           <button className="btn btn-danger" onClick={remove}>Delete</button>
@@ -48,8 +62,8 @@ export default function EditTeamPage() {
         </div>
       } />
       <div className="card">
-        <div className="row"><div><label>Name</label><input value={t.name} onChange={(e) => set("name", e.target.value)} /></div>
-          <div><label>Slug</label><input value={t.slug} onChange={(e) => set("slug", e.target.value)} /></div></div>
+        <div className="row"><div><label>Name</label><input value={t.name} onChange={(e) => setT({ ...t, name: e.target.value, slug: slugify(e.target.value) })} /></div>
+          <div><label>Slug</label><input value={t.slug} readOnly /></div></div>
         <div style={{ marginTop: 12 }}><label>Role</label><input value={t.role} onChange={(e) => set("role", e.target.value)} /></div>
         <div style={{ marginTop: 12 }}><label>Quote</label><textarea rows={2} value={t.quote} onChange={(e) => set("quote", e.target.value)} /></div>
         <div style={{ marginTop: 12 }}>

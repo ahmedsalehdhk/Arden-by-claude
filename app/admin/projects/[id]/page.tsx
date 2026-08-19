@@ -7,9 +7,54 @@ import ImageUploader from "../../_components/ImageUploader";
 import GalleryUploader, { GalleryImage } from "../../_components/GalleryUploader";
 import MarkdownEditor from "../../_components/MarkdownEditor";
 import PageHeader from "../../_components/PageHeader";
+import Toast from "../../_components/Toast";
 
-type Spec = { _key: string; label: string; value: string };
-type Feature = { _key: string; icon: string; label: string };
+function slugify(s: string) {
+  return s
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+const SPEC_LABELS = [
+  "Land Area",
+  "Size of Apartments",
+  "Facing of Land",
+  "Front Road Width",
+  "Number of Floors",
+  "Number of Basements",
+  "Number of Apartments",
+  "Number of Parking",
+  "Specialty of Land",
+] as const;
+
+type Spec = { _key: string; label: string; value: string; enabled: boolean };
+type Feature = { _key: string; icon: string; label: string; enabled: boolean };
+
+const FEATURE_CATALOG: ReadonlyArray<{ icon: string; label: string }> = [
+  { icon: "Zap",         label: "Full Load Power Backup Generator" },
+  { icon: "ArrowUpDown", label: "High Speed Elevators" },
+  { icon: "TreePine",    label: "Landscaped Gardens" },
+  { icon: "Waves",       label: "Swimming Pool" },
+  { icon: "Dumbbell",    label: "Loaded Fitness Centre" },
+  { icon: "Droplets",    label: "Central Water Treatment Plant" },
+  { icon: "Flame",       label: "Firefighting System" },
+  { icon: "ShieldCheck", label: "Earthquake Proof Structure" },
+  { icon: "Car",         label: "Chauffeurs' Waiting Room" },
+  { icon: "Sofa",        label: "Elegant Reception & Waiting Room" },
+  { icon: "DoorOpen",    label: "Double Height Entrance" },
+  { icon: "Video",       label: "24-Hour CCTV Surveillance" },
+  { icon: "ChefHat",     label: "BBQ Zone" },
+  { icon: "Sparkles",    label: "Artistic Lighting & Water Features" },
+  { icon: "Moon",        label: "Prayer Room" },
+  { icon: "ToyBrick",    label: "Kids' Playground" },
+  { icon: "Sun",         label: "Solar Power" },
+  { icon: "Thermometer", label: "Sauna and Steam Room" },
+  { icon: "Bath",        label: "Jacuzzi" },
+  { icon: "Tent",        label: "Gazebo" },
+];
 type FloorPlan = { _key: string; label: string; full_label: string; image: string; kind: string | null };
 type Neighborhood = { image_1: string | null; image_2: string | null; body_md: string };
 type Architect = { name: string; title: string; image: string | null; quote: string };
@@ -39,6 +84,7 @@ export default function EditProjectPage() {
   const [arch, setArch] = useState<Architect | null>(null);
   const [tab, setTab] = useState<"basics"|"specs"|"features"|"gallery"|"floors"|"nb"|"arch">("basics");
   const [saving, setSaving] = useState(false);
+  const [savedToast, setSavedToast] = useState(false);
 
   useEffect(() => { (async () => {
     const d = await api<any>(`/api/admin/projects/${id}`);
@@ -49,8 +95,28 @@ export default function EditProjectPage() {
       by_alliance_arden: d.by_alliance_arden, by_trilliant_arden: d.by_trilliant_arden,
       is_featured: d.is_featured, is_published: d.is_published,
     });
-    setSpecs((d.specs || []).map((s: any) => ({ ...s, _key: uid() })));
-    setFeatures((d.features || []).map((f: any) => ({ ...f, _key: uid() })));
+    {
+      const existing = new Map<string, string>((d.specs || []).map((s: any) => [s.label, s.value]));
+      setSpecs(
+        SPEC_LABELS.map((label) => ({
+          _key: uid(),
+          label,
+          value: existing.get(label) ?? "",
+          enabled: existing.has(label),
+        })),
+      );
+    }
+    {
+      const existing = new Set<string>((d.features || []).map((f: any) => f.label));
+      setFeatures(
+        FEATURE_CATALOG.map((f) => ({
+          _key: uid(),
+          icon: f.icon,
+          label: f.label,
+          enabled: existing.has(f.label),
+        })),
+      );
+    }
     setGallery((d.gallery || []).map((g: any) => ({ _key: uid(), url: g.url, caption: g.caption })));
     setFloorPlans((d.floor_plans || []).map((f: any) => ({ ...f, _key: uid() })));
     setNb(d.neighborhood ? { image_1: d.neighborhood.image_1, image_2: d.neighborhood.image_2, body_md: d.neighborhood.body_md ?? "" } : null);
@@ -66,17 +132,19 @@ export default function EditProjectPage() {
     try {
       const body = {
         ...p,
-        specs: specs.map(({ _key, ...s }) => s),
-        features: features.map(({ _key, ...f }) => f),
+        specs: specs.filter((s) => s.enabled).map(({ _key, enabled, ...s }) => s),
+        features: features.filter((f) => f.enabled).map(({ _key, enabled, ...f }) => f),
         gallery: gallery.map((g) => ({ url: g.url, caption: g.caption ?? null })),
         floor_plans: floorPlans.map(({ _key, ...f }) => f),
         neighborhood: nb,
-        architect: arch,
+        architect: arch ? { ...arch, title: "Principal Architect" } : null,
       };
       // Server doesn't accept `id` in body
       delete (body as any).id;
       await api(`/api/admin/projects/${id}`, { method: "PATCH", body: JSON.stringify(body) });
-      alert("Saved");
+      setSavedToast(true);
+      setTimeout(() => router.push("/admin/projects"), 900);
+      return;
     } catch (e: any) { alert(e.message); }
     finally { setSaving(false); }
   }
@@ -89,6 +157,7 @@ export default function EditProjectPage() {
 
   return (
     <div>
+      <Toast show={savedToast} />
       <PageHeader title={p.name || "Project"} right={
         <div style={{ display: "flex", gap: 8 }}>
           <button className="btn btn-danger" onClick={remove}>Delete</button>
@@ -108,8 +177,8 @@ export default function EditProjectPage() {
       {tab === "basics" && (
         <div className="card">
           <div className="row">
-            <div><label>Name</label><input value={p.name} onChange={(e) => set("name", e.target.value)} /></div>
-            <div><label>Slug</label><input value={p.slug} onChange={(e) => set("slug", e.target.value)} /></div>
+            <div><label>Name</label><input value={p.name} onChange={(e) => setP({ ...p, name: e.target.value, slug: slugify(e.target.value) })} /></div>
+            <div><label>Slug</label><input value={p.slug} readOnly /></div>
           </div>
           <div style={{ marginTop: 12 }}><label>Tagline</label><input value={p.tagline} onChange={(e) => set("tagline", e.target.value)} /></div>
           <div className="row" style={{ marginTop: 12 }}>
@@ -128,21 +197,36 @@ export default function EditProjectPage() {
           </div>
           <div style={{ marginTop: 12 }}><label>Address</label><input value={p.address} onChange={(e) => set("address", e.target.value)} /></div>
           <div style={{ marginTop: 12 }}><label>Location (short)</label><input value={p.location} onChange={(e) => set("location", e.target.value)} /></div>
-          <div style={{ marginTop: 12 }}><label>Google Maps embed src (iframe URL)</label>
-            <input value={p.map_embed_src ?? ""} onChange={(e) => set("map_embed_src", e.target.value || null)} /></div>
-          <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
             <ImageUploader value={p.hero_image || null} onChange={(v) => set("hero_image", v ?? "")} scope="projects" ownerId={id} label="Hero image" />
             <ImageUploader value={p.building_image || null} onChange={(v) => set("building_image", v ?? "")} scope="projects" ownerId={id} label="Building image" />
           </div>
-          <div className="row" style={{ marginTop: 12 }}>
-            <label style={{ display: "flex", alignItems: "center", gap: 6, textTransform: "none", letterSpacing: 0, fontWeight: 500, margin: 0 }}>
-              <input type="checkbox" checked={p.by_alliance_arden} onChange={(e) => set("by_alliance_arden", e.target.checked)} />
-              By Alliance-Arden Consortium
-            </label>
-            <label style={{ display: "flex", alignItems: "center", gap: 6, textTransform: "none", letterSpacing: 0, fontWeight: 500, margin: 0 }}>
-              <input type="checkbox" checked={p.by_trilliant_arden} onChange={(e) => set("by_trilliant_arden", e.target.checked)} />
-              By Trilliant-Arden Consortium
-            </label>
+          <div style={{ marginTop: 12 }}>
+            <label style={{ marginBottom: 6 }}>Consortium</label>
+            <div className="row">
+              {(["none", "alliance", "trilliant"] as const).map((val) => {
+                const checked =
+                  val === "alliance" ? p.by_alliance_arden :
+                  val === "trilliant" ? p.by_trilliant_arden :
+                  !p.by_alliance_arden && !p.by_trilliant_arden;
+                const label =
+                  val === "alliance" ? "By Alliance-Arden Consortium" :
+                  val === "trilliant" ? "By Trilliant-Arden Consortium" : "None";
+                return (
+                  <label key={val} style={{ display: "flex", alignItems: "center", gap: 6, textTransform: "none", letterSpacing: 0, fontWeight: 500, margin: 0 }}>
+                    <input
+                      type="radio"
+                      name="consortium"
+                      checked={checked}
+                      onChange={() => {
+                        setP({ ...p, by_alliance_arden: val === "alliance", by_trilliant_arden: val === "trilliant" });
+                      }}
+                    />
+                    {label}
+                  </label>
+                );
+              })}
+            </div>
           </div>
           <div className="row" style={{ marginTop: 12 }}>
             <label style={{ display: "flex", alignItems: "center", gap: 6, textTransform: "none", letterSpacing: 0, fontWeight: 500, margin: 0 }}>
@@ -159,30 +243,45 @@ export default function EditProjectPage() {
 
       {tab === "specs" && (
         <div className="card">
-          <DragList items={specs} onChange={setSpecs}
-            renderItem={(s) => (
-              <div className="row">
-                <div><input placeholder="Label" value={s.label} onChange={(e) => setSpecs(specs.map((x) => x._key === s._key ? { ...x, label: e.target.value } : x))} /></div>
-                <div><input placeholder="Value" value={s.value} onChange={(e) => setSpecs(specs.map((x) => x._key === s._key ? { ...x, value: e.target.value } : x))} /></div>
-                <div style={{ flex: 0 }}><button className="btn btn-danger" style={{ fontSize: 12 }} onClick={() => setSpecs(specs.filter((x) => x._key !== s._key))}>Remove</button></div>
+          <p className="muted" style={{ marginTop: 0 }}>Check each spec you want to show on the project page and fill in its value.</p>
+          {specs.map((s) => (
+            <div key={s.label} className="row" style={{ marginTop: 8, alignItems: "center" }}>
+              <label style={{ display: "flex", alignItems: "center", gap: 8, textTransform: "none", letterSpacing: 0, fontWeight: 500, margin: 0, minWidth: 220, flex: 0 }}>
+                <input
+                  type="checkbox"
+                  checked={s.enabled}
+                  onChange={(e) => setSpecs(specs.map((x) => x.label === s.label ? { ...x, enabled: e.target.checked } : x))}
+                />
+                {s.label}
+              </label>
+              <div>
+                <input
+                  placeholder="Value"
+                  disabled={!s.enabled}
+                  value={s.value}
+                  onChange={(e) => setSpecs(specs.map((x) => x.label === s.label ? { ...x, value: e.target.value } : x))}
+                />
               </div>
-            )} />
-          <button className="btn" style={{ marginTop: 8 }} onClick={() => setSpecs([...specs, { _key: uid(), label: "", value: "" }])}>Add spec</button>
+            </div>
+          ))}
         </div>
       )}
 
       {tab === "features" && (
         <div className="card">
-          <p className="muted" style={{ marginTop: 0 }}>Icon name uses lucide-react: any icon name from lucide.dev (e.g. <code>Zap</code>, <code>ShieldCheck</code>).</p>
-          <DragList items={features} onChange={setFeatures}
-            renderItem={(f) => (
-              <div className="row">
-                <div style={{ maxWidth: 180 }}><input placeholder="Icon (lucide)" value={f.icon} onChange={(e) => setFeatures(features.map((x) => x._key === f._key ? { ...x, icon: e.target.value } : x))} /></div>
-                <div><input placeholder="Label" value={f.label} onChange={(e) => setFeatures(features.map((x) => x._key === f._key ? { ...x, label: e.target.value } : x))} /></div>
-                <div style={{ flex: 0 }}><button className="btn btn-danger" style={{ fontSize: 12 }} onClick={() => setFeatures(features.filter((x) => x._key !== f._key))}>Remove</button></div>
-              </div>
-            )} />
-          <button className="btn" style={{ marginTop: 8 }} onClick={() => setFeatures([...features, { _key: uid(), icon: "", label: "" }])}>Add feature</button>
+          <p className="muted" style={{ marginTop: 0 }}>Check each feature you want to show on the project page.</p>
+          {features.map((f) => (
+            <div key={f.label} style={{ marginTop: 6 }}>
+              <label style={{ display: "flex", alignItems: "center", gap: 8, textTransform: "none", letterSpacing: 0, fontWeight: 500, margin: 0 }}>
+                <input
+                  type="checkbox"
+                  checked={f.enabled}
+                  onChange={(e) => setFeatures(features.map((x) => x.label === f.label ? { ...x, enabled: e.target.checked } : x))}
+                />
+                {f.label}
+              </label>
+            </div>
+          ))}
         </div>
       )}
 
@@ -197,7 +296,7 @@ export default function EditProjectPage() {
           <p className="muted" style={{ marginTop: 0 }}>Add one entry per floor. Order matters — the elevator strip renders top-to-bottom in reverse.</p>
           <DragList items={floorPlans} onChange={setFloorPlans}
             renderItem={(f) => (
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr auto auto", gap: 8, alignItems: "center" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 8, alignItems: "center" }}>
                 <input placeholder="Short label" value={f.label} onChange={(e) => setFloorPlans(floorPlans.map((x) => x._key === f._key ? { ...x, label: e.target.value } : x))} />
                 <input placeholder="Full label" value={f.full_label} onChange={(e) => setFloorPlans(floorPlans.map((x) => x._key === f._key ? { ...x, full_label: e.target.value } : x))} />
                 <select value={f.kind ?? ""} onChange={(e) => setFloorPlans(floorPlans.map((x) => x._key === f._key ? { ...x, kind: e.target.value || null } : x))}>
@@ -223,7 +322,7 @@ export default function EditProjectPage() {
           </label>
           {nb && (
             <div style={{ marginTop: 12 }}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
                 <ImageUploader value={nb.image_1} onChange={(v) => setNb({ ...nb, image_1: v })} scope="projects" ownerId={id} label="Image 1" />
                 <ImageUploader value={nb.image_2} onChange={(v) => setNb({ ...nb, image_2: v })} scope="projects" ownerId={id} label="Image 2" />
               </div>
@@ -232,21 +331,22 @@ export default function EditProjectPage() {
               </div>
             </div>
           )}
+          <div style={{ marginTop: 16 }}>
+            <label>Google Maps embed src (iframe URL)</label>
+            <input value={p.map_embed_src ?? ""} onChange={(e) => set("map_embed_src", e.target.value || null)} />
+          </div>
         </div>
       )}
 
       {tab === "arch" && (
         <div className="card">
           <label style={{ display: "flex", alignItems: "center", gap: 6, textTransform: "none", letterSpacing: 0, fontWeight: 500 }}>
-            <input type="checkbox" checked={arch !== null} onChange={(e) => setArch(e.target.checked ? { name: "", title: "", image: null, quote: "" } : null)} />
+            <input type="checkbox" checked={arch !== null} onChange={(e) => setArch(e.target.checked ? { name: "", title: "Principal Architect", image: null, quote: "" } : null)} />
             Show an architect section on this project
           </label>
           {arch && (
             <div style={{ marginTop: 12 }}>
-              <div className="row">
-                <div><label>Name</label><input value={arch.name} onChange={(e) => setArch({ ...arch, name: e.target.value })} /></div>
-                <div><label>Title</label><input value={arch.title} onChange={(e) => setArch({ ...arch, title: e.target.value })} /></div>
-              </div>
+              <div><label>Name</label><input value={arch.name} onChange={(e) => setArch({ ...arch, name: e.target.value })} /></div>
               <div style={{ marginTop: 12 }}>
                 <ImageUploader value={arch.image} onChange={(v) => setArch({ ...arch, image: v })} scope="projects" ownerId={id} label="Portrait" />
               </div>

@@ -20,12 +20,22 @@
 .admin-root .btn-danger { background: #fff; color: #b91c1c; border-color: #fecaca; }
 .admin-root .btn-danger:hover { background: #fef2f2; }
 .admin-root .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.admin-root input[type=text], .admin-root input[type=email], .admin-root input[type=password],
-.admin-root input[type=url], .admin-root input[type=tel], .admin-root textarea, .admin-root select {
-  width: 100%; padding: 0.5rem 0.7rem; border: 1px solid #d1d5db; border-radius: 6px;
+.admin-root input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]):not([type=color]):not([type=submit]):not([type=button]):not([type=reset]),
+.admin-root textarea, .admin-root select {
+  width: 100%; padding: 0.5rem 0.7rem; border: 1px solid #9ca3af; border-radius: 6px;
   font-size: 14px; background: #fff; color: #111827; box-sizing: border-box;
+  outline: none;
+}
+.admin-root input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]):not([type=color]):not([type=submit]):not([type=button]):not([type=reset]):focus,
+.admin-root textarea:focus, .admin-root select:focus {
+  border-color: #111827;
+  box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
 }
 .admin-root textarea { min-height: 90px; resize: vertical; }
+.admin-root input:not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]):not([type=color]):not([type=submit]):not([type=button]):not([type=reset]):disabled,
+.admin-root textarea:disabled, .admin-root select:disabled {
+  background: #f3f4f6 !important; color: #9ca3af !important; border-color: #e5e7eb !important; cursor: not-allowed;
+}
 .admin-root label { font-size: 12px; font-weight: 600; color: #374151; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; display: block; }
 .admin-root .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; }
 .admin-root .card + .card { margin-top: 16px; }
@@ -39,7 +49,123 @@
 .admin-root .badge-on { background: #dcfce7; color: #166534; }
 .admin-root .badge-off { background: #f3f4f6; color: #6b7280; }
 .admin-root .badge-warn { background: #fef3c7; color: #92400e; }
-.admin-root .tabs { display: flex; gap: 4px; border-bottom: 1px solid #e5e7eb; margin-bottom: 16px; }
+.admin-root .tabs { display: flex; gap: 4px; border-bottom: 1px solid #e5e7eb; margin-bottom: 16px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.admin-root .tabs::-webkit-scrollbar { display: none; }
+.admin-root .tab { white-space: nowrap; }
 .admin-root .tab { padding: 8px 14px; font-size: 14px; font-weight: 500; color: #6b7280; border-bottom: 2px solid transparent; cursor: pointer; }
 .admin-root .tab.active { color: #111827; border-bottom-color: #111827; }
 .admin-root .drag-handle { cursor: grab; color: #9ca3af; padding: 4px; }
+
+/* ---- Layout shell ---- */
+.admin-shell {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  height: 100vh;
+}
+.admin-aside {
+  border-right: 1px solid #e5e7eb;
+  background: #fff;
+  padding: 20px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.admin-aside-account { margin-top: auto; padding-top: 16px; border-top: 1px solid #e5e7eb; }
+.admin-main { padding: 28px 32px; overflow-y: auto; height: 100vh; }
+
+/* Sidebar variants */
+.admin-sidebar-desktop { display: block; }
+.admin-mobile-bar { display: none; }
+
+/* Mobile drawer */
+.admin-drawer-backdrop {
+  position: fixed; inset: 0; background: rgba(17,24,39,0.5); z-index: 300;
+  display: flex; justify-content: flex-start;
+}
+.admin-drawer {
+  width: min(280px, 85vw);
+  background: #fff;
+  padding: 20px;
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+}
+.admin-hamburger {
+  background: transparent; border: 1px solid #d1d5db;
+  width: 40px; height: 40px; border-radius: 8px;
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  cursor: pointer; padding: 0;
+}
+.admin-hamburger span { width: 18px; height: 2px; background: #111827; border-radius: 2px; }
+
+/* ---- Mobile responsive ---- */
+@media (max-width: 900px) {
+  .admin-shell {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 100vh;
+  }
+  .admin-aside {
+    position: sticky;
+    top: 28px;
+    z-index: 250;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    border-right: 0;
+    border-bottom: 1px solid #e5e7eb;
+    display: block;
+    overflow: visible;
+  }
+  .admin-aside > div:first-child,
+  .admin-aside > .admin-aside-account { display: none !important; }
+
+  .admin-main {
+    padding: 20px 16px;
+    height: auto;
+    overflow: visible;
+  }
+
+  .admin-sidebar-desktop { display: none !important; }
+  .admin-mobile-bar {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: #fff;
+    margin: 0;
+  }
+
+  .admin-root .row { flex-direction: column; align-items: stretch; }
+  .admin-root .row > * { flex: initial; width: 100%; }
+
+  .admin-root .card { padding: 16px; }
+
+  /* Tables scroll horizontally on small screens */
+  .admin-root .card table { min-width: 640px; }
+  .admin-root table { font-size: 13px; }
+  .admin-root th, .admin-root td { padding: 8px 8px; }
+}
+
+/* Table containers scroll horizontally at any width when they'd overflow */
+.admin-root .card { overflow-x: auto; }
+
+/* Overview tile grids collapse on smaller viewports */
+@media (max-width: 700px) {
+  .admin-priority-grid { grid-template-columns: 1fr !important; }
+  .admin-content-grid  { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+}
+@media (max-width: 420px) {
+  .admin-content-grid  { grid-template-columns: 1fr !important; }
+}
+
+/* Contact inbox modal responsive tweak */
+@media (max-width: 500px) {
+  .admin-root [role="dialog"], .admin-root .modal { padding: 12px !important; }
+}
+

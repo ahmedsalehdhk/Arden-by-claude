@@ -35,8 +35,17 @@ export default function LeadsPage() {
 
   return (
     <div>
-      <PageHeader title="Floor-plan leads" right={
+      <PageHeader title="Website leads" right={
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <button
+            className="btn"
+            onClick={async () => {
+              await api("/api/admin/floorplan-leads", { method: "POST", body: JSON.stringify({ action: "mark_all_read" }) });
+              load();
+            }}
+          >
+            Read all
+          </button>
           <label style={{ margin: 0, textTransform: "none", letterSpacing: 0, fontWeight: 500, fontSize: 12 }}>Project</label>
           <select value={project} onChange={(e) => setProject(e.target.value)} style={{ width: 200 }}>
             <option value="">All projects</option>

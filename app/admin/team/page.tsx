@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { api } from "../_components/api";
 import { DragList } from "../_components/DragList";
 import PageHeader from "../_components/PageHeader";
+import ImageUploader from "../_components/ImageUploader";
 
 type Row = {
   id: number; slug: string; name: string; role: string; image: string | null;
@@ -12,29 +12,23 @@ type Row = {
 };
 
 export default function TeamListPage() {
-  const router = useRouter();
   const [rows, setRows] = useState<(Row & { _key: string })[]>([]);
-  const [creating, setCreating] = useState(false);
   const [dirty, setDirty] = useState(false);
+  const [groupImage, setGroupImage] = useState<string | null>(null);
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(); loadGroupImage(); }, []);
   async function load() {
     const data = await api<Row[]>("/api/admin/team");
     setRows(data.map((r) => ({ ...r, _key: String(r.id) })));
     setDirty(false);
   }
-  async function create(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    setCreating(true);
-    try {
-      const { id } = await api<{ id: number }>("/api/admin/team", {
-        method: "POST",
-        body: JSON.stringify({ slug: fd.get("slug"), name: fd.get("name") }),
-      });
-      router.push(`/admin/team/${id}`);
-    } catch (err: any) { alert(err.message); }
-    finally { setCreating(false); }
+  async function loadGroupImage() {
+    const { url } = await api<{ url: string | null }>("/api/admin/settings/team-group-image");
+    setGroupImage(url);
+  }
+  async function saveGroupImage(url: string | null) {
+    setGroupImage(url);
+    await api("/api/admin/settings/team-group-image", { method: "PUT", body: JSON.stringify({ url }) });
   }
   async function saveOrder() {
     await api("/api/admin/team/order", { method: "PATCH", body: JSON.stringify({ ids: rows.map((r) => r.id) }) });
@@ -49,15 +43,16 @@ export default function TeamListPage() {
   return (
     <div>
       <PageHeader title="Team" right={
-        dirty && <button className="btn btn-primary" onClick={saveOrder}>Save order</button>
+        <div style={{ display: "flex", gap: 8 }}>
+          {dirty && <button className="btn btn-primary" onClick={saveOrder}>Save order</button>}
+          <Link href="/admin/team/new" className="btn btn-primary">Add member</Link>
+        </div>
       } />
 
       <div className="card" style={{ marginBottom: 16 }}>
-        <form onSubmit={create} className="row" style={{ alignItems: "flex-end" }}>
-          <div><label>Name</label><input name="name" required /></div>
-          <div><label>Slug (a–z, 0–9, -)</label><input name="slug" pattern="[a-z0-9-]+" required /></div>
-          <div style={{ flex: 0 }}><button className="btn btn-primary" disabled={creating}>Add member</button></div>
-        </form>
+        <h2 style={{ margin: "0 0 12px", fontSize: 16, fontWeight: 600 }}>Full team group photo</h2>
+        <p className="muted" style={{ marginTop: 0 }}>Displayed at the bottom of the About page. Recommended aspect ratio 16:7.</p>
+        <ImageUploader value={groupImage} onChange={(v) => saveGroupImage(v ?? null)} scope="team" label="Group photo" />
       </div>
 
       <DragList
