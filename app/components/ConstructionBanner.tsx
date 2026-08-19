@@ -1,4 +1,10 @@
+"use client";
+import { usePathname } from "next/navigation";
+
 export default function ConstructionBanner() {
+  const pathname = usePathname() || "";
+  if (pathname.startsWith("/admin")) return null;
+
   const message = "Website under construction";
   const items = Array.from({ length: 12 });
   return (

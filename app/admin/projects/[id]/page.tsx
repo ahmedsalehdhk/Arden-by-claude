@@ -203,7 +203,7 @@ export default function EditProjectPage() {
           </div>
           <div style={{ marginTop: 12 }}>
             <label style={{ marginBottom: 6 }}>Consortium</label>
-            <div className="row">
+            <div style={{ display: "flex", gap: 20, flexWrap: "wrap", alignItems: "center" }}>
               {(["none", "alliance", "trilliant"] as const).map((val) => {
                 const checked =
                   val === "alliance" ? p.by_alliance_arden :
@@ -228,7 +228,7 @@ export default function EditProjectPage() {
               })}
             </div>
           </div>
-          <div className="row" style={{ marginTop: 12 }}>
+          <div style={{ marginTop: 12, display: "flex", gap: 20, flexWrap: "wrap", alignItems: "center" }}>
             <label style={{ display: "flex", alignItems: "center", gap: 6, textTransform: "none", letterSpacing: 0, fontWeight: 500, margin: 0 }}>
               <input type="checkbox" checked={p.is_featured} onChange={(e) => set("is_featured", e.target.checked)} />
               Featured on homepage
@@ -243,7 +243,13 @@ export default function EditProjectPage() {
 
       {tab === "specs" && (
         <div className="card">
-          <p className="muted" style={{ marginTop: 0 }}>Check each spec you want to show on the project page and fill in its value.</p>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap", marginBottom: 12 }}>
+            <p className="muted" style={{ margin: 0 }}>Check each spec you want to show on the project page and fill in its value.</p>
+            <div style={{ display: "flex", gap: 8 }}>
+              <button className="btn" style={{ fontSize: 12 }} onClick={() => setSpecs(specs.map((s) => ({ ...s, enabled: true })))}>Select all</button>
+              <button className="btn" style={{ fontSize: 12 }} onClick={() => setSpecs(specs.map((s) => ({ ...s, enabled: false })))}>Clear all</button>
+            </div>
+          </div>
           {specs.map((s) => (
             <div key={s.label} className="row" style={{ marginTop: 8, alignItems: "center" }}>
               <label style={{ display: "flex", alignItems: "center", gap: 8, textTransform: "none", letterSpacing: 0, fontWeight: 500, margin: 0, minWidth: 220, flex: 0 }}>
@@ -296,15 +302,15 @@ export default function EditProjectPage() {
           <p className="muted" style={{ marginTop: 0 }}>Add one entry per floor. Order matters — the elevator strip renders top-to-bottom in reverse.</p>
           <DragList items={floorPlans} onChange={setFloorPlans}
             renderItem={(f) => (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 8, alignItems: "center" }}>
-                <input placeholder="Short label" value={f.label} onChange={(e) => setFloorPlans(floorPlans.map((x) => x._key === f._key ? { ...x, label: e.target.value } : x))} />
-                <input placeholder="Full label" value={f.full_label} onChange={(e) => setFloorPlans(floorPlans.map((x) => x._key === f._key ? { ...x, full_label: e.target.value } : x))} />
-                <select value={f.kind ?? ""} onChange={(e) => setFloorPlans(floorPlans.map((x) => x._key === f._key ? { ...x, kind: e.target.value || null } : x))}>
-                  <option value="">(none)</option><option value="basement">Basement</option><option value="ground">Ground</option>
-                  <option value="mezzanine">Mezzanine</option><option value="typical">Typical</option><option value="roof">Roof</option>
-                </select>
-                <ImageUploaderInline value={f.image} onChange={(v) => setFloorPlans(floorPlans.map((x) => x._key === f._key ? { ...x, image: v ?? "" } : x))} ownerId={id} />
-                <button className="btn btn-danger" style={{ fontSize: 12 }} onClick={() => setFloorPlans(floorPlans.filter((x) => x._key !== f._key))}>Remove</button>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 8, alignItems: "start" }}>
+                <input placeholder="Short label (e.g. GF)" value={f.label} onChange={(e) => setFloorPlans(floorPlans.map((x) => x._key === f._key ? { ...x, label: e.target.value.toUpperCase() } : x))} />
+                <input placeholder="Full label (e.g. Ground Floor)" value={f.full_label} onChange={(e) => setFloorPlans(floorPlans.map((x) => x._key === f._key ? { ...x, full_label: e.target.value.replace(/\b\w/g, (c) => c.toUpperCase()) } : x))} />
+                <div style={{ gridColumn: "1 / -1", display: "flex", gap: 12, alignItems: "flex-end", flexWrap: "wrap" }}>
+                  <div style={{ flex: 1, minWidth: 240 }}>
+                    <ImageUploaderInline value={f.image} onChange={(v) => setFloorPlans(floorPlans.map((x) => x._key === f._key ? { ...x, image: v ?? "" } : x))} ownerId={id} />
+                  </div>
+                  <button className="btn btn-danger" style={{ fontSize: 12 }} onClick={() => setFloorPlans(floorPlans.filter((x) => x._key !== f._key))}>Remove</button>
+                </div>
               </div>
             )} />
           <button className="btn" style={{ marginTop: 8 }}

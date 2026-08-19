@@ -75,7 +75,7 @@ export default function FloorPlansSection({ project }: { project: ProjectDetail 
   const [lightboxOpen, setLightboxOpen] = useState(false);
   // Default to Ground Floor if present; otherwise the bottom-most floor in the display.
   const initialIndex = (() => {
-    const groundIdx = plans.findIndex((p) => p.kind === "ground");
+    const groundIdx = plans.findIndex((p) => /^ground\b/i.test(p.fullLabel));
     if (groundIdx >= 0) return groundIdx;
     return plans.length - 1;
   })();

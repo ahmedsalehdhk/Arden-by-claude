@@ -1,4 +1,6 @@
 // cPanel Node.js startup file.
+process.env.NODE_ENV = process.env.NODE_ENV || "production";
+
 // On boot: applies pending SQL migrations, creates the seed admin if missing,
 // then starts the Next.js production server on process.env.PORT.
 

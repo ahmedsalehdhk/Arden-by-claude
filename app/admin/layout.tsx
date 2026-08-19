@@ -27,9 +27,11 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   return (
     <div className="admin-root admin-shell">
       <aside className="admin-aside">
-        <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 24 }}>Arden Admin</div>
-        <Sidebar>{account}</Sidebar>
-        <div className="admin-aside-account">{account}</div>
+        <div className="admin-aside-sticky">
+          <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 24 }}>Arden Admin</div>
+          <Sidebar>{account}</Sidebar>
+          <div className="admin-aside-account">{account}</div>
+        </div>
       </aside>
       <main className="admin-main">{children}</main>
     </div>

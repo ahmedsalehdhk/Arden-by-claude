@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { query, one } from "../../../lib/db";
 import { normalizeBdPhone } from "../../../lib/phone";
+import { rateLimit, clientIp } from "../../../lib/rate-limit";
 
 const Body = z.object({
   projectSlug: z.string().min(1).max(200),
@@ -10,6 +11,10 @@ const Body = z.object({
 });
 
 export async function POST(req: NextRequest) {
+  const rl = rateLimit(`fpl:${clientIp(req)}`, 5, 60_000);
+  if (!rl.ok) {
+    return NextResponse.json({ error: "Too many requests" }, { status: 429, headers: { "retry-after": String(rl.retryAfter) } });
+  }
   let body: z.infer<typeof Body>;
   try {
     body = Body.parse(await req.json());
