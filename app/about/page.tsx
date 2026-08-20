@@ -82,20 +82,37 @@ export default function AboutPage() {
     document.addEventListener("keydown", onKey);
 
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    const prevBodyOverflow = document.body.style.overflow;
-    const prevHtmlOverflow = document.documentElement.style.overflow;
-    const prevBodyPadRight = document.body.style.paddingRight;
-    document.body.style.overflow = "hidden";
-    document.documentElement.style.overflow = "hidden";
+    const scrollY = window.scrollY;
+    const body = document.body;
+    const prev = {
+      position: body.style.position,
+      top: body.style.top,
+      left: body.style.left,
+      right: body.style.right,
+      width: body.style.width,
+      paddingRight: body.style.paddingRight,
+      overflow: body.style.overflow,
+    };
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.left = "0";
+    body.style.right = "0";
+    body.style.width = "100%";
+    body.style.overflow = "hidden";
     if (scrollbarWidth > 0) {
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
+      body.style.paddingRight = `${scrollbarWidth}px`;
     }
 
     return () => {
       document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prevBodyOverflow;
-      document.documentElement.style.overflow = prevHtmlOverflow;
-      document.body.style.paddingRight = prevBodyPadRight;
+      body.style.position = prev.position;
+      body.style.top = prev.top;
+      body.style.left = prev.left;
+      body.style.right = prev.right;
+      body.style.width = prev.width;
+      body.style.paddingRight = prev.paddingRight;
+      body.style.overflow = prev.overflow;
+      window.scrollTo(0, scrollY);
     };
   }, [activeMember]);
 
@@ -434,45 +451,36 @@ export default function AboutPage() {
       <AnimatePresence>
         {activeMember !== null && (
           <motion.div
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8"
+            className="fixed inset-0 z-[100] bg-[#faf9f6] overflow-y-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            onClick={() => setActiveMember(null)}
             role="dialog"
             aria-modal="true"
             aria-labelledby="team-modal-name"
           >
-            <div className="absolute inset-0 bg-[#0a0a0a]/70 backdrop-blur-sm" />
-            <motion.div
-              className="relative bg-[#faf9f6] w-full max-w-5xl max-h-[90vh] overflow-hidden grid grid-cols-1 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] shadow-2xl"
-              initial={{ opacity: 0, y: 30, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 20, scale: 0.98 }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              onClick={(e) => e.stopPropagation()}
+            <button
+              type="button"
+              onClick={() => setActiveMember(null)}
+              aria-label="Close bio"
+              className="fixed top-4 right-4 z-10 w-11 h-11 flex items-center justify-center bg-[#faf9f6]/90 hover:bg-white text-[#1a1a1a] border border-[#1a1a1a]/10 rounded-full shadow-sm transition-colors"
             >
-              <button
-                type="button"
-                onClick={() => setActiveMember(null)}
-                aria-label="Close bio"
-                className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center bg-[#faf9f6]/90 hover:bg-white text-[#1a1a1a] transition-colors"
-              >
-                <X size={18} />
-              </button>
+              <X size={18} />
+            </button>
 
-              <div className="relative bg-[#1a1a1a]/5 aspect-[3/4] md:aspect-auto md:h-full">
+            <div className="min-h-full flex flex-col md:grid md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+              <div className="relative bg-[#1a1a1a]/5 h-[45vh] md:h-screen md:sticky md:top-0">
                 <Image
                   src={TEAM[activeMember].image}
                   alt={TEAM[activeMember].name}
                   fill
                   className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 40vw"
+                  sizes="(max-width: 768px) 100vw, 45vw"
                 />
               </div>
 
-              <div className="p-8 sm:p-10 lg:p-12 overflow-y-auto">
+              <div className="p-8 sm:p-10 lg:p-14 md:py-16">
                 <h3
                   id="team-modal-name"
                   className="font-serif text-[#1a1a1a] mb-2"
@@ -494,7 +502,7 @@ export default function AboutPage() {
                 </blockquote>
                 <MarkdownBody source={TEAM[activeMember].bio} />
               </div>
-            </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

@@ -55,9 +55,22 @@ function InputField({ label, name, type = "text", textarea = false, required = f
 
 type FormType = "clients" | "landowners";
 
+const DEFAULT_INFO = {
+  phone: "+88 019 1688 2330",
+  email: "info@ardenholdingsltd.com",
+  address: "House 40 (2nd Floor), Road 20,\nMohakhali DOHS, Dhaka-1206",
+};
+
 function ContactInner() {
   const [activeForm, setActiveForm] = useState<FormType>("clients");
   const [submitted, setSubmitted] = useState(false);
+  const [contactInfo, setContactInfo] = useState(DEFAULT_INFO);
+  useEffect(() => {
+    fetch("/api/settings/contact-info")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => { if (d) setContactInfo({ ...DEFAULT_INFO, ...d }); })
+      .catch(() => {});
+  }, []);
   const searchParams = useSearchParams();
   const isLoaded = useIsLoaded();
   const imageRef = useRef<HTMLDivElement>(null);
@@ -268,8 +281,8 @@ function ContactInner() {
                 </div>
                 <div>
                   <p className="font-sans text-eyebrow-sm uppercase text-[#1a1a1a]/40 mb-2">Phone</p>
-                  <a href="tel:+8801916882330" className="font-serif text-body-lg text-[#1a1a1a] hover:text-[#c9a54a] transition-colors">
-                    +88 019 1688 2330
+                  <a href={`tel:${contactInfo.phone.replace(/[^\d+]/g, "")}`} className="font-serif text-body-lg text-[#1a1a1a] hover:text-[#c9a54a] transition-colors">
+                    {contactInfo.phone}
                   </a>
                 </div>
               </div>
@@ -283,10 +296,10 @@ function ContactInner() {
                 <div>
                   <p className="font-sans text-eyebrow-sm uppercase text-[#1a1a1a]/40 mb-2">Email</p>
                   <a
-                    href="mailto:info@ardenholdingsltd.com"
+                    href={`mailto:${contactInfo.email}`}
                     className="font-serif text-body-lg text-[#1a1a1a] hover:text-[#c9a54a] transition-colors break-all"
                   >
-                    info@ardenholdingsltd.com
+                    {contactInfo.email}
                   </a>
                 </div>
               </div>
@@ -299,9 +312,8 @@ function ContactInner() {
                 </div>
                 <div>
                   <p className="font-sans text-eyebrow-sm uppercase text-[#1a1a1a]/40 mb-2">Address</p>
-                  <p className="font-serif text-body-lg text-[#1a1a1a]">
-                    House 40 (2nd Floor), Road 20,<br />
-                    Mohakhali DOHS, Dhaka-1206
+                  <p className="font-serif text-body-lg text-[#1a1a1a] whitespace-pre-line">
+                    {contactInfo.address}
                   </p>
                 </div>
               </div>

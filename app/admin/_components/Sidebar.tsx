@@ -17,6 +17,7 @@ const SECONDARY: NavItem[] = [
   ["/admin/blog", "News & events"],
   ["/admin/jobs", "Careers"],
   ["/admin/team", "Team"],
+  ["/admin/settings", "Site settings"],
 ];
 
 function isActive(pathname: string, href: string) {
