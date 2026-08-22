@@ -160,7 +160,7 @@ export default function CareersPage() {
               style={{ clipPath: "inset(0 7.5%)" }}
             >
               <Image
-                src="/projectimages/amanat/lobby-view-01.jpg"
+                src="/static/careers-hero.jpg"
                 alt="Working at Arden Holdings"
                 fill
                 className="object-cover"

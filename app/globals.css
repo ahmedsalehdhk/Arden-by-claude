@@ -23,7 +23,6 @@ body {
   color: var(--foreground);
   font-family: var(--font-opensans), sans-serif;
   overflow-x: hidden;
-  padding-top: 28px; /* space for fixed ConstructionBanner */
 }
 
 

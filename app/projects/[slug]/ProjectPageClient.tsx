@@ -124,18 +124,23 @@ function ProjectNotFound() {
 // ─────────────────────────────────────────────
 
 function ProjectHero({ project }: { project: ProjectDetail }) {
+  // Fall back to buildingImage or the first gallery item if hero_image is empty —
+  // admins sometimes forget to set it explicitly in the Basics tab.
+  const hero = project.heroImage || project.buildingImage || project.gallery?.[0] || "";
   return (
     <section className="relative w-full overflow-hidden" style={{ height: "100svh", minHeight: "600px" }}>
       {/* Full-bleed background image */}
       <div className="absolute inset-0">
-        <Image
-          src={project.heroImage}
-          alt={project.name}
-          fill
-          className="object-cover"
-          priority
-          sizes="100vw"
-        />
+        {hero && (
+          <Image
+            src={hero}
+            alt={project.name}
+            fill
+            className="object-cover"
+            priority
+            sizes="100vw"
+          />
+        )}
         {/* Top-down dark fade — keeps the transparent nav legible and carries a
             richer wash down almost the full hero for better text contrast. */}
         <div
@@ -325,7 +330,7 @@ function FeaturesSection({ project }: { project: ProjectDetail }) {
         <FadeIn delay={0.1}>
           <div className="relative overflow-hidden w-full h-full" style={{ aspectRatio: "4/5" }}>
             <Image
-              src={project.buildingImage}
+              src={project.buildingImage || project.heroImage || project.gallery?.[0] || ""}
               alt={`${project.name} Features`}
               fill
               className="object-cover"

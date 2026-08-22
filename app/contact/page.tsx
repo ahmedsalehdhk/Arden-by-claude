@@ -162,7 +162,7 @@ function ContactInner() {
               style={{ clipPath: "inset(0 7.5%)" }}
             >
               <Image
-                src="/projectimages/amanat/rooftop-01.jpg"
+                src="/static/contact-hero.jpg"
                 alt="Amanat rooftop by Arden Holdings"
                 fill
                 className="object-cover"

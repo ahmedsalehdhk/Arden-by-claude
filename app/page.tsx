@@ -24,9 +24,9 @@ import { useIsLoaded } from "./context/LoadContext";
 // Add more images here to auto-rotate through them in the hero.
 // Each image plays a Ken Burns loop; when its cycle ends, the next crossfades in.
 const HERO_IMAGES = [
-  { src: "/projectimages/rahma/view-09.png", alt: "Luxury real estate development" },
-  { src: "/projectimages/amanat/lobby-view-01.jpg", alt: "Luxury real estate development"},
-  { src: "/projectimages/rahma/view-08.png", alt: "Luxury real estate development"}
+  { src: "/static/home-hero-1.png", alt: "Luxury real estate development" },
+  { src: "/static/home-and-careers-hero.jpg", alt: "Luxury real estate development"},
+  { src: "/static/home-hero-2.png", alt: "Luxury real estate development"}
 ];
 
 const KEN_BURNS_DURATION_S = 6;
@@ -585,7 +585,7 @@ function ContactSection() {
         style={{ width: "46%" }}
       >
         <Image
-          src="/projectimages/rahma/view-07.jpg"
+          src="/static/home-cta.jpg"
           alt="Arden Holdings development"
           fill
           className="object-cover"

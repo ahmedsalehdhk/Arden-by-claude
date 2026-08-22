@@ -77,7 +77,7 @@ export default function TrilliantArdenConsortiumPage() {
               style={{ clipPath: "inset(0 7.5%)" }}
             >
               <Image
-                src="/consortium/hero-01.png"
+                src="/consortium/trilliant-ardent/hero-01.jpg"
                 alt="Trilliant-Arden Consortium"
                 fill
                 className="object-cover"

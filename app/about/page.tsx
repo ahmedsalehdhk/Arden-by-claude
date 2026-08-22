@@ -327,7 +327,7 @@ export default function AboutPage() {
             <FadeIn delay={0.15} className="lg:h-full lg:order-2">
               <div className="relative w-full bg-[#1a1a1a]/5 overflow-hidden aspect-[16/10] lg:aspect-auto lg:h-full">
                 <Image
-                  src="/about/hero-03.png"
+                  src="/about/hero-03.jpg"
                   alt="Arden project view"
                   fill
                   className="object-cover"
@@ -404,22 +404,6 @@ export default function AboutPage() {
             ))}
           </div>
 
-          {/* Group photo */}
-          <FadeIn delay={0.1}>
-            <div className="relative overflow-hidden w-full mb-6" style={{ aspectRatio: "16/7" }}>
-              <Image
-                src={groupImage}
-                alt="The Arden Holdings team"
-                fill
-                className="object-cover"
-                sizes="100vw"
-                loading="lazy"
-              />
-            </div>
-            <p className="font-sans text-[#1a1a1a]/40 text-center" style={{ fontSize: "12px", letterSpacing: "0.22em", textTransform: "uppercase" }}>
-              The Arden team, Dhaka
-            </p>
-          </FadeIn>
         </div>
       </section>
 

@@ -97,12 +97,7 @@ export default function Footer() {
         <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 font-sans text-body-sm text-white/50">
           <p>&copy; {new Date().getFullYear()} Arden Holdings Ltd. All rights reserved.</p>
           <span className="hidden sm:inline text-white/25">|</span>
-          <p>
-            Made By{" "}
-            <a href="#" className="text-white/70 hover:text-white transition-colors">
-              Proteron Digital
-            </a>
-          </p>
+          <p>Made By <span className="text-white/70">Proteron Digital</span></p>
         </div>
 
         <div className="flex items-center gap-3">
