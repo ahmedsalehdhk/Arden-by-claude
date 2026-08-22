@@ -71,7 +71,7 @@ function typeToEnum(t: string): "residential" | "commercial" {
 
 async function main() {
   const { pool, withTx } = await import("../lib/db");
-  const { PROJECT_DETAILS } = await import("../app/data/projects");
+  const { PROJECT_DETAILS } = await import("./seed-projects");
 
   // 1) Admin user
   const email = process.env.SEED_ADMIN_EMAIL;

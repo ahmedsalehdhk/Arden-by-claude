@@ -1,12 +1,13 @@
 import { mkdir, writeFile } from "node:fs/promises";
-import { join, extname } from "node:path";
+import { join, isAbsolute, extname } from "node:path";
 import { randomBytes } from "node:crypto";
 import sharp from "sharp";
 import { env } from "./env";
 
-// Directory URLs are always /uploads/... (relative to public/).
-const ROOT = env.UPLOAD_DIR; // e.g. "public/uploads"
-const PUBLIC_PREFIX = "/" + ROOT.replace(/^public\//, "");
+// Physical write path — absolute if given, otherwise resolved against cwd.
+const ROOT = isAbsolute(env.UPLOAD_DIR) ? env.UPLOAD_DIR : join(process.cwd(), env.UPLOAD_DIR);
+// Public URL that maps to ROOT. Trimmed of any trailing slash for clean joins.
+const URL_PREFIX = env.UPLOAD_URL_PREFIX.replace(/\/+$/, "");
 
 type SaveOptions = {
   scope: "projects" | "news" | "team" | "misc";
@@ -33,7 +34,7 @@ export async function saveImageBuffer(
   opts: SaveOptions,
 ): Promise<SavedImage> {
   const subdir = opts.ownerId != null ? `${opts.scope}/${opts.ownerId}` : opts.scope;
-  const dir = join(process.cwd(), ROOT, subdir);
+  const dir = join(ROOT, subdir);
   await mkdir(dir, { recursive: true });
 
   const ext = (extname(filename) || ".jpg").toLowerCase();
@@ -50,7 +51,7 @@ export async function saveImageBuffer(
   await writeFile(outPath, outBuf.data);
 
   return {
-    url: `${PUBLIC_PREFIX}/${subdir}/${base}${okExt}`,
+    url: `${URL_PREFIX}/${subdir}/${base}${okExt}`,
     width: outBuf.info.width,
     height: outBuf.info.height,
   };

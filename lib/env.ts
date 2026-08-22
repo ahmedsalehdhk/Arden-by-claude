@@ -14,7 +14,13 @@ function optional(name: string, fallback: string): string {
 export const env = {
   DATABASE_URL: required("DATABASE_URL"),
   SESSION_SECRET: required("SESSION_SECRET"),
+  // Absolute path where uploaded images are written. On cPanel this points
+  // OUTSIDE the app dir (e.g. /home/ardenhol/arden-uploads) and is symlinked
+  // into public/uploads so Next serves them at UPLOAD_URL_PREFIX.
   UPLOAD_DIR: optional("UPLOAD_DIR", "public/uploads"),
+  // Public URL path prefix that maps to UPLOAD_DIR. Kept configurable so the
+  // filesystem path and the public URL are decoupled.
+  UPLOAD_URL_PREFIX: optional("UPLOAD_URL_PREFIX", "/uploads"),
   SEED_ADMIN_EMAIL: optional("SEED_ADMIN_EMAIL", ""),
   SEED_ADMIN_PASSWORD: optional("SEED_ADMIN_PASSWORD", ""),
   SEED_ADMIN_NAME: optional("SEED_ADMIN_NAME", "Admin"),
