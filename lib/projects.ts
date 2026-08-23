@@ -1,5 +1,30 @@
 // DB-backed project helpers. Return the same shape the existing UI expects (ProjectDetail).
 import { many, one, withTx } from "./db";
+import { getSetting, setSetting } from "./settings";
+
+// Display order for the public /projects page is stored as a JSON id-array in
+// site_settings (key below). This avoids needing an ALTER TABLE on `projects`,
+// which the app's DB user doesn't own on the production host.
+const DISPLAY_ORDER_KEY = "projects_display_order";
+
+async function getDisplayOrderIds(): Promise<number[]> {
+  const v = await getSetting<number[]>(DISPLAY_ORDER_KEY);
+  return Array.isArray(v) ? v.filter((n) => typeof n === "number") : [];
+}
+
+// Sort projects by their position in the saved id-array. Any projects not in
+// the array (newly created, or before the admin has ever saved an order) fall
+// to the end in alphabetical name order.
+function sortByDisplayOrder<T extends { id: number; name: string }>(rows: T[], orderIds: number[]): T[] {
+  const pos = new Map(orderIds.map((id, i) => [id, i]));
+  const BIG = Number.MAX_SAFE_INTEGER;
+  return [...rows].sort((a, b) => {
+    const pa = pos.has(a.id) ? (pos.get(a.id) as number) : BIG;
+    const pb = pos.has(b.id) ? (pos.get(b.id) as number) : BIG;
+    if (pa !== pb) return pa - pb;
+    return a.name.localeCompare(b.name);
+  });
+}
 
 export interface ProjectSpec { label: string; value: string; sort_order?: number }
 export interface ProjectFeature { icon: string; label: string; sort_order?: number }
@@ -28,7 +53,6 @@ export interface ProjectDetail {
   byTrilliantArden?: boolean;
   is_featured: boolean;
   featured_order: number;
-  display_order: number;
   is_published: boolean;
   specs: ProjectSpec[];
   features: ProjectFeature[];
@@ -54,7 +78,6 @@ export interface ProjectSummary {
   byTrilliantArden: boolean;
   is_featured: boolean;
   featured_order: number;
-  display_order: number;
 }
 
 type Row = {
@@ -62,7 +85,7 @@ type Row = {
   type: string; status: string; address: string; location: string;
   hero_image: string; building_image: string; map_embed_src: string | null;
   by_alliance_arden: boolean; by_trilliant_arden: boolean;
-  is_featured: boolean; featured_order: number; display_order: number; is_published: boolean;
+  is_featured: boolean; featured_order: number; is_published: boolean;
 };
 
 function cap<T extends string>(s: string): T {
@@ -78,22 +101,25 @@ function toSummary(r: Row): ProjectSummary {
     heroImage: r.hero_image, buildingImage: r.building_image,
     byAllianceArden: r.by_alliance_arden, byTrilliantArden: r.by_trilliant_arden,
     is_featured: r.is_featured, featured_order: r.featured_order,
-    display_order: r.display_order,
   };
 }
 
 export async function getAllProjectSlugs(): Promise<string[]> {
-  const rows = await many<{ slug: string }>(
-    "SELECT slug FROM projects WHERE is_published = TRUE ORDER BY display_order ASC, name ASC",
-  );
-  return rows.map((r) => r.slug);
+  const [rows, orderIds] = await Promise.all([
+    many<{ id: number; slug: string; name: string }>(
+      "SELECT id, slug, name FROM projects WHERE is_published = TRUE",
+    ),
+    getDisplayOrderIds(),
+  ]);
+  return sortByDisplayOrder(rows, orderIds).map((r) => r.slug);
 }
 
 export async function getAllProjects(): Promise<ProjectSummary[]> {
-  const rows = await many<Row>(
-    "SELECT * FROM projects WHERE is_published = TRUE ORDER BY display_order ASC, name ASC",
-  );
-  return rows.map(toSummary);
+  const [rows, orderIds] = await Promise.all([
+    many<Row>("SELECT * FROM projects WHERE is_published = TRUE"),
+    getDisplayOrderIds(),
+  ]);
+  return sortByDisplayOrder(rows.map(toSummary), orderIds);
 }
 
 export async function getFeaturedProjects(): Promise<ProjectSummary[]> {
@@ -151,7 +177,6 @@ export async function getProjectBySlug(slug: string): Promise<ProjectDetail | nu
     byTrilliantArden: row.by_trilliant_arden || undefined,
     is_featured: row.is_featured,
     featured_order: row.featured_order,
-    display_order: row.display_order,
     is_published: row.is_published,
     specs,
     features,
@@ -186,14 +211,12 @@ export async function setFeaturedOrder(orderedIds: number[]): Promise<void> {
   });
 }
 
-// Admin: rewrite display_order (used on the /projects listing page) for all projects in one transaction.
+// Admin: rewrite display order (used on the /projects listing page). Stored as
+// a JSON id-array in site_settings — see DISPLAY_ORDER_KEY above.
 export async function setDisplayOrder(orderedIds: number[]): Promise<void> {
-  await withTx(async (c) => {
-    for (let i = 0; i < orderedIds.length; i++) {
-      await c.query(
-        "UPDATE projects SET display_order = $2, updated_at = NOW() WHERE id = $1",
-        [orderedIds[i], i],
-      );
-    }
-  });
+  await setSetting(DISPLAY_ORDER_KEY, orderedIds);
+}
+
+export async function getDisplayOrder(): Promise<number[]> {
+  return getDisplayOrderIds();
 }
