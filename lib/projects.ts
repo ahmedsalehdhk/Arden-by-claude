@@ -28,6 +28,7 @@ export interface ProjectDetail {
   byTrilliantArden?: boolean;
   is_featured: boolean;
   featured_order: number;
+  display_order: number;
   is_published: boolean;
   specs: ProjectSpec[];
   features: ProjectFeature[];
@@ -53,6 +54,7 @@ export interface ProjectSummary {
   byTrilliantArden: boolean;
   is_featured: boolean;
   featured_order: number;
+  display_order: number;
 }
 
 type Row = {
@@ -60,7 +62,7 @@ type Row = {
   type: string; status: string; address: string; location: string;
   hero_image: string; building_image: string; map_embed_src: string | null;
   by_alliance_arden: boolean; by_trilliant_arden: boolean;
-  is_featured: boolean; featured_order: number; is_published: boolean;
+  is_featured: boolean; featured_order: number; display_order: number; is_published: boolean;
 };
 
 function cap<T extends string>(s: string): T {
@@ -76,19 +78,20 @@ function toSummary(r: Row): ProjectSummary {
     heroImage: r.hero_image, buildingImage: r.building_image,
     byAllianceArden: r.by_alliance_arden, byTrilliantArden: r.by_trilliant_arden,
     is_featured: r.is_featured, featured_order: r.featured_order,
+    display_order: r.display_order,
   };
 }
 
 export async function getAllProjectSlugs(): Promise<string[]> {
   const rows = await many<{ slug: string }>(
-    "SELECT slug FROM projects WHERE is_published = TRUE ORDER BY name ASC",
+    "SELECT slug FROM projects WHERE is_published = TRUE ORDER BY display_order ASC, name ASC",
   );
   return rows.map((r) => r.slug);
 }
 
 export async function getAllProjects(): Promise<ProjectSummary[]> {
   const rows = await many<Row>(
-    "SELECT * FROM projects WHERE is_published = TRUE ORDER BY name ASC",
+    "SELECT * FROM projects WHERE is_published = TRUE ORDER BY display_order ASC, name ASC",
   );
   return rows.map(toSummary);
 }
@@ -148,6 +151,7 @@ export async function getProjectBySlug(slug: string): Promise<ProjectDetail | nu
     byTrilliantArden: row.by_trilliant_arden || undefined,
     is_featured: row.is_featured,
     featured_order: row.featured_order,
+    display_order: row.display_order,
     is_published: row.is_published,
     specs,
     features,
@@ -176,6 +180,18 @@ export async function setFeaturedOrder(orderedIds: number[]): Promise<void> {
     for (let i = 0; i < orderedIds.length; i++) {
       await c.query(
         "UPDATE projects SET is_featured = TRUE, featured_order = $2, updated_at = NOW() WHERE id = $1",
+        [orderedIds[i], i],
+      );
+    }
+  });
+}
+
+// Admin: rewrite display_order (used on the /projects listing page) for all projects in one transaction.
+export async function setDisplayOrder(orderedIds: number[]): Promise<void> {
+  await withTx(async (c) => {
+    for (let i = 0; i < orderedIds.length; i++) {
+      await c.query(
+        "UPDATE projects SET display_order = $2, updated_at = NOW() WHERE id = $1",
         [orderedIds[i], i],
       );
     }

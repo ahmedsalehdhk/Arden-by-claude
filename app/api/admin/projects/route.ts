@@ -9,8 +9,8 @@ const CreateBody = z.object({
 
 export async function GET() {
   const rows = await many(
-    `SELECT id, slug, name, type, status, location, is_featured, featured_order, is_published, updated_at
-       FROM projects ORDER BY name ASC`,
+    `SELECT id, slug, name, type, status, location, is_featured, featured_order, display_order, is_published, updated_at
+       FROM projects ORDER BY display_order ASC, name ASC`,
   );
   return NextResponse.json(rows);
 }

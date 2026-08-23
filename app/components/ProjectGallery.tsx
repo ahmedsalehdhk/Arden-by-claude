@@ -119,10 +119,11 @@ export default function ProjectGallery({ images, projectName, showHeading = true
           const isCenter = offset === 0;
           const isNeighbor = Math.abs(offset) === 1 || Math.abs(offset) === count - 1;
 
-          // Normalize the wrap-around neighbors so previous/next always show even at boundaries
+          // Normalize the wrap-around neighbors so previous/next always show even at boundaries.
+          // Guard on count > 1 so a lone slide (offset 0, count-1 0) is not pushed to the left.
           let visualOffset = offset;
-          if (offset === count - 1) visualOffset = -1;
-          else if (offset === -(count - 1)) visualOffset = 1;
+          if (count > 1 && offset === count - 1) visualOffset = -1;
+          else if (count > 1 && offset === -(count - 1)) visualOffset = 1;
 
           const isVisible = Math.abs(visualOffset) <= 1;
 
@@ -174,31 +175,33 @@ export default function ProjectGallery({ images, projectName, showHeading = true
         })}
       </div>
 
-      {/* Controls */}
-      <div className="mt-10 flex items-center justify-center gap-6">
-        <button
-          type="button"
-          aria-label="Previous image"
-          onClick={goPrev}
-          className="w-11 h-11 rounded-full border border-[#1a1a1a]/25 flex items-center justify-center text-[#1a1a1a]/70 hover:border-[#c9a54a] hover:text-[#c9a54a] transition-colors duration-300"
-        >
-          <ChevronLeft size={18} strokeWidth={1.5} />
-        </button>
-        <span
-          className="font-sans text-[#1a1a1a]/50 tabular-nums"
-          style={{ fontSize: "12px", letterSpacing: "0.28em" }}
-        >
-          {String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
-        </span>
-        <button
-          type="button"
-          aria-label="Next image"
-          onClick={goNext}
-          className="w-11 h-11 rounded-full border border-[#1a1a1a]/25 flex items-center justify-center text-[#1a1a1a]/70 hover:border-[#c9a54a] hover:text-[#c9a54a] transition-colors duration-300"
-        >
-          <ChevronRight size={18} strokeWidth={1.5} />
-        </button>
-      </div>
+      {/* Controls — hidden when only one image, since nav and counter add no value */}
+      {count > 1 && (
+        <div className="mt-10 flex items-center justify-center gap-6">
+          <button
+            type="button"
+            aria-label="Previous image"
+            onClick={goPrev}
+            className="w-11 h-11 rounded-full border border-[#1a1a1a]/25 flex items-center justify-center text-[#1a1a1a]/70 hover:border-[#c9a54a] hover:text-[#c9a54a] transition-colors duration-300"
+          >
+            <ChevronLeft size={18} strokeWidth={1.5} />
+          </button>
+          <span
+            className="font-sans text-[#1a1a1a]/50 tabular-nums"
+            style={{ fontSize: "12px", letterSpacing: "0.28em" }}
+          >
+            {String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
+          </span>
+          <button
+            type="button"
+            aria-label="Next image"
+            onClick={goNext}
+            className="w-11 h-11 rounded-full border border-[#1a1a1a]/25 flex items-center justify-center text-[#1a1a1a]/70 hover:border-[#c9a54a] hover:text-[#c9a54a] transition-colors duration-300"
+          >
+            <ChevronRight size={18} strokeWidth={1.5} />
+          </button>
+        </div>
+      )}
 
       {/* Lightbox */}
       <AnimatePresence>
