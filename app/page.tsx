@@ -101,7 +101,7 @@ function Hero() {
   }, []);
 
   return (
-    <section className="bg-[#faf9f6] pt-[calc(69px_+_7.5vw)] sm:pt-[140px] pb-[7.5vw] sm:pb-0" aria-label="Hero">
+    <section className="bg-[#faf9f6] pt-[140px]" aria-label="Hero">
       {/* Main headline */}
       <div className="px-[7.5%] pt-6 sm:pt-10 pb-6 sm:pb-8">
         <AnimatedHeading
@@ -120,10 +120,10 @@ function Hero() {
         />
       </div>
 
-      {/* Hero image — mobile height is derived so the whole hero fits one viewport
-          with a bottom gap that mirrors the top nav offset + text padding (~164px).
-          Desktop keeps the original fixed 78vh. */}
-      <div className="relative w-full overflow-hidden h-[calc(100svh_-_177px_-_15vw)] sm:h-[78vh]">
+      {/* Hero image — fixed 78vh on both mobile and desktop, matching /about.
+          On mobile this intentionally extends past the fold so the user scrolls
+          into the rest of the section, rather than the whole hero fitting one screen. */}
+      <div className="relative w-full overflow-hidden" style={{ height: "78vh" }}>
         <motion.div
           initial={{ y: -60, opacity: 0 }}
           animate={isLoaded ? { y: 0, opacity: 1 } : {}}
