@@ -112,10 +112,10 @@ function Hero() {
           delay={0.4}
           className="font-serif text-[#1a1a1a] text-center select-none uppercase w-full sm:whitespace-nowrap"
           style={{
-            fontSize: "clamp(1.5rem, 4.5vw, 4.5vw)",
+            fontSize: "clamp(2.2rem, 4.5vw, 4.5vw)",
             letterSpacing: "0.22em",
             lineHeight: 1.25,
-            fontWeight: 400,
+            fontWeight: 500,
           }}
         />
       </div>
@@ -196,7 +196,7 @@ function AboutSection() {
                 lineHeight: 1.1,
               }}
             />
-            <p className="font-sans font-medium text-body-lg text-[#1a1a1a] mb-10">
+            <p className="font-sans font-medium text-body-lg text-[#1a1a1a]/55 mb-10">
               Building the country&apos;s most selective projects requires more than just a vision—it requires a standard of excellence that never wavers. Discover a portfolio where luxury meets structural perfection.
             </p>
             <Link href="/about" className="self-start font-sans font-semibold text-[13px] tracking-[0.24em] uppercase text-[#1a1a1a] flex items-center gap-2 group hover:text-[#c9a54a] transition-colors duration-300">
@@ -224,7 +224,7 @@ function FeaturedProjectsSection() {
   const [FEATURED_PROJECTS, setFeatured] = useState<FeaturedProject[]>([]);
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/projects?featured=true")
+    fetch("/api/projects?featured=true", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : []))
       .then((rows: any[]) => {
         if (cancelled) return;
@@ -334,6 +334,13 @@ function FeaturedProjectsSection() {
 
       {/* Content */}
       <div className="relative z-10 h-full flex flex-col lg:flex-row lg:items-center lg:justify-between">
+        {/* Mobile-only category label — sits above the building image so the section
+            introduces itself before any imagery. Duplicated below (desktop layout) via
+            the text column, but hidden on mobile via .lg:block there. */}
+        <p className="lg:hidden font-sans text-eyebrow-lg uppercase text-white text-center pt-6 sm:pt-8 px-[7.5%]">
+          {project.category}
+        </p>
+
         {/* Building image — top on mobile, right column on desktop */}
         <motion.div className="lg:hidden flex justify-center pt-4 sm:pt-6 px-[7.5%]">
           <div
@@ -365,8 +372,9 @@ function FeaturedProjectsSection() {
 
         {/* Left column — text */}
         <div className="flex flex-col justify-center px-[7.5%] max-w-2xl w-full lg:w-auto flex-1 pt-4 sm:pt-6 lg:pt-0 pb-6 lg:pb-0">
-          {/* Static category label — doesn't re-animate on slide change */}
-          <p className="font-sans text-eyebrow-lg uppercase text-white mb-5 sm:mb-7">
+          {/* Static category label — doesn't re-animate on slide change.
+              Hidden on mobile because the mobile layout renders it above the building image. */}
+          <p className="hidden lg:block font-sans text-eyebrow-lg uppercase text-white mb-5 sm:mb-7">
             {project.category}
           </p>
 

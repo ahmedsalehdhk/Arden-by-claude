@@ -120,10 +120,11 @@ export default function ProjectGallery({ images, projectName, showHeading = true
           const isNeighbor = Math.abs(offset) === 1 || Math.abs(offset) === count - 1;
 
           // Normalize the wrap-around neighbors so previous/next always show even at boundaries.
-          // Guard on count > 1 so a lone slide (offset 0, count-1 0) is not pushed to the left.
+          // Only wrap when count >= 3 — with 2 images we want #1 in the center and #2 to the RHS,
+          // never the same slide mirrored on the opposite side.
           let visualOffset = offset;
-          if (count > 1 && offset === count - 1) visualOffset = -1;
-          else if (count > 1 && offset === -(count - 1)) visualOffset = 1;
+          if (count > 2 && offset === count - 1) visualOffset = -1;
+          else if (count > 2 && offset === -(count - 1)) visualOffset = 1;
 
           const isVisible = Math.abs(visualOffset) <= 1;
 
@@ -221,7 +222,7 @@ export default function ProjectGallery({ images, projectName, showHeading = true
                 e.stopPropagation();
                 setLightboxOpen(false);
               }}
-              className="absolute top-6 right-6 w-11 h-11 rounded-full border border-white/25 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
+              className="absolute top-6 right-6 z-20 w-11 h-11 rounded-full border border-white/25 bg-[#0a0a0a]/60 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
             >
               <X size={18} strokeWidth={1.5} />
             </button>
@@ -233,7 +234,7 @@ export default function ProjectGallery({ images, projectName, showHeading = true
                 e.stopPropagation();
                 goPrev();
               }}
-              className="absolute left-4 sm:left-8 w-12 h-12 rounded-full border border-white/25 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
+              className="absolute left-4 sm:left-8 z-20 w-12 h-12 rounded-full border border-white/25 bg-[#0a0a0a]/60 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
             >
               <ChevronLeft size={20} strokeWidth={1.5} />
             </button>
@@ -263,7 +264,7 @@ export default function ProjectGallery({ images, projectName, showHeading = true
                 e.stopPropagation();
                 goNext();
               }}
-              className="absolute right-4 sm:right-8 w-12 h-12 rounded-full border border-white/25 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
+              className="absolute right-4 sm:right-8 z-20 w-12 h-12 rounded-full border border-white/25 bg-[#0a0a0a]/60 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
             >
               <ChevronRight size={20} strokeWidth={1.5} />
             </button>

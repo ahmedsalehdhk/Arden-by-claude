@@ -129,7 +129,8 @@ function ProjectHero({ project }: { project: ProjectDetail }) {
   const hero = project.heroImage || project.buildingImage || project.gallery?.[0] || "";
   return (
     <section className="relative w-full overflow-hidden" style={{ height: "100svh", minHeight: "600px" }}>
-      {/* Full-bleed background image */}
+      {/* Full-bleed background image — object-cover so the photo always fills
+          the hero edge-to-edge (cropping when needed) with no letterbox gaps. */}
       <div className="absolute inset-0">
         {hero && (
           <Image
@@ -392,7 +393,7 @@ function ArchitectSection({ project }: { project: ProjectDetail }) {
             <p className="font-sans text-body-sm text-ink/55 mb-6">
               {a.title}
             </p>
-            <p className="font-sans font-medium text-body-lg text-ink !leading-[1.6]">
+            <p className="font-sans font-medium text-body-lg text-ink/55 !leading-[1.6]">
               {a.quote}
             </p>
           </div>
@@ -406,9 +407,22 @@ function ArchitectSection({ project }: { project: ProjectDetail }) {
 // KNOW YOUR NEIGHBORHOOD SECTION
 // ─────────────────────────────────────────────
 
+// Accepts either a bare URL or a full `<iframe ... src="URL" ...>` snippet
+// (the admin sometimes pastes the whole embed HTML from Google Maps).
+function extractMapSrc(input: string | undefined | null): string | null {
+  if (!input) return null;
+  const trimmed = input.trim();
+  if (!trimmed) return null;
+  const match = trimmed.match(/src=["']([^"']+)["']/i);
+  return match ? match[1] : trimmed;
+}
+
 function NeighborhoodSection({ project }: { project: ProjectDetail }) {
   const n = project.neighborhood;
   if (!n) return null;
+  const mapSrc =
+    extractMapSrc(project.mapEmbedSrc) ??
+    `https://www.google.com/maps?q=${encodeURIComponent(project.address)}&output=embed`;
 
   return (
     <Section tone="bone" rhythm="loose">
@@ -427,10 +441,7 @@ function NeighborhoodSection({ project }: { project: ProjectDetail }) {
         <div className="grid grid-cols-1 sm:grid-cols-3 sm:grid-rows-2 gap-3 sm:gap-4 mb-10 sm:mb-14 sm:h-[520px] lg:h-[620px]">
           <div className="relative overflow-hidden bg-ink/5 sm:col-span-2 sm:row-span-2 aspect-[4/3] sm:aspect-auto">
             <iframe
-              src={
-                project.mapEmbedSrc ??
-                `https://www.google.com/maps?q=${encodeURIComponent(project.address)}&output=embed`
-              }
+              src={mapSrc}
               className="absolute inset-0 w-full h-full border-0"
               allowFullScreen
               loading="lazy"

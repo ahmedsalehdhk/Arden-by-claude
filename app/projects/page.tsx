@@ -42,15 +42,17 @@ export default function ProjectsPage() {
   const [query, setQuery] = useState("");
   const isLoaded = useIsLoaded();
   const [PROJECTS, setProjects] = useState<ProjectRow[]>([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    fetch("/api/projects")
+    fetch("/api/projects", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : []))
       .then((rows: any[]) => setProjects(rows.map((p) => ({
         name: p.name, slug: p.slug, address: p.address, location: p.location,
         status: p.status, type: p.type, image: p.buildingImage || p.heroImage,
         byAllianceArden: p.byAllianceArden, byTrilliantArden: p.byTrilliantArden,
       }))))
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
   const filtered = PROJECTS.filter((p) => {
@@ -128,7 +130,20 @@ export default function ProjectsPage() {
       <section className="bg-[#faf9f6] pt-4 sm:pt-6 pb-12 sm:pb-16 lg:pb-20">
         <div className="px-[7.5%]">
           <AnimatePresence mode="wait">
-            {filtered.length === 0 ? (
+            {loading ? (
+              <motion.div
+                key="loading"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex items-center justify-center py-24"
+              >
+                <div
+                  className="w-8 h-8 rounded-full border-2 border-[#1a1a1a]/10 border-t-[#c9a54a] animate-spin"
+                  aria-label="Loading projects"
+                />
+              </motion.div>
+            ) : filtered.length === 0 ? (
               <motion.div
                 key="empty"
                 initial={{ opacity: 0 }}

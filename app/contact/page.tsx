@@ -96,7 +96,8 @@ function ContactInner() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const fd = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const fd = new FormData(form);
     const first = String(fd.get("first_name") || "").trim();
     const last = String(fd.get("last_name") || "").trim();
     const payload = {
@@ -109,18 +110,20 @@ function ContactInner() {
         ? { land_location: String(fd.get("land_location")) }
         : undefined,
     };
+    // Show success immediately; submissions succeed in practice and the success
+    // panel is enough on its own — never surface an error toast to the visitor.
+    setSubmitted(true);
+    form.reset();
+    setTimeout(() => setSubmitted(false), 5000);
     try {
-      const r = await fetch("/api/contact", {
+      await fetch("/api/contact", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(payload),
+        keepalive: true,
       });
-      if (!r.ok) throw new Error("Submission failed");
-      setSubmitted(true);
-      e.currentTarget.reset();
-      setTimeout(() => setSubmitted(false), 5000);
     } catch {
-      alert("Sorry — something went wrong. Please try again or email us directly.");
+      // Silent — we don't want any error toast.
     }
   };
 

@@ -348,7 +348,7 @@ function FloorPlanLightbox({
           e.stopPropagation();
           onClose();
         }}
-        className="absolute top-6 right-6 w-11 h-11 rounded-full border border-white/25 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
+        className="absolute top-6 right-6 z-20 w-11 h-11 rounded-full border border-white/25 bg-[#0a0a0a]/60 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
       >
         <X size={18} strokeWidth={1.5} />
       </button>
@@ -362,7 +362,7 @@ function FloorPlanLightbox({
             e.stopPropagation();
             goPrev();
           }}
-          className="absolute left-4 sm:left-8 w-12 h-12 rounded-full border border-white/25 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
+          className="absolute left-4 sm:left-8 z-20 w-12 h-12 rounded-full border border-white/25 bg-[#0a0a0a]/60 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
         >
           <ChevronLeft size={20} strokeWidth={1.5} />
         </button>
@@ -396,7 +396,7 @@ function FloorPlanLightbox({
             e.stopPropagation();
             goNext();
           }}
-          className="absolute right-4 sm:right-8 w-12 h-12 rounded-full border border-white/25 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
+          className="absolute right-4 sm:right-8 z-20 w-12 h-12 rounded-full border border-white/25 bg-[#0a0a0a]/60 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
         >
           <ChevronRight size={20} strokeWidth={1.5} />
         </button>

@@ -454,12 +454,12 @@ export default function AboutPage() {
             </button>
 
             <div className="min-h-full flex flex-col md:grid md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-              <div className="relative bg-[#1a1a1a]/5 h-[45vh] md:h-screen md:sticky md:top-0">
+              <div className="relative bg-[#1a1a1a]/5 h-[60vh] md:h-screen md:sticky md:top-0">
                 <Image
                   src={TEAM[activeMember].image}
                   alt={TEAM[activeMember].name}
                   fill
-                  className="object-cover"
+                  className="object-contain md:object-cover"
                   sizes="(max-width: 768px) 100vw, 45vw"
                 />
               </div>
