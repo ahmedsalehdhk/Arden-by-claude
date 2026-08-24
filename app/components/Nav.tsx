@@ -51,7 +51,7 @@ const NAV_LINKS: NavItem[] = [
       { label: "Trilliant-Arden Consortium", href: "/consortium/trilliant-arden" },
     ],
   },
-  { label: "News & Events", href: "/news" },
+  { label: "News & Events", href: "/blog" },
   { label: "Careers", href: "/careers" },
   { label: "Contact", href: "/contact" },
 ];
@@ -113,7 +113,7 @@ export default function Nav({ transparent = false }: { transparent?: boolean } =
         initial={{ y: "-100%", opacity: 0 }}
         animate={visible ? { y: hidden && !menuOpen ? "-100%" : 0, opacity: 1 } : {}}
         transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-        className={`fixed top-[28px] left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isTransparent
             ? "bg-transparent"
             : scrolled

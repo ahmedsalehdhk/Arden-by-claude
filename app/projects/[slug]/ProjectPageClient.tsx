@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef } from "react";
-import { useParams } from "next/navigation";
 import { motion, useInView } from "framer-motion";
 import {
   Zap,
@@ -30,9 +29,9 @@ import Footer from "../../components/Footer";
 import AnimatedHeading from "../../components/AnimatedHeading";
 import ProjectGallery from "../../components/ProjectGallery";
 import FloorPlansSection from "../../components/FloorPlansSection";
+import MarkdownBody from "../../components/MarkdownBody";
 import { Section } from "../../components/ui";
-import { getProjectBySlug } from "../../data/projects";
-import type { ProjectDetail } from "../../data/projects";
+import type { ProjectDetail } from "../../../lib/projects";
 
 // ─────────────────────────────────────────────
 // ICON MAP
@@ -125,18 +124,24 @@ function ProjectNotFound() {
 // ─────────────────────────────────────────────
 
 function ProjectHero({ project }: { project: ProjectDetail }) {
+  // Fall back to buildingImage or the first gallery item if hero_image is empty —
+  // admins sometimes forget to set it explicitly in the Basics tab.
+  const hero = project.heroImage || project.buildingImage || project.gallery?.[0] || "";
   return (
     <section className="relative w-full overflow-hidden" style={{ height: "100svh", minHeight: "600px" }}>
-      {/* Full-bleed background image */}
+      {/* Full-bleed background image — object-cover so the photo always fills
+          the hero edge-to-edge (cropping when needed) with no letterbox gaps. */}
       <div className="absolute inset-0">
-        <Image
-          src={project.heroImage}
-          alt={project.name}
-          fill
-          className="object-cover"
-          priority
-          sizes="100vw"
-        />
+        {hero && (
+          <Image
+            src={hero}
+            alt={project.name}
+            fill
+            className="object-cover"
+            priority
+            sizes="100vw"
+          />
+        )}
         {/* Top-down dark fade — keeps the transparent nav legible and carries a
             richer wash down almost the full hero for better text contrast. */}
         <div
@@ -326,7 +331,7 @@ function FeaturesSection({ project }: { project: ProjectDetail }) {
         <FadeIn delay={0.1}>
           <div className="relative overflow-hidden w-full h-full" style={{ aspectRatio: "4/5" }}>
             <Image
-              src={project.buildingImage}
+              src={project.buildingImage || project.heroImage || project.gallery?.[0] || ""}
               alt={`${project.name} Features`}
               fill
               className="object-cover"
@@ -367,15 +372,26 @@ function ArchitectSection({ project }: { project: ProjectDetail }) {
       <div className="px-[7.5%]">
         <FadeIn>
           <div className="flex flex-col items-center text-center max-w-2xl mx-auto">
-            <div className="relative overflow-hidden rounded-full bg-ink/5 mb-6" style={{ width: 112, height: 64 }}>
-              <Image
-                src={a.image}
-                alt={a.name}
-                fill
-                className="object-cover"
-                sizes="128px"
-                loading="lazy"
-              />
+            <div
+              className="relative overflow-hidden rounded-full bg-ink/5 mb-6"
+              style={{
+                width: 112,
+                height: 64,
+                backgroundImage: a.image ? undefined : "url('/architect-fallback.png')",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            >
+              {a.image && (
+                <Image
+                  src={a.image}
+                  alt={a.name}
+                  fill
+                  className="object-cover"
+                  sizes="128px"
+                  loading="lazy"
+                />
+              )}
             </div>
 
             <AnimatedHeading
@@ -388,7 +404,7 @@ function ArchitectSection({ project }: { project: ProjectDetail }) {
             <p className="font-sans text-body-sm text-ink/55 mb-6">
               {a.title}
             </p>
-            <p className="font-sans font-medium text-body-lg text-ink !leading-[1.6]">
+            <p className="font-sans font-medium text-body-lg text-ink/55 !leading-[1.6]">
               {a.quote}
             </p>
           </div>
@@ -402,9 +418,22 @@ function ArchitectSection({ project }: { project: ProjectDetail }) {
 // KNOW YOUR NEIGHBORHOOD SECTION
 // ─────────────────────────────────────────────
 
+// Accepts either a bare URL or a full `<iframe ... src="URL" ...>` snippet
+// (the admin sometimes pastes the whole embed HTML from Google Maps).
+function extractMapSrc(input: string | undefined | null): string | null {
+  if (!input) return null;
+  const trimmed = input.trim();
+  if (!trimmed) return null;
+  const match = trimmed.match(/src=["']([^"']+)["']/i);
+  return match ? match[1] : trimmed;
+}
+
 function NeighborhoodSection({ project }: { project: ProjectDetail }) {
   const n = project.neighborhood;
   if (!n) return null;
+  const mapSrc =
+    extractMapSrc(project.mapEmbedSrc) ??
+    `https://www.google.com/maps?q=${encodeURIComponent(project.address)}&output=embed`;
 
   return (
     <Section tone="bone" rhythm="loose">
@@ -423,10 +452,7 @@ function NeighborhoodSection({ project }: { project: ProjectDetail }) {
         <div className="grid grid-cols-1 sm:grid-cols-3 sm:grid-rows-2 gap-3 sm:gap-4 mb-10 sm:mb-14 sm:h-[520px] lg:h-[620px]">
           <div className="relative overflow-hidden bg-ink/5 sm:col-span-2 sm:row-span-2 aspect-[4/3] sm:aspect-auto">
             <iframe
-              src={
-                project.mapEmbedSrc ??
-                `https://www.google.com/maps?q=${encodeURIComponent(project.address)}&output=embed`
-              }
+              src={mapSrc}
               className="absolute inset-0 w-full h-full border-0"
               allowFullScreen
               loading="lazy"
@@ -461,22 +487,10 @@ function NeighborhoodSection({ project }: { project: ProjectDetail }) {
         </div>
       </FadeIn>
 
-      {/* Titled paragraphs */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
-        {n.sections.map((s, i) => (
-          <FadeIn key={s.title} delay={0.1 + i * 0.05}>
-            <h3
-              className="font-serif text-ink mb-4"
-              style={{ fontSize: "clamp(1.25rem, 1.6vw, 1.6rem)", fontWeight: 500 }}
-            >
-              {s.title}
-            </h3>
-            <p className="font-sans font-medium text-body-lg text-ink !leading-[1.6] sm:text-justify">
-              {s.body}
-            </p>
-          </FadeIn>
-        ))}
-      </div>
+      {/* Body paragraph(s) */}
+      <FadeIn delay={0.1}>
+        <MarkdownBody source={n.body_md || ""} justify />
+      </FadeIn>
     </Section>
   );
 }
@@ -523,11 +537,7 @@ function ProjectCTA() {
 // MAIN PAGE COMPONENT
 // ─────────────────────────────────────────────
 
-export default function ProjectDetailPage() {
-  const params = useParams();
-  const slug = typeof params.slug === "string" ? params.slug : "";
-  const project = getProjectBySlug(slug);
-
+export default function ProjectDetailPage({ project }: { project: ProjectDetail }) {
   if (!project) {
     return <ProjectNotFound />;
   }

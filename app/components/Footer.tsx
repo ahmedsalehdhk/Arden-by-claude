@@ -1,3 +1,16 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+const DEFAULT_INFO = {
+  phone: "+88 019 1688 2330",
+  email: "info@ardenholdingsltd.com",
+  address: "House 40 (2nd Floor), Road 20,\nMohakhali DOHS, Dhaka-1206",
+};
+
+function telHref(phone: string) {
+  return `tel:${phone.replace(/[^\d+]/g, "")}`;
+}
 
 // Inline social glyphs — matches the set used in the mobile nav overlay.
 type IconProps = { size?: number; className?: string };
@@ -29,6 +42,14 @@ const SOCIALS = [
 ];
 
 export default function Footer() {
+  const [info, setInfo] = useState(DEFAULT_INFO);
+  useEffect(() => {
+    fetch("/api/settings/contact-info")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => { if (d) setInfo({ ...DEFAULT_INFO, ...d }); })
+      .catch(() => {});
+  }, []);
+
   return (
     <footer className="bg-[#0f0f0f] py-8 px-[7.5%]">
       {/* Contact + Address row — both columns share the same top baseline */}
@@ -41,17 +62,17 @@ export default function Footer() {
           <ul className="space-y-3 sm:space-y-4">
             <li className="font-sans text-body text-white/70">
               Phone:&nbsp;
-              <a href="tel:+8801916882330" className="text-white hover:text-[#c9a54a] transition-colors">
-                +88 019 1688 2330
+              <a href={telHref(info.phone)} className="text-white hover:text-[#c9a54a] transition-colors">
+                {info.phone}
               </a>
             </li>
             <li className="font-sans text-body text-white/70">
               Email:&nbsp;
               <a
-                href="mailto:info@ardenholdingsltd.com"
+                href={`mailto:${info.email}`}
                 className="text-white hover:text-[#c9a54a] transition-colors break-all"
               >
-                info@ardenholdingsltd.com
+                {info.email}
               </a>
             </li>
           </ul>
@@ -62,8 +83,8 @@ export default function Footer() {
           <p className="font-sans text-eyebrow uppercase text-white mb-3">
             Address
           </p>
-          <p className="font-sans text-body text-white/70">
-            House 40 (2nd Floor), Road 20,<br />Mohakhali DOHS, Dhaka-1206
+          <p className="font-sans text-body text-white/70 whitespace-pre-line">
+            {info.address}
           </p>
         </div>
       </div>
@@ -76,12 +97,7 @@ export default function Footer() {
         <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 font-sans text-body-sm text-white/50">
           <p>&copy; {new Date().getFullYear()} Arden Holdings Ltd. All rights reserved.</p>
           <span className="hidden sm:inline text-white/25">|</span>
-          <p>
-            Made By{" "}
-            <a href="#" className="text-white/70 hover:text-white transition-colors">
-              Proteron Digital
-            </a>
-          </p>
+          <p>Made By <span className="text-white/70">Proteron Digital</span></p>
         </div>
 
         <div className="flex items-center gap-3">

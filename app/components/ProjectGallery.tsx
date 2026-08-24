@@ -9,12 +9,13 @@ import AnimatedHeading from "./AnimatedHeading";
 interface ProjectGalleryProps {
   images: string[];
   projectName: string;
+  showHeading?: boolean;
 }
 
 const AUTOPLAY_MS = 5000;
 const SWIPE_THRESHOLD = 60;
 
-export default function ProjectGallery({ images, projectName }: ProjectGalleryProps) {
+export default function ProjectGallery({ images, projectName, showHeading = true }: ProjectGalleryProps) {
   const [index, setIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [hovering, setHovering] = useState(false);
@@ -94,16 +95,17 @@ export default function ProjectGallery({ images, projectName }: ProjectGalleryPr
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
     >
-      {/* Heading */}
-      <div className="text-center mb-12 sm:mb-16">
-        <AnimatedHeading
-          as="h2"
-          text="Gallery"
-          trigger="view"
-          className="font-serif text-[#1a1a1a]"
-          style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
-        />
-      </div>
+      {showHeading && (
+        <div className="text-center mb-12 sm:mb-16">
+          <AnimatedHeading
+            as="h2"
+            text="Gallery"
+            trigger="view"
+            className="font-serif text-[#1a1a1a]"
+            style={{ fontSize: "clamp(2rem, 3.5vw, 3rem)", fontWeight: 400 }}
+          />
+        </div>
+      )}
 
       {/* Carousel */}
       <div
@@ -117,10 +119,12 @@ export default function ProjectGallery({ images, projectName }: ProjectGalleryPr
           const isCenter = offset === 0;
           const isNeighbor = Math.abs(offset) === 1 || Math.abs(offset) === count - 1;
 
-          // Normalize the wrap-around neighbors so previous/next always show even at boundaries
+          // Normalize the wrap-around neighbors so previous/next always show even at boundaries.
+          // Only wrap when count >= 3 — with 2 images we want #1 in the center and #2 to the RHS,
+          // never the same slide mirrored on the opposite side.
           let visualOffset = offset;
-          if (offset === count - 1) visualOffset = -1;
-          else if (offset === -(count - 1)) visualOffset = 1;
+          if (count > 2 && offset === count - 1) visualOffset = -1;
+          else if (count > 2 && offset === -(count - 1)) visualOffset = 1;
 
           const isVisible = Math.abs(visualOffset) <= 1;
 
@@ -172,31 +176,33 @@ export default function ProjectGallery({ images, projectName }: ProjectGalleryPr
         })}
       </div>
 
-      {/* Controls */}
-      <div className="mt-10 flex items-center justify-center gap-6">
-        <button
-          type="button"
-          aria-label="Previous image"
-          onClick={goPrev}
-          className="w-11 h-11 rounded-full border border-[#1a1a1a]/25 flex items-center justify-center text-[#1a1a1a]/70 hover:border-[#c9a54a] hover:text-[#c9a54a] transition-colors duration-300"
-        >
-          <ChevronLeft size={18} strokeWidth={1.5} />
-        </button>
-        <span
-          className="font-sans text-[#1a1a1a]/50 tabular-nums"
-          style={{ fontSize: "12px", letterSpacing: "0.28em" }}
-        >
-          {String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
-        </span>
-        <button
-          type="button"
-          aria-label="Next image"
-          onClick={goNext}
-          className="w-11 h-11 rounded-full border border-[#1a1a1a]/25 flex items-center justify-center text-[#1a1a1a]/70 hover:border-[#c9a54a] hover:text-[#c9a54a] transition-colors duration-300"
-        >
-          <ChevronRight size={18} strokeWidth={1.5} />
-        </button>
-      </div>
+      {/* Controls — hidden when only one image, since nav and counter add no value */}
+      {count > 1 && (
+        <div className="mt-10 flex items-center justify-center gap-6">
+          <button
+            type="button"
+            aria-label="Previous image"
+            onClick={goPrev}
+            className="w-11 h-11 rounded-full border border-[#1a1a1a]/25 flex items-center justify-center text-[#1a1a1a]/70 hover:border-[#c9a54a] hover:text-[#c9a54a] transition-colors duration-300"
+          >
+            <ChevronLeft size={18} strokeWidth={1.5} />
+          </button>
+          <span
+            className="font-sans text-[#1a1a1a]/50 tabular-nums"
+            style={{ fontSize: "12px", letterSpacing: "0.28em" }}
+          >
+            {String(index + 1).padStart(2, "0")} / {String(count).padStart(2, "0")}
+          </span>
+          <button
+            type="button"
+            aria-label="Next image"
+            onClick={goNext}
+            className="w-11 h-11 rounded-full border border-[#1a1a1a]/25 flex items-center justify-center text-[#1a1a1a]/70 hover:border-[#c9a54a] hover:text-[#c9a54a] transition-colors duration-300"
+          >
+            <ChevronRight size={18} strokeWidth={1.5} />
+          </button>
+        </div>
+      )}
 
       {/* Lightbox */}
       <AnimatePresence>
@@ -216,7 +222,7 @@ export default function ProjectGallery({ images, projectName }: ProjectGalleryPr
                 e.stopPropagation();
                 setLightboxOpen(false);
               }}
-              className="absolute top-6 right-6 w-11 h-11 rounded-full border border-white/25 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
+              className="absolute top-6 right-6 z-20 w-11 h-11 rounded-full border border-white/25 bg-[#0a0a0a]/60 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
             >
               <X size={18} strokeWidth={1.5} />
             </button>
@@ -228,7 +234,7 @@ export default function ProjectGallery({ images, projectName }: ProjectGalleryPr
                 e.stopPropagation();
                 goPrev();
               }}
-              className="absolute left-4 sm:left-8 w-12 h-12 rounded-full border border-white/25 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
+              className="absolute left-4 sm:left-8 z-20 w-12 h-12 rounded-full border border-white/25 bg-[#0a0a0a]/60 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
             >
               <ChevronLeft size={20} strokeWidth={1.5} />
             </button>
@@ -258,7 +264,7 @@ export default function ProjectGallery({ images, projectName }: ProjectGalleryPr
                 e.stopPropagation();
                 goNext();
               }}
-              className="absolute right-4 sm:right-8 w-12 h-12 rounded-full border border-white/25 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
+              className="absolute right-4 sm:right-8 z-20 w-12 h-12 rounded-full border border-white/25 bg-[#0a0a0a]/60 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
             >
               <ChevronRight size={20} strokeWidth={1.5} />
             </button>

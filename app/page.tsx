@@ -24,33 +24,22 @@ import { useIsLoaded } from "./context/LoadContext";
 // Add more images here to auto-rotate through them in the hero.
 // Each image plays a Ken Burns loop; when its cycle ends, the next crossfades in.
 const HERO_IMAGES = [
-  { src: "/projectimages/rahma/view-09.png", alt: "Luxury real estate development" },
-  { src: "/projectimages/amanat/lobby-view-01.jpg", alt: "Luxury real estate development"},
-  { src: "/projectimages/rahma/view-08.png", alt: "Luxury real estate development"}
+  { src: "/static/home-hero-1.png", alt: "Luxury real estate development" },
+  { src: "/static/home-and-careers-hero.jpg", alt: "Luxury real estate development"},
+  { src: "/static/home-hero-2.png", alt: "Luxury real estate development"}
 ];
 
 const KEN_BURNS_DURATION_S = 6;
 
-const FEATURED_PROJECTS = [
-  {
-    category: "Featured Projects",
-    tag: "Residential",
-    name: "Amanat",
-    slug: "amanat",
-    location: "Plot 64, Road 1, Banani",
-    image: "/projectimages/amanat/front-side-view-01.jpg",
-    buildingImage: "/projectimages/amanat/hero-night.jpg",
-  },
-  {
-    category: "Featured Projects",
-    tag: "Residential",
-    name: "Rahma",
-    slug: "rahma",
-    location: "Plot 16, Road 410, Sector 11, Jolshiri",
-    image: "/projectimages/rahma/view-02.jpg",
-    buildingImage: "/projectimages/rahma/view-01.jpg",
-  },
-];
+type FeaturedProject = {
+  category: string;
+  tag: string;
+  name: string;
+  slug: string;
+  location: string;
+  image: string;
+  buildingImage: string;
+};
 
 const STATS = [
   { value: 100, suffix: "%", label: "On-Time Handover" },
@@ -112,7 +101,7 @@ function Hero() {
   }, []);
 
   return (
-    <section className="bg-[#faf9f6] pt-[calc(69px_+_7.5vw)] sm:pt-[140px] pb-[7.5vw] sm:pb-0" aria-label="Hero">
+    <section className="bg-[#faf9f6] pt-[140px]" aria-label="Hero">
       {/* Main headline */}
       <div className="px-[7.5%] pt-6 sm:pt-10 pb-6 sm:pb-8">
         <AnimatedHeading
@@ -123,18 +112,18 @@ function Hero() {
           delay={0.4}
           className="font-serif text-[#1a1a1a] text-center select-none uppercase w-full sm:whitespace-nowrap"
           style={{
-            fontSize: "clamp(1.5rem, 4.5vw, 4.5vw)",
+            fontSize: "clamp(2.2rem, 4.5vw, 4.5vw)",
             letterSpacing: "0.22em",
             lineHeight: 1.25,
-            fontWeight: 400,
+            fontWeight: 500,
           }}
         />
       </div>
 
-      {/* Hero image — mobile height is derived so the whole hero fits one viewport
-          with a bottom gap that mirrors the top nav offset + text padding (~164px).
-          Desktop keeps the original fixed 78vh. */}
-      <div className="relative w-full overflow-hidden h-[calc(100svh_-_177px_-_15vw)] sm:h-[78vh]">
+      {/* Hero image — fixed 78vh on both mobile and desktop, matching /about.
+          On mobile this intentionally extends past the fold so the user scrolls
+          into the rest of the section, rather than the whole hero fitting one screen. */}
+      <div className="relative w-full overflow-hidden" style={{ height: "78vh" }}>
         <motion.div
           initial={{ y: -60, opacity: 0 }}
           animate={isLoaded ? { y: 0, opacity: 1 } : {}}
@@ -207,7 +196,7 @@ function AboutSection() {
                 lineHeight: 1.1,
               }}
             />
-            <p className="font-sans font-medium text-body-lg text-[#1a1a1a] mb-10">
+            <p className="font-sans font-medium text-body-lg text-[#1a1a1a]/55 mb-10">
               Building the country&apos;s most selective projects requires more than just a vision—it requires a standard of excellence that never wavers. Discover a portfolio where luxury meets structural perfection.
             </p>
             <Link href="/about" className="self-start font-sans font-semibold text-[13px] tracking-[0.24em] uppercase text-[#1a1a1a] flex items-center gap-2 group hover:text-[#c9a54a] transition-colors duration-300">
@@ -232,6 +221,29 @@ const FEATURED_AUTO_ADVANCE_MS = 7000;
 const FEATURED_SWIPE_DURATION_MS = 1600;
 
 function FeaturedProjectsSection() {
+  const [FEATURED_PROJECTS, setFeatured] = useState<FeaturedProject[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/projects?featured=true", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : []))
+      .then((rows: any[]) => {
+        if (cancelled) return;
+        setFeatured(
+          rows.map((p) => ({
+            category: "Featured Projects",
+            tag: p.type,
+            name: p.name,
+            slug: p.slug,
+            location: p.location,
+            image: p.heroImage,
+            buildingImage: p.buildingImage || p.heroImage,
+          })),
+        );
+      })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
+
   const [activeIndex, setActiveIndex] = useState(0);
   const [prevIndex, setPrevIndex] = useState<number | null>(null);
   const [fading, setFading] = useState(false);
@@ -266,6 +278,8 @@ function FeaturedProjectsSection() {
     }, FEATURED_AUTO_ADVANCE_MS);
     return () => clearTimeout(id);
   }, [activeIndex, total]);
+
+  if (total === 0) return null;
 
   const project = FEATURED_PROJECTS[activeIndex];
 
@@ -320,6 +334,13 @@ function FeaturedProjectsSection() {
 
       {/* Content */}
       <div className="relative z-10 h-full flex flex-col lg:flex-row lg:items-center lg:justify-between">
+        {/* Mobile-only category label — sits above the building image so the section
+            introduces itself before any imagery. Duplicated below (desktop layout) via
+            the text column, but hidden on mobile via .lg:block there. */}
+        <p className="lg:hidden font-sans text-eyebrow-lg uppercase text-white text-center pt-6 sm:pt-8 px-[7.5%]">
+          {project.category}
+        </p>
+
         {/* Building image — top on mobile, right column on desktop */}
         <motion.div className="lg:hidden flex justify-center pt-4 sm:pt-6 px-[7.5%]">
           <div
@@ -351,8 +372,9 @@ function FeaturedProjectsSection() {
 
         {/* Left column — text */}
         <div className="flex flex-col justify-center px-[7.5%] max-w-2xl w-full lg:w-auto flex-1 pt-4 sm:pt-6 lg:pt-0 pb-6 lg:pb-0">
-          {/* Static category label — doesn't re-animate on slide change */}
-          <p className="font-sans text-eyebrow-lg uppercase text-white mb-5 sm:mb-7">
+          {/* Static category label — doesn't re-animate on slide change.
+              Hidden on mobile because the mobile layout renders it above the building image. */}
+          <p className="hidden lg:block font-sans text-eyebrow-lg uppercase text-white mb-5 sm:mb-7">
             {project.category}
           </p>
 
@@ -571,7 +593,7 @@ function ContactSection() {
         style={{ width: "46%" }}
       >
         <Image
-          src="/projectimages/rahma/view-07.jpg"
+          src="/static/home-cta.jpg"
           alt="Arden Holdings development"
           fill
           className="object-cover"

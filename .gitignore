@@ -39,3 +39,17 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# env
+.env
+.env.local
+.env.*.local
+
+# runtime uploads (user-uploaded content, not part of the app)
+/public/uploads/
+/.uploads/
+
+# local archives / build artifacts
+*.zip
+/next.zip
+/server.js.bak

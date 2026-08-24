@@ -77,7 +77,7 @@ export default function ConsortiumPage() {
               style={{ clipPath: "inset(0 7.5%)" }}
             >
               <Image
-                src="/consortium/hero-01.png"
+                src="/consortium/alliance-arden/hero-01.jpg"
                 alt="Alliance-Arden Consortium"
                 fill
                 className="object-cover"
@@ -116,6 +116,22 @@ export default function ConsortiumPage() {
               <p className="font-sans font-medium text-body-lg text-[#1a1a1a] !leading-[1.6] sm:text-justify">
                 Our ambition extends beyond creating premium residences. We aspire to create destinations that redefine expectations of contemporary living and become reference points for the future of real estate in Bangladesh. And our vision does not end at the borders of Bangladesh. With a strong foundation of experience, a progressive mindset and an uncompromising commitment to excellence, the Alliance&ndash;Arden Consortium looks forward to taking its vision of distinctive development beyond borders and onto a broader international horizon.
               </p>
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={0.15}>
+            {/* Full-width image below the 3rd paragraph. object-contain ensures the whole
+                image is visible on every screen size — no cropping. */}
+            <div className="w-full mt-12 sm:mt-16">
+              <Image
+                src="/consortium/alliance-arden/hero-02.jpg"
+                alt="Alliance-Arden Consortium"
+                width={2400}
+                height={1350}
+                sizes="100vw"
+                className="w-full h-auto object-contain"
+                loading="lazy"
+              />
             </div>
           </FadeIn>
 

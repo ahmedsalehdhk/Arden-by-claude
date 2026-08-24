@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, X, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 import AnimatedHeading from "./AnimatedHeading";
 import { Section, FadeIn } from "./ui";
-import type { ProjectDetail, FloorPlan } from "../data/projects";
+import type { ProjectDetail, FloorPlan } from "../../lib/projects";
 
 // localStorage keys — one flag per site (unlock once, see everywhere).
 const UNLOCK_KEY = "arden.floorplans.unlocked";
@@ -34,11 +34,23 @@ function saveSubscriber(entry: Omit<Subscriber, "at">) {
     if (idx >= 0) list[idx] = record;
     else list.push(record);
     window.localStorage.setItem(SUBSCRIBERS_KEY, JSON.stringify(list));
-    // eslint-disable-next-line no-console
-    console.log("[arden] floor-plan subscriber saved", record);
   } catch {
     // localStorage unavailable — silently ignore
   }
+}
+
+// Fire-and-forget POST to the backend so the admin sees this lead.
+// Never blocks the unlock UX: any error is swallowed with a console log.
+function reportLeadToServer(projectSlug: string, name: string, phone: string) {
+  fetch("/api/floorplan-leads", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ projectSlug, name, phone }),
+    keepalive: true,
+  }).catch((e) => {
+    // eslint-disable-next-line no-console
+    console.warn("[arden] floor-plan lead report failed", e);
+  });
 }
 
 // Bangladeshi mobile numbers: 10 local digits, starting with 1.
@@ -63,7 +75,7 @@ export default function FloorPlansSection({ project }: { project: ProjectDetail 
   const [lightboxOpen, setLightboxOpen] = useState(false);
   // Default to Ground Floor if present; otherwise the bottom-most floor in the display.
   const initialIndex = (() => {
-    const groundIdx = plans.findIndex((p) => p.kind === "ground");
+    const groundIdx = plans.findIndex((p) => /^ground\b/i.test(p.fullLabel));
     if (groundIdx >= 0) return groundIdx;
     return plans.length - 1;
   })();
@@ -136,6 +148,7 @@ export default function FloorPlansSection({ project }: { project: ProjectDetail 
         {modalOpen && !isUnlocked && (
           <UnlockModal
             projectName={project.name}
+            projectSlug={project.slug}
             onClose={() => setModalOpen(false)}
             onUnlock={() => {
               window.localStorage.setItem(UNLOCK_KEY, "1");
@@ -335,7 +348,7 @@ function FloorPlanLightbox({
           e.stopPropagation();
           onClose();
         }}
-        className="absolute top-6 right-6 w-11 h-11 rounded-full border border-white/25 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
+        className="absolute top-6 right-6 z-20 w-11 h-11 rounded-full border border-white/25 bg-[#0a0a0a]/60 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
       >
         <X size={18} strokeWidth={1.5} />
       </button>
@@ -349,7 +362,7 @@ function FloorPlanLightbox({
             e.stopPropagation();
             goPrev();
           }}
-          className="absolute left-4 sm:left-8 w-12 h-12 rounded-full border border-white/25 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
+          className="absolute left-4 sm:left-8 z-20 w-12 h-12 rounded-full border border-white/25 bg-[#0a0a0a]/60 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
         >
           <ChevronLeft size={20} strokeWidth={1.5} />
         </button>
@@ -383,7 +396,7 @@ function FloorPlanLightbox({
             e.stopPropagation();
             goNext();
           }}
-          className="absolute right-4 sm:right-8 w-12 h-12 rounded-full border border-white/25 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
+          className="absolute right-4 sm:right-8 z-20 w-12 h-12 rounded-full border border-white/25 bg-[#0a0a0a]/60 flex items-center justify-center text-white/80 hover:border-white hover:text-white transition-colors duration-300"
         >
           <ChevronRight size={20} strokeWidth={1.5} />
         </button>
@@ -405,10 +418,12 @@ function FloorPlanLightbox({
 
 function UnlockModal({
   projectName,
+  projectSlug,
   onClose,
   onUnlock,
 }: {
   projectName: string;
+  projectSlug: string;
   onClose: () => void;
   onUnlock: () => void;
 }) {
@@ -448,6 +463,8 @@ function UnlockModal({
 
     setSubmitting(true);
     saveSubscriber({ name: cleanName, phone: cleanPhone, project: projectName });
+    // Fire-and-forget: the API normalizes the phone to 11-digit "01…" format on the server side.
+    reportLeadToServer(projectSlug, cleanName, cleanPhone);
     setTimeout(() => {
       setSubmitting(false);
       onUnlock();

@@ -1,10 +1,11 @@
-import { getAllProjectSlugs } from "../../data/projects";
+import { notFound } from "next/navigation";
+import { getProjectBySlug } from "../../../lib/projects";
 import ProjectPageClient from "./ProjectPageClient";
 
-export function generateStaticParams() {
-  return getAllProjectSlugs().map((slug) => ({ slug }));
-}
+export const dynamic = "force-dynamic";
 
-export default function Page() {
-  return <ProjectPageClient />;
+export default async function Page({ params }: { params: { slug: string } }) {
+  const project = await getProjectBySlug(params.slug);
+  if (!project) notFound();
+  return <ProjectPageClient project={project} />;
 }

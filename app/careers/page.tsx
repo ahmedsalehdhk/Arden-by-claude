@@ -1,28 +1,115 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform, cubicBezier } from "framer-motion";
-import { ArrowUpRight, MapPin, Briefcase } from "lucide-react";
+import { ArrowUpRight, MapPin, Briefcase, Mail, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import Nav from "../components/Nav";
 import Footer from "../components/Footer";
 import AnimatedHeading from "../components/AnimatedHeading";
+import MarkdownBody from "../components/MarkdownBody";
 import { Section, FadeIn } from "../components/ui";
 import { useIsLoaded } from "../context/LoadContext";
 
-// Dummy openings — replace when the actual roles are confirmed.
-const OPENINGS: {
+type Opening = {
+  slug: string;
   title: string;
   location: string;
   type: string;
   department: string;
   summary: string;
-}[] = [];
+  description: string;
+};
+
+function OpeningRow({ role, email }: { role: Opening; email: string }) {
+  const [open, setOpen] = useState(false);
+  const mailHref = `mailto:${email}?subject=${encodeURIComponent(
+    `Application — ${role.title}`
+  )}&body=${encodeURIComponent(
+    `Hello Arden Holdings,\n\nI'd like to apply for the ${role.title} role (${role.location}).\n\nMy CV is attached and a short note about myself is below.\n\n—\n`
+  )}`;
+
+  return (
+    <li className="py-8 sm:py-10">
+      <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1.6fr)_auto] items-start gap-4 md:gap-8">
+        <div>
+          <h3
+            className="font-serif text-ink"
+            style={{ fontSize: "clamp(1.4rem, 2.2vw, 1.9rem)", fontWeight: 500 }}
+          >
+            {role.title}
+          </h3>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-3 text-ink/50">
+            <span className="inline-flex items-center gap-1.5 font-sans text-body-sm">
+              <MapPin size={13} strokeWidth={1.5} />
+              {role.location}
+            </span>
+            <span className="inline-flex items-center gap-1.5 font-sans text-body-sm">
+              <Briefcase size={13} strokeWidth={1.5} />
+              {role.type} · {role.department}
+            </span>
+          </div>
+        </div>
+        <p className="font-sans text-body text-ink/70">{role.summary}</p>
+        <div className="flex flex-wrap gap-3 md:self-center md:flex-nowrap">
+          {role.description?.trim() && (
+            <button
+              type="button"
+              onClick={() => setOpen((o) => !o)}
+              aria-expanded={open}
+              className="group inline-flex items-center justify-center gap-2 px-4 py-2 border border-ink/25 rounded-full font-sans text-eyebrow uppercase text-ink hover:border-gold hover:text-gold transition-colors"
+            >
+              {open ? "Hide details" : "Read more"}
+              <ChevronDown
+                size={14}
+                strokeWidth={1.5}
+                className={`transition-transform ${open ? "rotate-180" : ""}`}
+              />
+            </button>
+          )}
+          <a
+            href={mailHref}
+            className="group inline-flex items-center justify-center gap-2 px-4 py-2 border border-ink/25 rounded-full font-sans text-eyebrow uppercase text-ink hover:border-gold hover:text-gold transition-colors"
+          >
+            <Mail size={14} strokeWidth={1.5} />
+            Email to apply
+            <ArrowUpRight
+              size={14}
+              className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+            />
+          </a>
+        </div>
+      </div>
+
+      {open && role.description?.trim() && (
+        <div className="mt-6 md:mt-8 md:pl-0">
+          <MarkdownBody source={role.description} />
+        </div>
+      )}
+    </li>
+  );
+}
 
 export default function CareersPage() {
   const isLoaded = useIsLoaded();
   const imageRef = useRef<HTMLDivElement>(null);
+  const [OPENINGS, setOpenings] = useState<Opening[]>([]);
+  const [applyEmail, setApplyEmail] = useState("info@ardenholdingsltd.com");
+  useEffect(() => {
+    fetch("/api/jobs")
+      .then((r) => (r.ok ? r.json() : []))
+      .then((rows: any[]) => setOpenings(rows.map((j) => ({
+        slug: j.slug, title: j.title, location: j.location, type: j.type,
+        department: j.department, summary: j.summary,
+        description: j.description_md || "",
+      }))))
+      .catch(() => {});
+    fetch("/api/settings/contact-info")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => { if (d?.email) setApplyEmail(d.email); })
+      .catch(() => {});
+  }, []);
   const { scrollY } = useScroll();
   const clipPercent = useTransform(scrollY, [0, 600], [7.5, 0], {
     ease: cubicBezier(0.22, 1, 0.36, 1),
@@ -73,7 +160,7 @@ export default function CareersPage() {
               style={{ clipPath: "inset(0 7.5%)" }}
             >
               <Image
-                src="/projectimages/amanat/lobby-view-01.jpg"
+                src="/static/careers-hero.jpg"
                 alt="Working at Arden Holdings"
                 fill
                 className="object-cover"
@@ -102,41 +189,7 @@ export default function CareersPage() {
           <ul className="divide-y divide-ink/10 border-t border-b border-ink/10">
             {OPENINGS.map((role, i) => (
               <FadeIn key={role.title} delay={i * 0.06}>
-                <li>
-                  <Link
-                    href={`/contact?role=${encodeURIComponent(role.title)}`}
-                    className="group grid grid-cols-1 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1.6fr)_auto] items-start gap-4 md:gap-8 py-8 sm:py-10"
-                  >
-                    <div>
-                      <h3
-                        className="font-serif text-ink group-hover:text-gold transition-colors duration-300"
-                        style={{ fontSize: "clamp(1.4rem, 2.2vw, 1.9rem)", fontWeight: 500 }}
-                      >
-                        {role.title}
-                      </h3>
-                      <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-3 text-ink/50">
-                        <span className="inline-flex items-center gap-1.5 font-sans text-body-sm">
-                          <MapPin size={13} strokeWidth={1.5} />
-                          {role.location}
-                        </span>
-                        <span className="inline-flex items-center gap-1.5 font-sans text-body-sm">
-                          <Briefcase size={13} strokeWidth={1.5} />
-                          {role.type} · {role.department}
-                        </span>
-                      </div>
-                    </div>
-                    <p className="font-sans text-body text-ink/70">
-                      {role.summary}
-                    </p>
-                    <span className="hidden md:inline-flex self-center items-center gap-2 font-sans text-eyebrow uppercase text-ink group-hover:text-gold transition-colors">
-                      Apply
-                      <ArrowUpRight
-                        size={14}
-                        className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
-                      />
-                    </span>
-                  </Link>
-                </li>
+                <OpeningRow role={role} email={applyEmail} />
               </FadeIn>
             ))}
           </ul>
