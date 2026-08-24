@@ -14,10 +14,11 @@ function optional(name: string, fallback: string): string {
 export const env = {
   DATABASE_URL: required("DATABASE_URL"),
   SESSION_SECRET: required("SESSION_SECRET"),
-  // Absolute path where uploaded images are written. On cPanel this points
-  // OUTSIDE the app dir (e.g. /home/ardenhol/arden-uploads) and is symlinked
-  // into public/uploads so Next serves them at UPLOAD_URL_PREFIX.
-  UPLOAD_DIR: optional("UPLOAD_DIR", "public/uploads"),
+  // Path where uploaded images are written. Absolute in production (e.g.
+  // /home/ardenhol/arden-uploads, kept outside the app dir so redeploys don't
+  // touch it); relative for local dev. Served by app/uploads/[...path]/route.ts
+  // at UPLOAD_URL_PREFIX — no symlink required.
+  UPLOAD_DIR: optional("UPLOAD_DIR", ".uploads"),
   // Public URL path prefix that maps to UPLOAD_DIR. Kept configurable so the
   // filesystem path and the public URL are decoupled.
   UPLOAD_URL_PREFIX: optional("UPLOAD_URL_PREFIX", "/uploads"),
