@@ -372,15 +372,26 @@ function ArchitectSection({ project }: { project: ProjectDetail }) {
       <div className="px-[7.5%]">
         <FadeIn>
           <div className="flex flex-col items-center text-center max-w-2xl mx-auto">
-            <div className="relative overflow-hidden rounded-full bg-ink/5 mb-6" style={{ width: 112, height: 64 }}>
-              <Image
-                src={a.image}
-                alt={a.name}
-                fill
-                className="object-cover"
-                sizes="128px"
-                loading="lazy"
-              />
+            <div
+              className="relative overflow-hidden rounded-full bg-ink/5 mb-6"
+              style={{
+                width: 112,
+                height: 64,
+                backgroundImage: a.image ? undefined : "url('/architect-fallback.png')",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+            >
+              {a.image && (
+                <Image
+                  src={a.image}
+                  alt={a.name}
+                  fill
+                  className="object-cover"
+                  sizes="128px"
+                  loading="lazy"
+                />
+              )}
             </div>
 
             <AnimatedHeading
